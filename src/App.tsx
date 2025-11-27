@@ -19,7 +19,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename="/cip-audit-ready">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/nerc-cip-101" element={<NercCip101 />} />
