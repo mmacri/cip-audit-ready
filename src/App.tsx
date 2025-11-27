@@ -17,6 +17,9 @@ import AuditSimulator from "./pages/AuditSimulator";
 import ReadinessPlan from "./pages/ReadinessPlan";
 import FinalExam from "./pages/FinalExam";
 import Certificate from "./pages/Certificate";
+import RoleCertificate from "./pages/RoleCertificate";
+import Achievements from "./pages/Achievements";
+import ProgressBackup from "./pages/ProgressBackup";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +36,7 @@ const App = () => (
           <Route path="/modules" element={<Modules />} />
           <Route path="/role-training" element={<RoleTraining />} />
           <Route path="/role-training/:roleId" element={<RoleTrainingDetail />} />
+          <Route path="/role-training/:roleId/certificate" element={<RoleCertificate />} />
           <Route path="/evidence-lab" element={<EvidenceLab />} />
           <Route path="/self-assessment" element={<SelfAssessment />} />
           <Route path="/resources" element={<Resources />} />
@@ -42,6 +46,8 @@ const App = () => (
           <Route path="/readiness-plan" element={<ReadinessPlan />} />
           <Route path="/final-exam" element={<FinalExam />} />
           <Route path="/certificate" element={<Certificate />} />
+          <Route path="/achievements" element={<Achievements />} />
+          <Route path="/progress-backup" element={<ProgressBackup />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

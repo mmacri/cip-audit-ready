@@ -24,6 +24,8 @@ const moreNavItems = [
   { label: "Audit Simulator", href: "/audit-simulator" },
   { label: "Readiness Plan", href: "/readiness-plan" },
   { label: "Self-Assessment", href: "/self-assessment" },
+  { label: "Achievements", href: "/achievements" },
+  { label: "Progress Backup", href: "/progress-backup" },
   { label: "Resources", href: "/resources" },
   { label: "Final Exam", href: "/final-exam" },
   { label: "Certificate", href: "/certificate" },

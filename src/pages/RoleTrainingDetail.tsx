@@ -3,11 +3,13 @@ import { Layout } from '@/components/layout/Layout';
 import { useUserPreferences, UserRole, roleLabels, experienceLabels } from '@/hooks/useUserPreferences';
 import { useRoleProgress } from '@/hooks/useRoleProgress';
 import { useProgress } from '@/hooks/useProgress';
+import { useBadges } from '@/hooks/useBadges';
 import { roleTrainingPlans, moduleNames } from '@/data/roleTrainingData';
 import { roleMissions } from '@/data/roleMissionsData';
 import { RoleTaskChecklist } from '@/components/RoleTaskChecklist';
 import { TrainingPlanGenerator } from '@/components/TrainingPlanGenerator';
 import { MissionCard } from '@/components/MissionCard';
+import { BadgeDisplay } from '@/components/BadgeDisplay';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -21,7 +23,8 @@ import {
   ArrowRight,
   ExternalLink,
   Star,
-  Rocket
+  Rocket,
+  Award
 } from 'lucide-react';
 
 const roleIcons: Record<UserRole, typeof Target> = {
@@ -37,7 +40,8 @@ export default function RoleTrainingDetail() {
   const { roleId } = useParams<{ roleId: string }>();
   const { preferences } = useUserPreferences();
   const { progress } = useProgress();
-  const { getCurrentRoleProgress, toggleTask, isTaskComplete, toggleMission, isMissionComplete } = useRoleProgress(roleId as UserRole);
+  const { getCurrentRoleProgress, toggleTask, isTaskComplete, toggleMission, isMissionComplete, allProgress } = useRoleProgress(roleId as UserRole);
+  const { isRoleComplete, getRoleCompletionProgress } = useBadges();
 
   // Validate roleId
   const validRoles: UserRole[] = ['compliance', 'it-ot', 'physical-security', 'hr-training', 'leadership', 'other'];
@@ -64,6 +68,9 @@ export default function RoleTrainingDetail() {
 
   const allModules = [...new Set(rolePlan.phases.flatMap(p => p.modules.map(m => m.id)))];
   const completedAllModules = allModules.filter(m => progress.completedModules.includes(m)).length;
+
+  const roleComplete = isRoleComplete(role, allProgress[role]);
+  const completionProgress = getRoleCompletionProgress(role, allProgress[role]);
 
   return (
     <Layout>
@@ -123,7 +130,7 @@ export default function RoleTrainingDetail() {
               </div>
 
               {/* Key Tools */}
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 mb-4">
                 <span className="text-sm text-muted-foreground mr-2">Key Tools:</span>
                 {rolePlan.keyTools.map((tool) => (
                   <Link
@@ -136,6 +143,36 @@ export default function RoleTrainingDetail() {
                   </Link>
                 ))}
               </div>
+
+              {/* Certificate Button */}
+              <div className="pt-4 border-t border-border/50">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <Award className={`h-5 w-5 ${roleComplete ? 'text-success' : 'text-muted-foreground'}`} />
+                    <div>
+                      <p className="text-sm font-medium text-navy">
+                        {roleComplete ? 'Role Path Complete!' : 'Role Completion Certificate'}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {roleComplete 
+                          ? 'You\'ve completed all requirements for this role path.'
+                          : `${completionProgress.overall}% complete - finish required steps to unlock your certificate`}
+                      </p>
+                    </div>
+                  </div>
+                  <Button 
+                    asChild 
+                    variant={roleComplete ? 'default' : 'outline'}
+                    size="sm"
+                    className={!roleComplete ? 'opacity-70' : ''}
+                  >
+                    <Link to={`/role-training/${role}/certificate`}>
+                      {roleComplete ? 'View Certificate' : 'View Requirements'}
+                      <ArrowRight className="ml-1 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -146,7 +183,7 @@ export default function RoleTrainingDetail() {
         <div className="container">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-xl font-semibold text-navy mb-4">Role Overview</h2>
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div className="bg-card rounded-xl border border-border/50 p-5">
                 <h3 className="text-sm font-semibold text-navy mb-2">Your Role</h3>
                 <p className="text-sm text-muted-foreground">{rolePlan.overview}</p>
@@ -156,6 +193,9 @@ export default function RoleTrainingDetail() {
                 <p className="text-sm text-muted-foreground">{rolePlan.accountability}</p>
               </div>
             </div>
+            
+            {/* Achievements Section */}
+            <BadgeDisplay role={role} roleProgress={allProgress[role]} />
           </div>
         </div>
       </section>
