@@ -4,8 +4,10 @@ import { useUserPreferences, UserRole, roleLabels, experienceLabels } from '@/ho
 import { useRoleProgress } from '@/hooks/useRoleProgress';
 import { useProgress } from '@/hooks/useProgress';
 import { roleTrainingPlans, moduleNames } from '@/data/roleTrainingData';
+import { roleMissions } from '@/data/roleMissionsData';
 import { RoleTaskChecklist } from '@/components/RoleTaskChecklist';
 import { TrainingPlanGenerator } from '@/components/TrainingPlanGenerator';
+import { MissionCard } from '@/components/MissionCard';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -18,7 +20,8 @@ import {
   Wrench,
   ArrowRight,
   ExternalLink,
-  Star
+  Star,
+  Rocket
 } from 'lucide-react';
 
 const roleIcons: Record<UserRole, typeof Target> = {
@@ -34,7 +37,7 @@ export default function RoleTrainingDetail() {
   const { roleId } = useParams<{ roleId: string }>();
   const { preferences } = useUserPreferences();
   const { progress } = useProgress();
-  const { getCurrentRoleProgress, toggleTask, isTaskComplete } = useRoleProgress(roleId as UserRole);
+  const { getCurrentRoleProgress, toggleTask, isTaskComplete, toggleMission, isMissionComplete } = useRoleProgress(roleId as UserRole);
 
   // Validate roleId
   const validRoles: UserRole[] = ['compliance', 'it-ot', 'physical-security', 'hr-training', 'leadership', 'other'];
@@ -44,6 +47,7 @@ export default function RoleTrainingDetail() {
 
   const role = roleId as UserRole;
   const rolePlan = roleTrainingPlans[role];
+  const missions = roleMissions[role] || [];
   const roleProgress = getCurrentRoleProgress();
   const RoleIcon = roleIcons[role];
 
@@ -51,6 +55,9 @@ export default function RoleTrainingDetail() {
   const totalTasks = rolePlan.phases.reduce((sum, phase) => sum + phase.tasks.length, 0);
   const completedTasks = roleProgress.tasksCompleted.length;
   const taskPercentage = Math.round((completedTasks / totalTasks) * 100);
+
+  const completedMissions = roleProgress.missionsCompleted.length;
+  const totalMissions = missions.length;
 
   const requiredModules = [...new Set(rolePlan.phases.flatMap(p => p.modules.filter(m => m.required).map(m => m.id)))];
   const completedRequiredModules = requiredModules.filter(m => progress.completedModules.includes(m)).length;
@@ -80,14 +87,22 @@ export default function RoleTrainingDetail() {
 
             {/* Role Dashboard */}
             <div className="bg-card rounded-xl border border-border/50 p-6 shadow-card">
-              <div className="grid sm:grid-cols-3 gap-4 mb-6">
+              <div className="grid sm:grid-cols-4 gap-4 mb-6">
                 <div className="bg-muted/50 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <CheckCircle2 className="h-4 w-4 text-success" />
-                    <span className="text-sm font-medium text-navy">Tasks Completed</span>
+                    <span className="text-sm font-medium text-navy">Tasks</span>
                   </div>
                   <p className="text-2xl font-bold text-success">{completedTasks} / {totalTasks}</p>
                   <Progress value={taskPercentage} className="h-1.5 mt-2" />
+                </div>
+                <div className="bg-muted/50 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Rocket className="h-4 w-4 text-accent" />
+                    <span className="text-sm font-medium text-navy">Missions</span>
+                  </div>
+                  <p className="text-2xl font-bold text-accent">{completedMissions} / {totalMissions}</p>
+                  <Progress value={totalMissions > 0 ? (completedMissions / totalMissions) * 100 : 0} className="h-1.5 mt-2" />
                 </div>
                 <div className="bg-muted/50 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
@@ -99,10 +114,10 @@ export default function RoleTrainingDetail() {
                 </div>
                 <div className="bg-muted/50 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <Target className="h-4 w-4 text-accent" />
+                    <Target className="h-4 w-4 text-navy" />
                     <span className="text-sm font-medium text-navy">All Modules</span>
                   </div>
-                  <p className="text-2xl font-bold text-accent">{completedAllModules} / {allModules.length}</p>
+                  <p className="text-2xl font-bold text-navy">{completedAllModules} / {allModules.length}</p>
                   <Progress value={allModules.length > 0 ? (completedAllModules / allModules.length) * 100 : 0} className="h-1.5 mt-2" />
                 </div>
               </div>
@@ -150,10 +165,11 @@ export default function RoleTrainingDetail() {
         <div className="container">
           <div className="max-w-4xl mx-auto">
             <Tabs defaultValue="phases" className="space-y-6">
-              <TabsList className="grid grid-cols-3 w-full max-w-md mx-auto">
+              <TabsList className="grid grid-cols-4 w-full max-w-lg mx-auto">
                 <TabsTrigger value="phases">Phased Plan</TabsTrigger>
+                <TabsTrigger value="missions">Missions</TabsTrigger>
                 <TabsTrigger value="timeline">Timeline</TabsTrigger>
-                <TabsTrigger value="generator">Generate Plan</TabsTrigger>
+                <TabsTrigger value="generator">Export</TabsTrigger>
               </TabsList>
 
               {/* Phased Training Plan */}
@@ -210,6 +226,28 @@ export default function RoleTrainingDetail() {
                       />
                     </div>
                   </div>
+                ))}
+              </TabsContent>
+
+              {/* Missions Tab */}
+              <TabsContent value="missions" className="space-y-6">
+                <div className="bg-muted/30 rounded-xl border border-border/50 p-6 mb-6">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Rocket className="h-5 w-5 text-accent" />
+                    <h3 className="font-semibold text-navy">Role Missions</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Scenario-based assignments that apply what you've learned. Each mission simulates a real-world 
+                    situation you might face in your role. Complete the steps and mark the mission done to track your progress.
+                  </p>
+                </div>
+                {missions.map((mission) => (
+                  <MissionCard
+                    key={mission.id}
+                    mission={mission}
+                    isComplete={isMissionComplete(mission.id)}
+                    onToggleComplete={toggleMission}
+                  />
                 ))}
               </TabsContent>
 

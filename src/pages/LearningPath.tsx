@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { ProgressWidget } from "@/components/ProgressWidget";
+import { RoleSelector } from "@/components/RoleSelector";
 import { useUserPreferences, roleLabels } from "@/hooks/useUserPreferences";
 import { useProgress } from "@/hooks/useProgress";
 import { roleTrainingPlans, moduleNames } from "@/data/roleTrainingData";
@@ -92,10 +93,29 @@ export default function LearningPath() {
         </div>
       </section>
 
-      {/* Progress Widget */}
+      {/* Role Selector & Progress Widget */}
       <section className="py-8">
         <div className="container">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-4xl mx-auto space-y-6">
+            <div className="bg-card rounded-xl border border-border/50 p-6">
+              <h2 className="text-lg font-semibold text-navy mb-4">Select Your Role Path</h2>
+              <div className="flex flex-col sm:flex-row sm:items-end gap-4">
+                <RoleSelector className="flex-1" />
+                {preferences.role && (
+                  <Button asChild>
+                    <Link to={`/role-training/${preferences.role}`}>
+                      View Full Training Plan
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                )}
+              </div>
+              {preferences.role && (
+                <p className="text-sm text-muted-foreground mt-3">
+                  Your role selection personalizes module recommendations below and unlocks your dedicated training plan.
+                </p>
+              )}
+            </div>
             <ProgressWidget />
           </div>
         </div>

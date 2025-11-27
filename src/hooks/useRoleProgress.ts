@@ -6,6 +6,7 @@ const STORAGE_KEY = 'cip-academy-role-progress';
 export interface RoleProgressData {
   modulesCompleted: number[];
   tasksCompleted: string[];
+  missionsCompleted: string[];
   finalExamPassed: boolean;
 }
 
@@ -21,6 +22,7 @@ export interface AllRoleProgress {
 const defaultRoleProgress: RoleProgressData = {
   modulesCompleted: [],
   tasksCompleted: [],
+  missionsCompleted: [],
   finalExamPassed: false,
 };
 
@@ -151,11 +153,37 @@ export function useRoleProgress(currentRole: UserRole | null) {
     });
   }, [currentRole, saveProgress]);
 
+  const toggleMission = useCallback((missionId: string) => {
+    if (!currentRole) return;
+    setAllProgress(prev => {
+      const roleProgress = prev[currentRole] || defaultRoleProgress;
+      const isComplete = roleProgress.missionsCompleted.includes(missionId);
+      const newProgress = {
+        ...prev,
+        [currentRole]: {
+          ...roleProgress,
+          missionsCompleted: isComplete
+            ? roleProgress.missionsCompleted.filter(id => id !== missionId)
+            : [...roleProgress.missionsCompleted, missionId],
+        },
+      };
+      saveProgress(newProgress);
+      return newProgress;
+    });
+  }, [currentRole, saveProgress]);
+
+  const isMissionComplete = useCallback((missionId: string): boolean => {
+    if (!currentRole) return false;
+    const roleProgress = allProgress[currentRole] || defaultRoleProgress;
+    return roleProgress.missionsCompleted.includes(missionId);
+  }, [currentRole, allProgress]);
+
   const getProgressStats = useCallback((role: UserRole) => {
     const roleProgress = allProgress[role] || defaultRoleProgress;
     return {
       modulesCompleted: roleProgress.modulesCompleted.length,
       tasksCompleted: roleProgress.tasksCompleted.length,
+      missionsCompleted: roleProgress.missionsCompleted.length,
       finalExamPassed: roleProgress.finalExamPassed,
     };
   }, [allProgress]);
@@ -184,6 +212,8 @@ export function useRoleProgress(currentRole: UserRole | null) {
     markTaskIncomplete,
     toggleTask,
     isTaskComplete,
+    toggleMission,
+    isMissionComplete,
     isModuleCompleteForRole,
     setFinalExamPassed,
     getProgressStats,
