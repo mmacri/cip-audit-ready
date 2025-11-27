@@ -1,56 +1,81 @@
 import { Layout } from "@/components/layout/Layout";
+import { Button } from "@/components/ui/button";
 import { 
   FileSpreadsheet, 
   FileText, 
   Download, 
   ExternalLink,
   BookOpen,
-  Table,
-  List
+  Table
 } from "lucide-react";
+import {
+  generateEvidenceInventory,
+  generateTrainingMatrix,
+  generateIncidentResponseScript,
+  generateChangeControlChecklist,
+  generatePatchTracker,
+  generateAccessReviewForm,
+} from "@/utils/pdfTemplates";
 
-const templates = [
+interface Template {
+  icon: typeof FileSpreadsheet;
+  title: string;
+  description: string;
+  format: string;
+  columns?: string[];
+  fields?: string[];
+  sections?: string[];
+  generatePdf: () => void;
+}
+
+const templates: Template[] = [
   {
     icon: FileSpreadsheet,
     title: "Evidence Inventory Spreadsheet",
     description: "Track all evidence documents mapped to CIP requirements, including owners, dates, and locations.",
-    format: "Excel Template",
-    columns: ["CIP Requirement ID", "Evidence Description", "Document Location", "Owner", "Last Updated", "Expiration Date", "Status"]
+    format: "PDF with Example Data",
+    columns: ["CIP Requirement ID", "Evidence Description", "Document Location", "Owner", "Last Updated", "Expiration Date", "Status"],
+    generatePdf: generateEvidenceInventory,
   },
   {
     icon: Table,
     title: "Training Matrix",
     description: "Map personnel to required training, track completion dates, and identify upcoming renewals.",
-    format: "Excel Template",
-    columns: ["Employee Name", "Role", "Required Training", "Completion Date", "Next Due Date", "Trainer", "Status"]
+    format: "PDF with Example Data",
+    columns: ["Employee Name", "Role", "Required Training", "Completion Date", "Next Due Date", "Trainer", "Status"],
+    generatePdf: generateTrainingMatrix,
   },
   {
     icon: FileText,
     title: "Incident Response Tabletop Script",
     description: "Scenario-based exercise script for testing your incident response plan with your team.",
-    format: "Word Document",
-    sections: ["Scenario Overview", "Inject Timeline", "Discussion Questions", "Expected Actions", "Lessons Learned Template"]
+    format: "PDF with Example Scenario",
+    sections: ["Scenario Overview", "Inject Timeline", "Discussion Questions", "Expected Actions", "Lessons Learned Template"],
+    generatePdf: generateIncidentResponseScript,
   },
   {
     icon: FileText,
     title: "Change Control Checklist",
     description: "Step-by-step checklist for documenting configuration changes to BES Cyber Systems.",
-    format: "PDF Checklist",
-    fields: ["Change Request ID", "Requestor", "System Affected", "Change Description", "Risk Assessment", "Approvals", "Implementation Date", "Rollback Plan", "Post-Change Verification"]
+    format: "PDF with Example Data",
+    fields: ["Change Request ID", "Requestor", "System Affected", "Change Description", "Risk Assessment", "Approvals", "Implementation Date", "Rollback Plan", "Post-Change Verification"],
+    generatePdf: generateChangeControlChecklist,
   },
   {
     icon: FileSpreadsheet,
     title: "Patch Assessment Tracker",
     description: "Track security patches from identification through assessment and implementation or mitigation.",
-    format: "Excel Template",
-    columns: ["Patch ID", "Vendor", "Affected Systems", "Release Date", "Assessment Due", "Disposition", "Implementation Date", "Mitigation Details"]
+    format: "PDF with Example Data",
+    columns: ["Patch ID", "Vendor", "Affected Systems", "Release Date", "Assessment Due", "Disposition", "Implementation Date", "Mitigation Details"],
+    generatePdf: generatePatchTracker,
   },
   {
     icon: FileText,
     title: "Access Review Documentation Form",
     description: "Standardized form for documenting quarterly access reviews with approval signatures.",
-    format: "Word Document",
-    fields: ["Review Period", "System/Application", "Access List Reviewed", "Reviewer Name", "Date", "Discrepancies Found", "Corrective Actions", "Approver Signature"]
+    format: "PDF with Example Data",
+    fields: ["Review Period", "System/Application", "Access List Reviewed", "Reviewer Name", "Date", "Discrepancies Found", "Corrective Actions", "Approver Signature"],
+    generatePdf: generateAccessReviewForm,
   }
 ];
 
@@ -179,7 +204,7 @@ export default function Resources() {
             </h1>
             <p className="text-lg text-muted-foreground">
               Practical tools, templates, and reference materials to support your 
-              NERC CIP compliance program.
+              NERC CIP compliance program. Download PDF templates with pre-filled examples.
             </p>
           </div>
         </div>
@@ -191,28 +216,38 @@ export default function Resources() {
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl font-bold text-navy mb-6">Downloadable Templates</h2>
             <p className="text-muted-foreground mb-8">
-              These templates provide starting points for common CIP documentation needs. 
-              Customize them to fit your organization's specific requirements and processes.
+              These templates include pre-filled example data to help you understand the format and structure. 
+              Download them as PDFs and use them as references when building your own documentation.
             </p>
 
             <div className="space-y-4">
               {templates.map((template) => (
                 <div 
                   key={template.title}
-                  className="bg-card rounded-xl border border-border/50 p-5 hover:shadow-card-hover transition-all duration-300 cursor-pointer group"
+                  className="bg-card rounded-xl border border-border/50 p-5 hover:shadow-card-hover transition-all duration-300 group"
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
                       <template.icon className="h-6 w-6 text-primary" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-navy mb-1 group-hover:text-primary transition-colors">
-                        {template.title}
-                      </h3>
+                      <div className="flex items-start justify-between gap-4 mb-1">
+                        <h3 className="font-semibold text-navy group-hover:text-primary transition-colors">
+                          {template.title}
+                        </h3>
+                        <Button 
+                          size="sm" 
+                          onClick={template.generatePdf}
+                          className="shrink-0"
+                        >
+                          <Download className="h-4 w-4 mr-1" />
+                          Download PDF
+                        </Button>
+                      </div>
                       <p className="text-sm text-muted-foreground mb-3">{template.description}</p>
                       
                       {/* Show columns/fields/sections */}
-                      {'columns' in template && (
+                      {template.columns && (
                         <div className="bg-muted/50 rounded-lg p-3 mb-3">
                           <p className="text-xs font-medium text-navy mb-1">Key Columns:</p>
                           <div className="flex flex-wrap gap-1">
@@ -224,7 +259,7 @@ export default function Resources() {
                           </div>
                         </div>
                       )}
-                      {'fields' in template && (
+                      {template.fields && (
                         <div className="bg-muted/50 rounded-lg p-3 mb-3">
                           <p className="text-xs font-medium text-navy mb-1">Key Fields:</p>
                           <div className="flex flex-wrap gap-1">
@@ -236,7 +271,7 @@ export default function Resources() {
                           </div>
                         </div>
                       )}
-                      {'sections' in template && (
+                      {template.sections && (
                         <div className="bg-muted/50 rounded-lg p-3 mb-3">
                           <p className="text-xs font-medium text-navy mb-1">Sections:</p>
                           <div className="flex flex-wrap gap-1">
