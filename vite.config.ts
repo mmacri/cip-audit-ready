@@ -5,7 +5,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: "/cip-audit-ready/",
+  base: process.env.GITHUB_PAGES === 'true' ? "/cip-audit-ready/" : "/",
   server: {
     host: "::",
     port: 8080,
