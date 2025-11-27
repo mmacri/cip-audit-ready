@@ -228,7 +228,7 @@ export default function SelfAssessment() {
 
                 {/* Recommendations */}
                 <div className="bg-muted/50 rounded-xl p-6">
-                  <h4 className="font-semibold text-navy mb-3">Recommended Modules</h4>
+                  <h4 className="font-semibold text-navy mb-3">Recommended Next Steps</h4>
                   <p className="text-sm text-muted-foreground mb-4">
                     Based on your lowest scoring area ({categoryInfo[lowestCategory].name}), we recommend:
                   </p>
@@ -240,11 +240,22 @@ export default function SelfAssessment() {
                     ))}
                   </div>
                   {lowestCategory === "evidence" && (
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground mb-4">
                       Also visit the <Link to="/evidence-lab" className="text-primary hover:underline font-medium">Evidence Lab</Link> for 
                       hands-on guidance on organizing and strengthening your evidence practices.
                     </p>
                   )}
+                  <div className="pt-4 border-t border-border">
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Ready to create an action plan based on your assessment?
+                    </p>
+                    <Link 
+                      to="/readiness-plan"
+                      className="inline-flex items-center gap-2 text-sm text-primary font-medium hover:underline"
+                    >
+                      Build Your Readiness Plan <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
                 </div>
 
                 <Button onClick={handleReset} variant="outline" className="w-full">

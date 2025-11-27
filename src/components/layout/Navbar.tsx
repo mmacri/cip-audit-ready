@@ -2,19 +2,35 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Menu, X, GraduationCap } from "lucide-react";
+import { UserRoleBadge } from "@/components/UserRoleBadge";
+import { Menu, X, GraduationCap, MoreHorizontal } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-const navItems = [
+const mainNavItems = [
   { label: "Home", href: "/" },
   { label: "Learning Path", href: "/learning-path" },
   { label: "Modules", href: "/modules" },
   { label: "Role Training", href: "/role-training" },
   { label: "Evidence Lab", href: "/evidence-lab" },
+];
+
+const moreNavItems = [
   { label: "Case Studies", href: "/case-studies" },
+  { label: "Audit Simulator", href: "/audit-simulator" },
+  { label: "Readiness Plan", href: "/readiness-plan" },
   { label: "Self-Assessment", href: "/self-assessment" },
   { label: "Resources", href: "/resources" },
   { label: "Final Exam", href: "/final-exam" },
+  { label: "Certificate", href: "/certificate" },
+  { label: "About & Contact", href: "/about" },
 ];
+
+const allNavItems = [...mainNavItems, ...moreNavItems];
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -33,32 +49,68 @@ export function Navbar() {
           </div>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              to={item.href}
-              className={cn(
-                "px-3 py-2 text-sm font-medium rounded-lg transition-colors",
-                location.pathname === item.href
-                  ? "text-primary bg-primary/10"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="hidden lg:flex items-center gap-1">
+          <nav className="flex items-center gap-1">
+            {mainNavItems.map((item) => (
+              <Link
+                key={item.href}
+                to={item.href}
+                className={cn(
+                  "px-3 py-2 text-sm font-medium rounded-lg transition-colors",
+                  location.pathname === item.href
+                    ? "text-primary bg-primary/10"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                )}
+              >
+                {item.label}
+              </Link>
+            ))}
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className={cn(
+                  "px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1",
+                  moreNavItems.some(item => location.pathname === item.href)
+                    ? "text-primary bg-primary/10"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                )}>
+                  More <MoreHorizontal className="h-4 w-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                {moreNavItems.map((item) => (
+                  <DropdownMenuItem key={item.href} asChild>
+                    <Link
+                      to={item.href}
+                      className={cn(
+                        location.pathname === item.href && "bg-primary/10 text-primary"
+                      )}
+                    >
+                      {item.label}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </nav>
+          
+          <div className="ml-2 pl-2 border-l border-border">
+            <UserRoleBadge />
+          </div>
+        </div>
 
-        <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-          {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </Button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <UserRoleBadge />
+          <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
+        </div>
       </div>
 
       {mobileMenuOpen && (
         <div className="lg:hidden border-t border-border bg-white">
           <nav className="container py-4 flex flex-col gap-1">
-            {navItems.map((item) => (
+            {allNavItems.map((item) => (
               <Link
                 key={item.href}
                 to={item.href}

@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { CheckCircle2, XCircle, RotateCcw, Trophy } from 'lucide-react';
+import { CheckCircle2, XCircle, RotateCcw, Trophy, ArrowRight, Lightbulb } from 'lucide-react';
 
 export interface QuizQuestion {
   id: number;
@@ -57,35 +58,117 @@ export function Quiz({ questions, onPass, passingScore = 0.7, title = "Quiz" }: 
   const passed = percentage >= passingScore * 100;
   const allAnswered = Object.keys(answers).length === questions.length;
 
+  // Get next steps guidance based on score
+  const getNextSteps = () => {
+    if (percentage >= 80) {
+      return {
+        type: 'success',
+        title: 'Excellent! Ready to Move On',
+        guidance: [
+          'Apply what you learned in your real environment',
+          'Try the practical exercise if you haven\'t already',
+          'Move on to the next module when ready'
+        ],
+        showLink: true
+      };
+    } else if (percentage >= 50) {
+      return {
+        type: 'warning',
+        title: 'Good Progress - Review Key Concepts',
+        guidance: [
+          'Review the sections where you missed questions',
+          'Re-read the explanations for incorrect answers',
+          'Try the quiz again after reviewing'
+        ],
+        showLink: false
+      };
+    } else {
+      return {
+        type: 'error',
+        title: 'More Review Needed',
+        guidance: [
+          'Carefully re-read all content sections above',
+          'Focus on understanding the "why" behind each concept',
+          'Take notes on key terms and timelines',
+          'Try the quiz again when you feel more confident'
+        ],
+        showLink: false
+      };
+    }
+  };
+
   return (
     <div className="bg-card rounded-xl border border-border/50 p-6">
       <h3 className="text-lg font-semibold text-navy mb-4">{title}</h3>
       
       {showResults && (
-        <div className={cn(
-          "mb-6 p-4 rounded-lg border",
-          passed 
-            ? "bg-success/10 border-success/30" 
-            : "bg-destructive/10 border-destructive/30"
-        )}>
-          <div className="flex items-center gap-3">
-            {passed ? (
-              <Trophy className="h-6 w-6 text-success" />
-            ) : (
-              <XCircle className="h-6 w-6 text-destructive" />
-            )}
-            <div>
-              <p className={cn("font-semibold", passed ? "text-success" : "text-destructive")}>
-                Score: {score}/{questions.length} ({percentage}%)
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {passed 
-                  ? "Congratulations! You passed the quiz." 
-                  : `You need ${Math.round(passingScore * 100)}% to pass. Review the material and try again.`
-                }
-              </p>
+        <div className="mb-6 space-y-4">
+          {/* Score Display */}
+          <div className={cn(
+            "p-4 rounded-lg border",
+            passed 
+              ? "bg-success/10 border-success/30" 
+              : "bg-destructive/10 border-destructive/30"
+          )}>
+            <div className="flex items-center gap-3">
+              {passed ? (
+                <Trophy className="h-6 w-6 text-success" />
+              ) : (
+                <XCircle className="h-6 w-6 text-destructive" />
+              )}
+              <div>
+                <p className={cn("font-semibold", passed ? "text-success" : "text-destructive")}>
+                  Score: {score}/{questions.length} ({percentage}%)
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {passed 
+                    ? "Congratulations! You passed the quiz." 
+                    : `You need ${Math.round(passingScore * 100)}% to pass. Review the material and try again.`
+                  }
+                </p>
+              </div>
             </div>
           </div>
+
+          {/* Next Steps Guidance */}
+          {(() => {
+            const nextSteps = getNextSteps();
+            return (
+              <div className={cn(
+                "p-4 rounded-lg border",
+                nextSteps.type === 'success' ? "bg-primary/5 border-primary/20" :
+                nextSteps.type === 'warning' ? "bg-warning/5 border-warning/20" :
+                "bg-muted border-border"
+              )}>
+                <div className="flex items-start gap-3">
+                  <Lightbulb className={cn(
+                    "h-5 w-5 shrink-0 mt-0.5",
+                    nextSteps.type === 'success' ? "text-primary" :
+                    nextSteps.type === 'warning' ? "text-warning" : "text-muted-foreground"
+                  )} />
+                  <div>
+                    <p className="font-medium text-navy mb-2">{nextSteps.title}</p>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      {nextSteps.guidance.map((item, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <span className="text-primary">•</span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                    {nextSteps.showLink && passed && (
+                      <Link 
+                        to="/learning-path"
+                        className="inline-flex items-center gap-1 text-sm text-primary font-medium mt-3 hover:underline"
+                      >
+                        View Learning Path <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       )}
 

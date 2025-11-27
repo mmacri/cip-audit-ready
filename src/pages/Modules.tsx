@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Quiz, QuizQuestion } from "@/components/Quiz";
 import { useProgress } from "@/hooks/useProgress";
+import { useUserPreferences } from "@/hooks/useUserPreferences";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,13 +10,20 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { ModuleRecap } from "@/components/ModuleRecap";
+import { SpacedReviewQuiz } from "@/components/SpacedReviewQuiz";
+import { ESPPSPDiagram } from "@/components/diagrams/ESPPSPDiagram";
+import { PatchManagementDiagram } from "@/components/diagrams/PatchManagementDiagram";
+import { IncidentResponseDiagram } from "@/components/diagrams/IncidentResponseDiagram";
+import { TrainingMatrixDiagram } from "@/components/diagrams/TrainingMatrixDiagram";
 import { 
   BookOpen, 
   ChevronDown, 
   CheckCircle2,
   Target,
   Lightbulb,
-  GraduationCap
+  GraduationCap,
+  Star
 } from "lucide-react";
 
 interface ModuleData {
@@ -659,6 +667,7 @@ const modulesData: ModuleData[] = [
 export default function Modules() {
   const [openModules, setOpenModules] = useState<number[]>([]);
   const { isModuleComplete, markModuleComplete, isLoaded } = useProgress();
+  const { isModuleRecommended, preferences } = useUserPreferences();
 
   const toggleModule = (moduleId: number) => {
     setOpenModules(prev => 
@@ -666,6 +675,14 @@ export default function Modules() {
         ? prev.filter(id => id !== moduleId)
         : [...prev, moduleId]
     );
+  };
+
+  // Diagram components for specific modules
+  const moduleDiagrams: Record<number, React.ReactNode> = {
+    4: <TrainingMatrixDiagram className="my-6" />,
+    5: <ESPPSPDiagram className="my-6" />,
+    6: <PatchManagementDiagram className="my-6" />,
+    7: <IncidentResponseDiagram className="my-6" />,
   };
 
   const handleQuizPass = (moduleId: number) => {
@@ -699,6 +716,7 @@ export default function Modules() {
             {modulesData.map((module) => {
               const isComplete = isLoaded && isModuleComplete(module.id);
               const isOpen = openModules.includes(module.id);
+              const isRecommended = preferences.onboardingComplete && isModuleRecommended(module.id);
 
               return (
                 <div 
@@ -706,7 +724,7 @@ export default function Modules() {
                   id={`module-${module.id}`}
                   className={cn(
                     "bg-card rounded-xl border-2 overflow-hidden transition-all",
-                    isComplete ? "border-success/50" : "border-border/50"
+                    isComplete ? "border-success/50" : isRecommended ? "border-primary/50" : "border-border/50"
                   )}
                 >
                   <Collapsible open={isOpen} onOpenChange={() => toggleModule(module.id)}>
@@ -721,10 +739,15 @@ export default function Modules() {
                           {isComplete ? <CheckCircle2 className="h-6 w-6" /> : module.id}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
+                          <div className="flex items-center gap-2 mb-1 flex-wrap">
                             <h2 className="text-lg font-semibold text-navy">
                               Module {module.id}: {module.title}
                             </h2>
+                            {isRecommended && !isComplete && (
+                              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-medium flex items-center gap-1">
+                                <Star className="h-3 w-3" /> Recommended
+                              </span>
+                            )}
                             {isComplete && (
                               <span className="text-xs bg-success/10 text-success px-2 py-1 rounded-full font-medium">
                                 Complete
@@ -749,8 +772,13 @@ export default function Modules() {
                     
                     <CollapsibleContent>
                       <div className="px-6 pb-6 space-y-8 border-t border-border">
-                        {/* Learning Objectives */}
+                        {/* Module Recap - Shows key points from previous module */}
                         <div className="pt-6">
+                          <ModuleRecap moduleId={module.id} />
+                        </div>
+
+                        {/* Learning Objectives */}
+                        <div>
                           <div className="flex items-center gap-2 mb-4">
                             <Target className="h-5 w-5 text-primary" />
                             <h3 className="text-lg font-semibold text-navy">Learning Objectives</h3>
@@ -775,6 +803,14 @@ export default function Modules() {
                           ))}
                         </div>
 
+                        {/* Visual Diagram (if applicable) */}
+                        {moduleDiagrams[module.id] && (
+                          <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
+                            <h4 className="font-semibold text-navy mb-4">Visual Reference</h4>
+                            {moduleDiagrams[module.id]}
+                          </div>
+                        )}
+
                         {/* Exercise */}
                         <div className="bg-accent/10 border border-accent/30 rounded-xl p-6">
                           <div className="flex items-center gap-2 mb-3">
@@ -790,6 +826,9 @@ export default function Modules() {
                           onPass={() => handleQuizPass(module.id)}
                           title={`Module ${module.id} Quiz`}
                         />
+
+                        {/* Spaced Review Questions */}
+                        <SpacedReviewQuiz currentModule={module.id} />
                       </div>
                     </CollapsibleContent>
                   </Collapsible>

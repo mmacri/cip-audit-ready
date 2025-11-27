@@ -1,7 +1,10 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { OnboardingModal } from "@/components/OnboardingModal";
+import { useUserPreferences } from "@/hooks/useUserPreferences";
 import { 
   BookOpen, 
   FolderSearch, 
@@ -63,8 +66,25 @@ const howItWorks = [
 ];
 
 export default function Home() {
+  const { preferences, isLoaded } = useUserPreferences();
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    if (isLoaded && !preferences.onboardingComplete) {
+      // Small delay to let the page render first
+      const timer = setTimeout(() => setShowOnboarding(true), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoaded, preferences.onboardingComplete]);
+
   return (
     <Layout>
+      {/* Onboarding Modal */}
+      <OnboardingModal 
+        open={showOnboarding} 
+        onComplete={() => setShowOnboarding(false)} 
+      />
+
       {/* Hero Section */}
       <section className="relative overflow-hidden gradient-hero">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyNHYySDI0di0yaDEyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
