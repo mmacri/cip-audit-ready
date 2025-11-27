@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { GraduationCap, Mail, Phone, MapPin } from "lucide-react";
+import { GraduationCap } from "lucide-react";
 
 export function Footer() {
   return (
     <footer className="bg-navy text-navy-foreground">
       <div className="container py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -67,30 +67,6 @@ export function Footer() {
                 <Link to="/resources#glossary" className="text-navy-foreground/70 hover:text-white transition-colors">
                   Glossary
                 </Link>
-              </li>
-              <li>
-                <Link to="/about" className="text-navy-foreground/70 hover:text-white transition-colors">
-                  About Us
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="font-semibold mb-4">Contact</h4>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-center gap-2 text-navy-foreground/70">
-                <Mail className="h-4 w-4" />
-                contact@cipreadiness.academy
-              </li>
-              <li className="flex items-center gap-2 text-navy-foreground/70">
-                <Phone className="h-4 w-4" />
-                (555) 123-4567
-              </li>
-              <li className="flex items-start gap-2 text-navy-foreground/70">
-                <MapPin className="h-4 w-4 mt-0.5" />
-                <span>Energy District<br />Houston, TX</span>
               </li>
             </ul>
           </div>

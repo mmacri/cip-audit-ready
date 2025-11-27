@@ -12,7 +12,6 @@ const navItems = [
   { label: "Evidence Lab", href: "/evidence-lab" },
   { label: "Self-Assessment", href: "/self-assessment" },
   { label: "Resources", href: "/resources" },
-  { label: "About", href: "/about" },
 ];
 
 export function Navbar() {

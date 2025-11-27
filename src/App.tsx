@@ -10,7 +10,6 @@ import RoleTraining from "./pages/RoleTraining";
 import EvidenceLab from "./pages/EvidenceLab";
 import SelfAssessment from "./pages/SelfAssessment";
 import Resources from "./pages/Resources";
-import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,7 +28,6 @@ const App = () => (
           <Route path="/evidence-lab" element={<EvidenceLab />} />
           <Route path="/self-assessment" element={<SelfAssessment />} />
           <Route path="/resources" element={<Resources />} />
-          <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
