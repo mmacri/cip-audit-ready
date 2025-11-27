@@ -3,8 +3,10 @@ import { Layout } from "@/components/layout/Layout";
 import { Quiz, QuizQuestion } from "@/components/Quiz";
 import { useProgress } from "@/hooks/useProgress";
 import { useUserPreferences } from "@/hooks/useUserPreferences";
+import { roleTrainingPlans } from "@/data/roleTrainingData";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Collapsible,
   CollapsibleContent,
@@ -24,7 +26,8 @@ import {
   Target,
   Lightbulb,
   GraduationCap,
-  Star
+  Star,
+  Shield
 } from "lucide-react";
 
 interface ModuleData {
@@ -717,7 +720,19 @@ export default function Modules() {
             {modulesData.map((module) => {
               const isComplete = isLoaded && isModuleComplete(module.id);
               const isOpen = openModules.includes(module.id);
-              const isRecommended = preferences.onboardingComplete && isModuleRecommended(module.id);
+              
+              // Check if module is required or recommended for current role
+              const rolePlan = preferences.role ? roleTrainingPlans[preferences.role] : null;
+              const requiredModules = rolePlan 
+                ? [...new Set(rolePlan.phases.flatMap(p => p.modules.filter(m => m.required).map(m => m.id)))]
+                : [];
+              const recommendedModules = rolePlan
+                ? [...new Set(rolePlan.phases.flatMap(p => p.modules.filter(m => !m.required).map(m => m.id)))]
+                : [];
+              
+              const isRequired = requiredModules.includes(module.id);
+              const isRecommended = recommendedModules.includes(module.id);
+              const isRoleRelevant = isRequired || isRecommended;
 
               return (
                 <div 
@@ -725,7 +740,10 @@ export default function Modules() {
                   id={`module-${module.id}`}
                   className={cn(
                     "bg-card rounded-xl border-2 overflow-hidden transition-all",
-                    isComplete ? "border-success/50" : isRecommended ? "border-primary/50" : "border-border/50"
+                    isComplete ? "border-success/50" : 
+                    isRequired ? "border-primary/50 shadow-sm" : 
+                    isRecommended ? "border-accent/40" : 
+                    preferences.role && !isRoleRelevant ? "border-border/30 opacity-60" : "border-border/50"
                   )}
                 >
                   <Collapsible open={isOpen} onOpenChange={() => toggleModule(module.id)}>
@@ -735,7 +753,9 @@ export default function Modules() {
                           "w-12 h-12 rounded-xl flex items-center justify-center shrink-0 font-bold text-lg",
                           isComplete 
                             ? "bg-success text-success-foreground" 
-                            : "bg-primary/10 text-primary"
+                            : isRequired
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-primary/10 text-primary"
                         )}>
                           {isComplete ? <CheckCircle2 className="h-6 w-6" /> : module.id}
                         </div>
@@ -744,15 +764,20 @@ export default function Modules() {
                             <h2 className="text-lg font-semibold text-navy">
                               Module {module.id}: {module.title}
                             </h2>
-                            {isRecommended && !isComplete && (
-                              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-medium flex items-center gap-1">
-                                <Star className="h-3 w-3" /> Recommended
-                              </span>
+                            {isComplete && preferences.role && (
+                              <Badge variant="default" className="bg-success text-success-foreground text-[10px]">
+                                <CheckCircle2 className="h-3 w-3 mr-1" /> Complete for your role
+                              </Badge>
                             )}
-                            {isComplete && (
-                              <span className="text-xs bg-success/10 text-success px-2 py-1 rounded-full font-medium">
-                                Complete
-                              </span>
+                            {!isComplete && isRequired && (
+                              <Badge variant="default" className="text-[10px]">
+                                <Shield className="h-3 w-3 mr-1" /> Required for your role
+                              </Badge>
+                            )}
+                            {!isComplete && isRecommended && (
+                              <Badge variant="secondary" className="text-[10px]">
+                                <Star className="h-3 w-3 mr-1" /> Recommended for your role
+                              </Badge>
                             )}
                           </div>
                           <ul className="text-sm text-muted-foreground space-y-1">

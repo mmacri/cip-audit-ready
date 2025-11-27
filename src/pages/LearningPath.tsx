@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { ProgressWidget } from "@/components/ProgressWidget";
-import { RoleSelector } from "@/components/RoleSelector";
+import { RoleSelectorCards } from "@/components/RoleSelectorCards";
 import { useUserPreferences, roleLabels } from "@/hooks/useUserPreferences";
 import { useProgress } from "@/hooks/useProgress";
 import { roleTrainingPlans, moduleNames } from "@/data/roleTrainingData";
@@ -15,7 +15,8 @@ import {
   ArrowRight,
   BookOpen,
   CheckCircle2,
-  Star
+  Star,
+  Sparkles
 } from "lucide-react";
 
 const tracks = [
@@ -73,10 +74,15 @@ export default function LearningPath() {
     return null;
   };
 
+  const isModuleDimmed = (moduleNum: number) => {
+    if (!preferences.role) return false;
+    return !requiredModules.includes(moduleNum) && !recommendedModules.includes(moduleNum);
+  };
+
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary/5 to-accent/5 py-16 md:py-20">
+      <section className="bg-gradient-to-br from-primary/5 to-accent/5 py-12 md:py-16">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center">
             <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-6">
@@ -86,36 +92,52 @@ export default function LearningPath() {
               Learning Path
             </h1>
             <p className="text-lg text-muted-foreground">
-              Use this page as your roadmap through the training content. Choose the track that 
-              matches your role and experience level, then work through the recommended modules.
+              Select your role to get a personalized training path. Your selection highlights 
+              required and recommended modules based on your job responsibilities.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Role Selector & Progress Widget */}
-      <section className="py-8">
+      {/* Role Selector Panel */}
+      <section className="py-8 border-b border-border/50">
         <div className="container">
-          <div className="max-w-4xl mx-auto space-y-6">
-            <div className="bg-card rounded-xl border border-border/50 p-6">
-              <h2 className="text-lg font-semibold text-navy mb-4">Select Your Role Path</h2>
-              <div className="flex flex-col sm:flex-row sm:items-end gap-4">
-                <RoleSelector className="flex-1" />
-                {preferences.role && (
+          <div className="max-w-5xl mx-auto">
+            <div className="bg-card rounded-xl border border-border/50 p-6 shadow-card">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+                  <Sparkles className="h-5 w-5 text-accent" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold text-navy">Select Your Role Path</h2>
+                  <p className="text-sm text-muted-foreground">Choose your role to personalize your training journey</p>
+                </div>
+              </div>
+              
+              <RoleSelectorCards />
+              
+              {preferences.role && (
+                <div className="mt-4 pt-4 border-t border-border/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <p className="text-sm text-muted-foreground">
+                    Your role selection personalizes module recommendations below.
+                  </p>
                   <Button asChild>
                     <Link to={`/role-training/${preferences.role}`}>
-                      View Full Training Plan
+                      View Full {roleLabels[preferences.role]} Training Plan
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
-                )}
-              </div>
-              {preferences.role && (
-                <p className="text-sm text-muted-foreground mt-3">
-                  Your role selection personalizes module recommendations below and unlocks your dedicated training plan.
-                </p>
+                </div>
               )}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Progress Widget */}
+      <section className="py-6">
+        <div className="container">
+          <div className="max-w-5xl mx-auto">
             <ProgressWidget />
           </div>
         </div>
@@ -147,25 +169,32 @@ export default function LearningPath() {
                       {track.modules.map((moduleNum) => {
                         const badge = getModuleBadge(moduleNum);
                         const isComplete = progress.completedModules.includes(moduleNum);
+                        const isDimmed = isModuleDimmed(moduleNum);
                         return (
                           <Link
                             key={moduleNum}
                             to={`/modules#module-${moduleNum}`}
                             className={cn(
                               "inline-flex items-center gap-2 bg-background rounded-lg px-3 py-2 text-sm hover:shadow-md transition-all group",
-                              badge === 'required' && "ring-2 ring-primary/30",
-                              badge === 'recommended' && "ring-1 ring-accent/30"
+                              badge === 'required' && "ring-2 ring-primary/50 shadow-sm",
+                              badge === 'recommended' && "ring-2 ring-accent/40",
+                              isDimmed && "opacity-50"
                             )}
                           >
                             <span className={cn(
                               "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors",
                               isComplete 
                                 ? "bg-success text-success-foreground" 
-                                : "bg-muted text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground"
+                                : badge === 'required'
+                                  ? "bg-primary/20 text-primary group-hover:bg-primary group-hover:text-primary-foreground"
+                                  : "bg-muted text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground"
                             )}>
                               {isComplete ? <CheckCircle2 className="h-3 w-3" /> : moduleNum}
                             </span>
-                            <span className="text-muted-foreground group-hover:text-foreground transition-colors">
+                            <span className={cn(
+                              "transition-colors",
+                              badge === 'required' ? "text-foreground font-medium" : "text-muted-foreground group-hover:text-foreground"
+                            )}>
                               {moduleNames[moduleNum]}
                             </span>
                             {badge === 'required' && preferences.role && (
