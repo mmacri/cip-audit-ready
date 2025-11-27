@@ -3,7 +3,14 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
+import Home from "./pages/Home";
+import NercCip101 from "./pages/NercCip101";
+import AuditJourney from "./pages/AuditJourney";
+import RoleTraining from "./pages/RoleTraining";
+import EvidenceLab from "./pages/EvidenceLab";
+import SelfAssessment from "./pages/SelfAssessment";
+import Resources from "./pages/Resources";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -15,8 +22,14 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/" element={<Home />} />
+          <Route path="/nerc-cip-101" element={<NercCip101 />} />
+          <Route path="/audit-journey" element={<AuditJourney />} />
+          <Route path="/role-training" element={<RoleTraining />} />
+          <Route path="/evidence-lab" element={<EvidenceLab />} />
+          <Route path="/self-assessment" element={<SelfAssessment />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
