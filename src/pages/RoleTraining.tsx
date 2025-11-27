@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Quiz, QuizQuestion } from "@/components/Quiz";
 import { cn } from "@/lib/utils";
@@ -27,6 +28,7 @@ interface RoleData {
     questions: string[];
   };
   quiz: QuizQuestion[];
+  recommendedModules: { id: number; title: string }[];
 }
 
 const roles: RoleData[] = [
@@ -67,6 +69,13 @@ const roles: RoleData[] = [
       { id: 1, question: "How often should you review evidence collection status?", options: ["Daily", "Weekly", "Monthly", "Quarterly"], correctAnswer: 1 },
       { id: 2, question: "What is the primary role of the Compliance Manager during an audit?", options: ["Technical support", "Primary liaison with auditors", "Physical security", "IT administration"], correctAnswer: 1 },
       { id: 3, question: "Why is a compliance calendar important?", options: ["For vacation tracking", "To track recurring requirements and deadlines", "For budget planning", "For employee reviews"], correctAnswer: 1 }
+    ],
+    recommendedModules: [
+      { id: 1, title: "Foundations of NERC and CIP" },
+      { id: 3, title: "Governance & Program Management" },
+      { id: 7, title: "Incident Response & Recovery" },
+      { id: 9, title: "Information Protection & Supply Chain" },
+      { id: 10, title: "Audit Simulation & Continuous Improvement" }
     ]
   },
   {
@@ -106,6 +115,14 @@ const roles: RoleData[] = [
       { id: 1, question: "Within how many days must security patches be assessed?", options: ["15 days", "30 days", "35 days", "60 days"], correctAnswer: 2 },
       { id: 2, question: "How long must security logs be retained?", options: ["30 days", "60 days", "90 days", "1 year"], correctAnswer: 2 },
       { id: 3, question: "When must baseline documentation be updated after a change?", options: ["Immediately", "Within 30 days", "Within 60 days", "At next audit"], correctAnswer: 1 }
+    ],
+    recommendedModules: [
+      { id: 1, title: "Foundations of NERC and CIP" },
+      { id: 2, title: "Asset Identification & Scope" },
+      { id: 5, title: "Electronic & Physical Perimeters" },
+      { id: 6, title: "System Security & Patching" },
+      { id: 7, title: "Incident Response & Recovery" },
+      { id: 8, title: "Configuration & Vulnerability Management" }
     ]
   },
   {
@@ -145,6 +162,12 @@ const roles: RoleData[] = [
       { id: 1, question: "How must visitors be managed within a PSP?", options: ["Sign in and roam freely", "Continuous escort required", "Badge and go", "No visitors allowed"], correctAnswer: 1 },
       { id: 2, question: "How quickly must physical access be revoked after termination?", options: ["Immediately", "24 hours", "7 days", "30 days"], correctAnswer: 1 },
       { id: 3, question: "What must visitor logs include?", options: ["Just the visitor name", "Entry/exit times, visitor name, escort name", "Badge number only", "Company name only"], correctAnswer: 1 }
+    ],
+    recommendedModules: [
+      { id: 1, title: "Foundations of NERC and CIP" },
+      { id: 2, title: "Asset Identification & Scope" },
+      { id: 5, title: "Electronic & Physical Perimeters" },
+      { id: 7, title: "Incident Response & Recovery" }
     ]
   },
   {
@@ -184,6 +207,11 @@ const roles: RoleData[] = [
       { id: 1, question: "When must CIP training be completed?", options: ["Within 30 days of access", "Before access is granted", "Within the first year", "During annual review"], correctAnswer: 1 },
       { id: 2, question: "How far back must personnel risk assessments check?", options: ["3 years", "5 years", "7 years", "10 years"], correctAnswer: 2 },
       { id: 3, question: "What is the access revocation timeline for terminations?", options: ["Immediately", "24 hours", "48 hours", "1 week"], correctAnswer: 1 }
+    ],
+    recommendedModules: [
+      { id: 1, title: "Foundations of NERC and CIP" },
+      { id: 3, title: "Governance & Program Management" },
+      { id: 4, title: "People & Training" }
     ]
   },
   {
@@ -223,6 +251,11 @@ const roles: RoleData[] = [
       { id: 1, question: "How often must cyber security policies be reviewed?", options: ["Every 6 months", "Every 12 months", "Every 15 months", "Every 24 months"], correctAnswer: 2 },
       { id: 2, question: "Can the CIP Senior Manager delegate their accountability?", options: ["Yes, to anyone", "Yes, to executives only", "No, accountability cannot be delegated", "Only during audits"], correctAnswer: 2 },
       { id: 3, question: "Why is leadership support a compliance requirement?", options: ["It's not required", "CIP-003 requires designated senior management", "Only for large utilities", "Only during audits"], correctAnswer: 1 }
+    ],
+    recommendedModules: [
+      { id: 1, title: "Foundations of NERC and CIP" },
+      { id: 3, title: "Governance & Program Management" },
+      { id: 10, title: "Audit Simulation & Continuous Improvement" }
     ]
   }
 ];
@@ -362,6 +395,30 @@ export default function RoleTraining() {
               questions={currentRole.quiz} 
               title={`${currentRole.title} Quiz`}
             />
+
+            {/* Recommended Modules */}
+            <div className="bg-gradient-to-br from-primary/5 to-accent/5 rounded-xl border border-primary/20 p-6">
+              <h3 className="text-lg font-semibold text-navy mb-3">Recommended Modules for {currentRole.title}</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                These modules cover the key CIP requirements most relevant to your role:
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {currentRole.recommendedModules.map((mod) => (
+                  <Link
+                    key={mod.id}
+                    to={`/modules#module-${mod.id}`}
+                    className="inline-flex items-center gap-2 bg-card border border-border/50 rounded-lg px-3 py-2 text-sm hover:border-primary/50 hover:shadow-md transition-all group"
+                  >
+                    <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                      {mod.id}
+                    </span>
+                    <span className="text-muted-foreground group-hover:text-foreground transition-colors">
+                      {mod.title}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>

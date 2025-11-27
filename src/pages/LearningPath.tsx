@@ -27,11 +27,11 @@ const tracks = [
     title: "Role-Based Track",
     description: "Select modules based on your specific job function. Each role has different compliance responsibilities and needs focused training on the requirements most relevant to their work.",
     roles: [
-      { name: "Compliance", modules: [1, 3, 7, 10] },
-      { name: "IT/OT", modules: [1, 2, 5, 6, 7, 8] },
-      { name: "Physical Security", modules: [1, 2, 5, 7] },
-      { name: "HR/Training", modules: [1, 3, 4] },
-      { name: "Leadership", modules: [1, 3, 10] }
+      { name: "Compliance / Risk Manager", modules: [1, 3, 7, 9, 10], why: "Focus on governance, documentation, and audit readiness" },
+      { name: "IT/OT Engineer", modules: [1, 2, 5, 6, 7, 8], why: "Focus on technical controls and system security" },
+      { name: "Physical Security", modules: [1, 2, 5, 7], why: "Focus on perimeters and incident response" },
+      { name: "HR/Training", modules: [1, 3, 4], why: "Focus on people, policies, and training requirements" },
+      { name: "Leadership", modules: [1, 3, 10], why: "Focus on oversight, governance, and continuous improvement" }
     ],
     color: "bg-accent/10 text-accent border-accent/30",
     note: "Visit the Role-Based Training page for detailed responsibilities and scenarios for each role."
@@ -134,10 +134,13 @@ export default function LearningPath() {
                 {track.roles && (
                   <div className="mb-4">
                     <h3 className="text-sm font-semibold text-navy mb-3">Modules by Role:</h3>
-                    <div className="bg-background rounded-xl p-4 space-y-3">
+                    <div className="bg-background rounded-xl p-4 space-y-4">
                       {track.roles.map((role) => (
-                        <div key={role.name} className="flex items-center justify-between">
-                          <span className="font-medium text-navy">{role.name}</span>
+                        <div key={role.name} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                          <div>
+                            <span className="font-medium text-navy">{role.name}</span>
+                            {role.why && <p className="text-xs text-muted-foreground">{role.why}</p>}
+                          </div>
                           <div className="flex gap-1">
                             {role.modules.map((m) => (
                               <Link

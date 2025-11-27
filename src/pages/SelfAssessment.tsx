@@ -232,13 +232,19 @@ export default function SelfAssessment() {
                   <p className="text-sm text-muted-foreground mb-4">
                     Based on your lowest scoring area ({categoryInfo[lowestCategory].name}), we recommend:
                   </p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-4">
                     {categoryInfo[lowestCategory].modules.map(m => (
                       <Link key={m} to={`/modules#module-${m}`} className="bg-primary text-primary-foreground px-3 py-1 rounded-lg text-sm hover:bg-primary/90">
                         Module {m}
                       </Link>
                     ))}
                   </div>
+                  {lowestCategory === "evidence" && (
+                    <p className="text-sm text-muted-foreground">
+                      Also visit the <Link to="/evidence-lab" className="text-primary hover:underline font-medium">Evidence Lab</Link> for 
+                      hands-on guidance on organizing and strengthening your evidence practices.
+                    </p>
+                  )}
                 </div>
 
                 <Button onClick={handleReset} variant="outline" className="w-full">
