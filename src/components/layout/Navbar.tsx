@@ -6,12 +6,13 @@ import { Menu, X, GraduationCap } from "lucide-react";
 
 const navItems = [
   { label: "Home", href: "/" },
-  { label: "NERC CIP 101", href: "/nerc-cip-101" },
-  { label: "Audit Journey", href: "/audit-journey" },
+  { label: "Learning Path", href: "/learning-path" },
+  { label: "Modules", href: "/modules" },
   { label: "Role-Based Training", href: "/role-training" },
   { label: "Evidence Lab", href: "/evidence-lab" },
   { label: "Self-Assessment", href: "/self-assessment" },
   { label: "Resources", href: "/resources" },
+  { label: "About & Contact", href: "/about" },
 ];
 
 export function Navbar() {
@@ -31,7 +32,6 @@ export function Navbar() {
           </div>
         </Link>
 
-        {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-1">
           {navItems.map((item) => (
             <Link
@@ -49,18 +49,11 @@ export function Navbar() {
           ))}
         </nav>
 
-        {/* Mobile Menu Button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="lg:hidden"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
+        <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
           {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </Button>
       </div>
 
-      {/* Mobile Navigation */}
       {mobileMenuOpen && (
         <div className="lg:hidden border-t border-border bg-white">
           <nav className="container py-4 flex flex-col gap-1">
