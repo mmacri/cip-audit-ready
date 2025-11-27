@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -68,6 +68,7 @@ const howItWorks = [
 export default function Home() {
   const { preferences, isLoaded } = useUserPreferences();
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isLoaded && !preferences.onboardingComplete) {
@@ -77,12 +78,17 @@ export default function Home() {
     }
   }, [isLoaded, preferences.onboardingComplete]);
 
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false);
+    navigate('/learning-path');
+  };
+
   return (
     <Layout>
       {/* Onboarding Modal */}
       <OnboardingModal 
         open={showOnboarding} 
-        onComplete={() => setShowOnboarding(false)} 
+        onComplete={handleOnboardingComplete} 
       />
 
       {/* Hero Section */}
