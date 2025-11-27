@@ -1,59 +1,64 @@
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { 
   BookOpen, 
-  Route, 
-  Users, 
   FolderSearch, 
-  ClipboardCheck, 
-  FileText,
+  Users, 
+  ClipboardCheck,
   ArrowRight,
-  GraduationCap
+  GraduationCap,
+  CheckCircle2,
+  Lightbulb,
+  Target,
+  Trophy,
+  Save
 } from "lucide-react";
 
-const navigationCards = [
+const learnCards = [
   {
     icon: BookOpen,
-    title: "NERC CIP 101",
-    description: "Learn the fundamentals of all 11 CIP standards with plain-English explanations and example audit questions.",
-    href: "/nerc-cip-101",
-    color: "bg-primary/10 text-primary"
-  },
-  {
-    icon: Route,
-    title: "Audit Journey",
-    description: "Follow a 5-step roadmap from baseline assessment through audit week with actionable checklists.",
-    href: "/audit-journey",
-    color: "bg-accent/10 text-accent"
-  },
-  {
-    icon: Users,
-    title: "Role-Based Training",
-    description: "Training tailored for Compliance Managers, IT/OT Engineers, Physical Security, HR, and Leadership.",
-    href: "/role-training",
-    color: "bg-teal/10 text-teal"
+    title: "Understand NERC CIP Standards",
+    description: "Learn all 11 CIP standards in plain language, with practical examples and real-world context for every requirement."
   },
   {
     icon: FolderSearch,
-    title: "Evidence & Documentation Lab",
-    description: "Understand what auditors consider valid evidence and how to organize documentation effectively.",
-    href: "/evidence-lab",
-    color: "bg-success/10 text-success"
+    title: "Build an Evidence System",
+    description: "Create a repeatable documentation and evidence collection process that keeps you audit-ready year-round."
+  },
+  {
+    icon: Users,
+    title: "Train Every Role",
+    description: "Ensure everyone from engineers to executives knows their specific CIP responsibilities and recurring tasks."
+  },
+  {
+    icon: Target,
+    title: "Practice Before the Audit",
+    description: "Run through scenarios and simulations so your team is confident and prepared when auditors arrive."
+  }
+];
+
+const howItWorks = [
+  {
+    icon: BookOpen,
+    title: "Module-Based Learning",
+    description: "Work through 10 structured modules covering everything from foundational concepts to advanced audit preparation."
   },
   {
     icon: ClipboardCheck,
-    title: "Self-Assessment & Checklists",
-    description: "Take a readiness quiz and access comprehensive checklists for audit preparation.",
-    href: "/self-assessment",
-    color: "bg-warning/10 text-warning"
+    title: "Quizzes & Checklists",
+    description: "Test your knowledge with quizzes after each module and track tasks with interactive checklists."
   },
   {
-    icon: FileText,
-    title: "Resources & Templates",
-    description: "Download templates, review glossary terms, and access external NERC resources.",
-    href: "/resources",
-    color: "bg-sky/10 text-sky"
+    icon: Lightbulb,
+    title: "Scenarios & Case Studies",
+    description: "Apply your knowledge to realistic situations you might encounter during audits or daily operations."
+  },
+  {
+    icon: Save,
+    title: "Progress Tracking",
+    description: "Your progress is saved in your browser so you can pick up where you left off anytime."
   }
 ];
 
@@ -63,92 +68,141 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative overflow-hidden gradient-hero">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyNHYySDI0di0yaDEyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
-        <div className="container relative py-16 md:py-20">
-          <div className="max-w-3xl mx-auto text-center space-y-4">
+        <div className="container relative py-20 md:py-28">
+          <div className="max-w-3xl mx-auto text-center space-y-6">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-4">
               <GraduationCap className="h-5 w-5 text-white" />
               <span className="text-white/90 text-sm font-medium">NERC CIP Training Platform</span>
             </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
-              CIP Readiness Academy
+              Be NERC CIP Audit-Ready All Year Long
             </h1>
-            <p className="text-lg text-white/90 max-w-2xl mx-auto">
-              Your comprehensive resource for NERC CIP audit preparation. Learn what auditors look for, 
-              train your team, and build sustainable compliance practices.
+            <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
+              A complete, end-to-end training program for power utilities preparing for NERC CIP audits. 
+              Learn the standards, build your evidence system, and practice before auditors arrive.
             </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+              <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90 shadow-lg">
+                <Link to="/learning-path">
+                  View the Learning Path
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10">
+                <Link to="/self-assessment">
+                  Start the Readiness Self-Assessment
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent" />
       </section>
 
-      {/* Quick Navigation Grid */}
-      <section className="py-12 md:py-16">
+      {/* What You'll Learn */}
+      <section className="py-16 md:py-20">
         <div className="container">
-          <div className="text-center mb-10">
+          <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-navy mb-3">
-              Explore the Academy
+              What You'll Learn
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Select a module below to begin your NERC CIP readiness journey.
+              Master the knowledge and skills needed to build a sustainable compliance program.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {navigationCards.map((card) => (
-              <Link key={card.href} to={card.href} className="group">
-                <Card className="h-full transition-all duration-300 hover:shadow-lg hover:border-primary/30 hover:-translate-y-1">
-                  <CardHeader className="pb-3">
-                    <div className={`w-12 h-12 rounded-xl ${card.color} flex items-center justify-center mb-3`}>
-                      <card.icon className="h-6 w-6" />
-                    </div>
-                    <CardTitle className="text-lg text-navy group-hover:text-primary transition-colors flex items-center gap-2">
-                      {card.title}
-                      <ArrowRight className="h-4 w-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-sm leading-relaxed">
-                      {card.description}
-                    </CardDescription>
-                  </CardContent>
-                </Card>
-              </Link>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {learnCards.map((card) => (
+              <Card key={card.title} className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                <CardHeader className="pb-3">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-3">
+                    <card.icon className="h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-lg text-navy">
+                    {card.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-sm leading-relaxed">
+                    {card.description}
+                  </CardDescription>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Quick Start Suggestions */}
-      <section className="py-12 md:py-16 bg-muted/50">
+      {/* How This Training Works */}
+      <section className="py-16 md:py-20 bg-muted/50">
+        <div className="container">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-navy mb-3">
+              How This Training Works
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              A structured approach to building audit readiness, designed for busy utility professionals.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {howItWorks.map((item, index) => (
+              <div key={item.title} className="relative">
+                <div className="bg-card rounded-xl border border-border/50 p-6 h-full">
+                  <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center mb-4 font-bold">
+                    {index + 1}
+                  </div>
+                  <h3 className="font-semibold text-navy mb-2">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground">{item.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Start */}
+      <section className="py-16 md:py-20">
         <div className="container">
           <div className="max-w-3xl mx-auto">
-            <h3 className="text-xl font-semibold text-navy mb-6 text-center">
-              Recommended Starting Points
-            </h3>
+            <div className="text-center mb-10">
+              <h3 className="text-xl font-semibold text-navy mb-2">
+                Ready to Begin?
+              </h3>
+              <p className="text-muted-foreground">
+                Choose your starting point based on your experience level.
+              </p>
+            </div>
             <div className="grid sm:grid-cols-3 gap-4">
               <Link 
                 to="/self-assessment" 
-                className="bg-card rounded-xl p-5 border border-border/50 hover:border-primary/30 hover:shadow-md transition-all text-center"
+                className="bg-card rounded-xl p-6 border border-border/50 hover:border-primary/30 hover:shadow-md transition-all text-center group"
               >
-                <div className="text-3xl font-bold text-primary mb-2">1</div>
-                <p className="text-sm font-medium text-navy">Take the Self-Assessment</p>
-                <p className="text-xs text-muted-foreground mt-1">Gauge your current readiness</p>
+                <div className="w-12 h-12 rounded-full bg-warning/10 text-warning flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                  <ClipboardCheck className="h-6 w-6" />
+                </div>
+                <p className="font-semibold text-navy mb-1">New to CIP?</p>
+                <p className="text-sm text-muted-foreground">Take the Self-Assessment to identify gaps</p>
               </Link>
               <Link 
-                to="/nerc-cip-101" 
-                className="bg-card rounded-xl p-5 border border-border/50 hover:border-primary/30 hover:shadow-md transition-all text-center"
+                to="/learning-path" 
+                className="bg-card rounded-xl p-6 border border-border/50 hover:border-primary/30 hover:shadow-md transition-all text-center group"
               >
-                <div className="text-3xl font-bold text-accent mb-2">2</div>
-                <p className="text-sm font-medium text-navy">Review CIP Standards</p>
-                <p className="text-xs text-muted-foreground mt-1">Understand the requirements</p>
+                <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                  <Target className="h-6 w-6" />
+                </div>
+                <p className="font-semibold text-navy mb-1">Know the Basics?</p>
+                <p className="text-sm text-muted-foreground">View the Learning Path and choose your track</p>
               </Link>
               <Link 
-                to="/audit-journey" 
-                className="bg-card rounded-xl p-5 border border-border/50 hover:border-primary/30 hover:shadow-md transition-all text-center"
+                to="/modules" 
+                className="bg-card rounded-xl p-6 border border-border/50 hover:border-primary/30 hover:shadow-md transition-all text-center group"
               >
-                <div className="text-3xl font-bold text-teal mb-2">3</div>
-                <p className="text-sm font-medium text-navy">Plan Your Audit Journey</p>
-                <p className="text-xs text-muted-foreground mt-1">Follow the 5-step roadmap</p>
+                <div className="w-12 h-12 rounded-full bg-success/10 text-success flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                  <Trophy className="h-6 w-6" />
+                </div>
+                <p className="font-semibold text-navy mb-1">Ready to Learn?</p>
+                <p className="text-sm text-muted-foreground">Jump into Module 1 and start learning</p>
               </Link>
             </div>
           </div>

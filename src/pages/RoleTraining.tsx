@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
+import { Quiz, QuizQuestion } from "@/components/Quiz";
 import { cn } from "@/lib/utils";
 import { 
   ClipboardList, 
@@ -9,10 +10,26 @@ import {
   Briefcase,
   CheckSquare,
   Clock,
-  Lightbulb
+  Lightbulb,
+  MessageSquare
 } from "lucide-react";
 
-const roles = [
+interface RoleData {
+  id: string;
+  icon: typeof ClipboardList;
+  title: string;
+  description: string;
+  topFive: string[];
+  recurring: string[];
+  thisWeek: string[];
+  scenario: {
+    story: string;
+    questions: string[];
+  };
+  quiz: QuizQuestion[];
+}
+
+const roles: RoleData[] = [
   {
     id: "compliance-manager",
     icon: ClipboardList,
@@ -37,6 +54,19 @@ const roles = [
       "Audit your evidence folders—are all required documents present and properly named?",
       "Confirm next month's recurring tasks are assigned with clear owners",
       "Schedule a check-in with one department to review their CIP responsibilities"
+    ],
+    scenario: {
+      story: "An auditor contacts you requesting evidence for CIP-007 R2 patch management for the past 6 months. You have 48 hours to compile the evidence package. Your IT team informs you that patch assessment documentation for Q2 is incomplete—some assessments were performed but not fully documented.",
+      questions: [
+        "What evidence would you pull first to respond to this request?",
+        "How would you address the documentation gap for Q2?",
+        "Who else in your organization needs to be involved in preparing this response?"
+      ]
+    },
+    quiz: [
+      { id: 1, question: "How often should you review evidence collection status?", options: ["Daily", "Weekly", "Monthly", "Quarterly"], correctAnswer: 1 },
+      { id: 2, question: "What is the primary role of the Compliance Manager during an audit?", options: ["Technical support", "Primary liaison with auditors", "Physical security", "IT administration"], correctAnswer: 1 },
+      { id: 3, question: "Why is a compliance calendar important?", options: ["For vacation tracking", "To track recurring requirements and deadlines", "For budget planning", "For employee reviews"], correctAnswer: 1 }
     ]
   },
   {
@@ -63,6 +93,19 @@ const roles = [
       "Verify your most recent log review is documented with findings",
       "Check if any patches are approaching the 35-day assessment deadline",
       "Confirm your ESP network diagram reflects current architecture"
+    ],
+    scenario: {
+      story: "A critical security patch is released for your SCADA system on a Monday. The vendor rates it as critical due to active exploitation in the wild. Your change management process typically requires a 2-week testing period, but the 35-day assessment clock is now ticking.",
+      questions: [
+        "What is your first step upon learning about this patch?",
+        "How do you balance the urgency of the vulnerability against change management requirements?",
+        "What documentation must you create regardless of whether you implement immediately or mitigate?"
+      ]
+    },
+    quiz: [
+      { id: 1, question: "Within how many days must security patches be assessed?", options: ["15 days", "30 days", "35 days", "60 days"], correctAnswer: 2 },
+      { id: 2, question: "How long must security logs be retained?", options: ["30 days", "60 days", "90 days", "1 year"], correctAnswer: 2 },
+      { id: 3, question: "When must baseline documentation be updated after a change?", options: ["Immediately", "Within 30 days", "Within 60 days", "At next audit"], correctAnswer: 1 }
     ]
   },
   {
@@ -71,7 +114,7 @@ const roles = [
     title: "Physical Security",
     description: "Physical Security personnel manage access to Physical Security Perimeters (PSPs), monitor physical access logs, maintain visitor management programs, and ensure that physical protection systems are operational and tested.",
     topFive: [
-      "Know the boundaries of every PSP and PACS (Physical Access Control Systems) in your environment",
+      "Know the boundaries of every PSP and PACS in your environment",
       "Understand authorized access lists and the process for adding or removing individuals",
       "Master visitor management—escorts, logging, and badge procedures",
       "Know testing requirements for physical access control systems",
@@ -89,6 +132,19 @@ const roles = [
       "Pull a sample of recent visitor logs and verify proper documentation",
       "Confirm your PSP access list matches currently authorized personnel",
       "Check that the last PACS test is documented and within schedule"
+    ],
+    scenario: {
+      story: "A contractor arrives at your control center for scheduled maintenance on an HMI system. The contractor claims they were added to the access list last week, but their name does not appear in your system. The maintenance is time-sensitive and operations is expecting them.",
+      questions: [
+        "What is your immediate response to this situation?",
+        "How do you verify the contractor's authorization without delaying critical work?",
+        "What documentation is required if you allow the contractor access as a visitor?"
+      ]
+    },
+    quiz: [
+      { id: 1, question: "How must visitors be managed within a PSP?", options: ["Sign in and roam freely", "Continuous escort required", "Badge and go", "No visitors allowed"], correctAnswer: 1 },
+      { id: 2, question: "How quickly must physical access be revoked after termination?", options: ["Immediately", "24 hours", "7 days", "30 days"], correctAnswer: 1 },
+      { id: 3, question: "What must visitor logs include?", options: ["Just the visitor name", "Entry/exit times, visitor name, escort name", "Badge number only", "Company name only"], correctAnswer: 1 }
     ]
   },
   {
@@ -104,7 +160,7 @@ const roles = [
       "Maintain records that prove training completion dates and content"
     ],
     recurring: [
-      "Track training completion and flag any personnel approaching deadlines",
+      "Track training completion and flag personnel approaching deadlines",
       "Process access revocations within 24 hours of notification",
       "Initiate personnel risk assessments for new hires and role changes",
       "Update training materials when CIP requirements change",
@@ -115,6 +171,19 @@ const roles = [
       "Review the list of personnel due for annual training renewal",
       "Verify recent terminations had access revoked within 24 hours",
       "Confirm training records include specific content covered, not just attendance"
+    ],
+    scenario: {
+      story: "On Friday at 4:30 PM, you receive notification that a system administrator with access to High impact BES Cyber Systems has been terminated effective immediately due to a policy violation. IT has already left for the day. The 24-hour clock is now running.",
+      questions: [
+        "What is your immediate first action upon receiving this notification?",
+        "How do you ensure all electronic and physical access is revoked within 24 hours?",
+        "What documentation must you create to demonstrate timely revocation?"
+      ]
+    },
+    quiz: [
+      { id: 1, question: "When must CIP training be completed?", options: ["Within 30 days of access", "Before access is granted", "Within the first year", "During annual review"], correctAnswer: 1 },
+      { id: 2, question: "How far back must personnel risk assessments check?", options: ["3 years", "5 years", "7 years", "10 years"], correctAnswer: 2 },
+      { id: 3, question: "What is the access revocation timeline for terminations?", options: ["Immediately", "24 hours", "48 hours", "1 week"], correctAnswer: 1 }
     ]
   },
   {
@@ -141,6 +210,19 @@ const roles = [
       "Confirm your CIP Senior Manager delegation letter is current",
       "Review the latest compliance readiness score with your Compliance Manager",
       "Ask your team: do they have the resources needed for current compliance activities?"
+    ],
+    scenario: {
+      story: "Your Compliance Manager presents the quarterly compliance report showing that your organization is at risk of missing the 15-month policy review deadline. The CIP Senior Manager has been on extended leave, and the backup delegate's authority expired last month. The audit notification just arrived for next quarter.",
+      questions: [
+        "What is the most urgent compliance issue in this scenario?",
+        "How do you address the CIP Senior Manager delegation gap?",
+        "What resources or decisions might be needed to resolve the policy review deadline?"
+      ]
+    },
+    quiz: [
+      { id: 1, question: "How often must cyber security policies be reviewed?", options: ["Every 6 months", "Every 12 months", "Every 15 months", "Every 24 months"], correctAnswer: 2 },
+      { id: 2, question: "Can the CIP Senior Manager delegate their accountability?", options: ["Yes, to anyone", "Yes, to executives only", "No, accountability cannot be delegated", "Only during audits"], correctAnswer: 2 },
+      { id: 3, question: "Why is leadership support a compliance requirement?", options: ["It's not required", "CIP-003 requires designated senior management", "Only for large utilities", "Only during audits"], correctAnswer: 1 }
     ]
   }
 ];
@@ -155,9 +237,7 @@ export default function RoleTraining() {
       <section className="bg-gradient-to-br from-primary/5 to-accent/5 py-16 md:py-20">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-navy mb-4">
-              Role-Based Training
-            </h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-navy mb-4">Role-Based Training</h1>
             <p className="text-lg text-muted-foreground">
               Every role in your organization has specific NERC CIP responsibilities. 
               Select your role to see what you need to know and do.
@@ -192,9 +272,9 @@ export default function RoleTraining() {
       {/* Role Content */}
       <section className="py-12 md:py-16">
         <div className="container">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-4xl mx-auto space-y-8">
             {/* Role Header */}
-            <div className="flex items-start gap-4 mb-8">
+            <div className="flex items-start gap-4">
               <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
                 <currentRole.icon className="h-7 w-7 text-primary" />
               </div>
@@ -241,7 +321,7 @@ export default function RoleTraining() {
             </div>
 
             {/* This Week */}
-            <div className="mt-6 bg-gradient-to-br from-accent/10 to-primary/10 rounded-xl border border-accent/20 p-6">
+            <div className="bg-gradient-to-br from-accent/10 to-primary/10 rounded-xl border border-accent/20 p-6">
               <div className="flex items-center gap-2 mb-4">
                 <CheckSquare className="h-5 w-5 text-accent" />
                 <h3 className="text-lg font-semibold text-navy">3 Things to Do This Week</h3>
@@ -257,6 +337,31 @@ export default function RoleTraining() {
                 ))}
               </ul>
             </div>
+
+            {/* Scenario */}
+            <div className="bg-card rounded-xl border border-border/50 p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <MessageSquare className="h-5 w-5 text-warning" />
+                <h3 className="text-lg font-semibold text-navy">Role Scenario</h3>
+              </div>
+              <p className="text-muted-foreground mb-4">{currentRole.scenario.story}</p>
+              <div className="bg-muted/50 rounded-lg p-4">
+                <h4 className="text-sm font-semibold text-navy mb-2">Reflection Questions:</h4>
+                <ol className="space-y-2">
+                  {currentRole.scenario.questions.map((q, i) => (
+                    <li key={i} className="text-sm text-muted-foreground flex gap-2">
+                      <span className="font-medium">{i + 1}.</span> {q}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+
+            {/* Quiz */}
+            <Quiz 
+              questions={currentRole.quiz} 
+              title={`${currentRole.title} Quiz`}
+            />
           </div>
         </div>
       </section>
