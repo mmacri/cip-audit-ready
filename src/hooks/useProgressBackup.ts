@@ -12,6 +12,9 @@ const PROGRESS_KEYS = [
   'finalExamDate',
   'cip-academy-badges',
   'cip-academy-tools-used',
+  'cip-academy-reflection-notes',
+  'cip-academy-scenario-progress',
+  'cip-academy-pre-assessment',
 ];
 
 export function useProgressBackup() {
@@ -55,6 +58,21 @@ export function useProgressBackup() {
       const badges = localStorage.getItem('cip-academy-badges');
       if (badges) {
         backup.badges = JSON.parse(badges);
+      }
+
+      const reflectionNotes = localStorage.getItem('cip-academy-reflection-notes');
+      if (reflectionNotes) {
+        backup.reflectionNotes = JSON.parse(reflectionNotes);
+      }
+
+      const scenarioProgress = localStorage.getItem('cip-academy-scenario-progress');
+      if (scenarioProgress) {
+        backup.scenarioProgress = JSON.parse(scenarioProgress);
+      }
+
+      const preAssessment = localStorage.getItem('cip-academy-pre-assessment');
+      if (preAssessment) {
+        backup.preAssessment = JSON.parse(preAssessment);
       }
     } catch (error) {
       console.error('Error gathering progress data:', error);
@@ -140,6 +158,21 @@ export function useProgressBackup() {
         localStorage.setItem('cip-academy-badges', JSON.stringify(backup.badges));
       }
 
+      // Restore reflection notes
+      if (backup.reflectionNotes) {
+        localStorage.setItem('cip-academy-reflection-notes', JSON.stringify(backup.reflectionNotes));
+      }
+
+      // Restore scenario progress
+      if (backup.scenarioProgress) {
+        localStorage.setItem('cip-academy-scenario-progress', JSON.stringify(backup.scenarioProgress));
+      }
+
+      // Restore pre-assessment
+      if (backup.preAssessment) {
+        localStorage.setItem('cip-academy-pre-assessment', JSON.stringify(backup.preAssessment));
+      }
+
       return true;
     } catch (error) {
       console.error('Error restoring progress:', error);
@@ -185,6 +218,27 @@ export function useProgressBackup() {
       });
       if (totalBadges > 0) {
         summary.push(`${totalBadges} badges earned`);
+      }
+    }
+
+    if (backup.reflectionNotes) {
+      const noteCount = Object.keys(backup.reflectionNotes).length;
+      if (noteCount > 0) {
+        summary.push(`${noteCount} reflection notes saved`);
+      }
+    }
+
+    if (backup.scenarioProgress) {
+      const completedScenarios = Object.values(backup.scenarioProgress).filter((s) => s?.completedAt).length;
+      if (completedScenarios > 0) {
+        summary.push(`${completedScenarios} scenarios completed`);
+      }
+    }
+
+    if (backup.preAssessment) {
+      const completedAssessments = Object.keys(backup.preAssessment).length;
+      if (completedAssessments > 0) {
+        summary.push(`${completedAssessments} pre-assessments completed`);
       }
     }
 

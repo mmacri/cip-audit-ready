@@ -26,6 +26,7 @@ const moreNavItems = [
   { label: "Self-Assessment", href: "/self-assessment" },
   { label: "Achievements", href: "/achievements" },
   { label: "Progress Backup", href: "/progress-backup" },
+  { label: "Manager Guide", href: "/manager-guide" },
   { label: "Resources", href: "/resources" },
   { label: "Final Exam", href: "/final-exam" },
   { label: "Certificate", href: "/certificate" },

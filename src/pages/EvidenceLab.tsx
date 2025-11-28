@@ -1,5 +1,7 @@
 import { Layout } from "@/components/layout/Layout";
 import { InteractiveChecklist } from "@/components/InteractiveChecklist";
+import { SampleArtifact } from "@/components/SampleArtifact";
+import { sampleArtifacts } from "@/data/sampleArtifactsData";
 import { cn } from "@/lib/utils";
 import { 
   FileSearch, 
@@ -8,7 +10,8 @@ import {
   FolderTree, 
   AlertTriangle,
   Lightbulb,
-  Target
+  Target,
+  FileText
 } from "lucide-react";
 
 const strongVsWeak = [
@@ -193,6 +196,27 @@ export default function EvidenceLab() {
                     <p className="text-sm text-muted-foreground">{step.description}</p>
                   </div>
                 </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Sample Artifacts */}
+      <section className="py-12 md:py-16">
+        <div className="container">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-center gap-3 mb-6">
+              <FileText className="h-6 w-6 text-primary" />
+              <h2 className="text-2xl font-bold text-navy">Sample Artifacts</h2>
+            </div>
+            <p className="text-muted-foreground mb-8">
+              See examples of what audit-ready evidence looks like. These samples demonstrate the level of detail 
+              and organization that auditors expect.
+            </p>
+            <div className="space-y-6">
+              {sampleArtifacts.map((artifact) => (
+                <SampleArtifact key={artifact.id} artifact={artifact} />
               ))}
             </div>
           </div>

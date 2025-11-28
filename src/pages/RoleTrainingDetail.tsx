@@ -4,16 +4,24 @@ import { useUserPreferences, UserRole, roleLabels, experienceLabels } from '@/ho
 import { useRoleProgress } from '@/hooks/useRoleProgress';
 import { useProgress } from '@/hooks/useProgress';
 import { useBadges } from '@/hooks/useBadges';
+import { usePreAssessment } from '@/hooks/usePreAssessment';
 import { roleTrainingPlans, moduleNames } from '@/data/roleTrainingData';
 import { roleMissions } from '@/data/roleMissionsData';
+import { domainLabels, domainModuleMapping } from '@/data/preAssessmentData';
+import { getReflectionContextForRole } from '@/data/reflectionPromptsData';
 import { RoleTaskChecklist } from '@/components/RoleTaskChecklist';
 import { TrainingPlanGenerator } from '@/components/TrainingPlanGenerator';
 import { MissionCard } from '@/components/MissionCard';
 import { BadgeDisplay } from '@/components/BadgeDisplay';
+import { PreAssessment } from '@/components/PreAssessment';
+import { RoleScenarioPlayer } from '@/components/RoleScenarioPlayer';
+import { PitfallsSection } from '@/components/PitfallsSection';
+import { ReflectionPanel } from '@/components/ReflectionPanel';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
   Target, 
   BookOpen, 
@@ -24,7 +32,10 @@ import {
   ExternalLink,
   Star,
   Rocket,
-  Award
+  Award,
+  ClipboardCheck,
+  AlertTriangle,
+  Lightbulb
 } from 'lucide-react';
 
 const roleIcons: Record<UserRole, typeof Target> = {
@@ -42,6 +53,7 @@ export default function RoleTrainingDetail() {
   const { progress } = useProgress();
   const { getCurrentRoleProgress, toggleTask, isTaskComplete, toggleMission, isMissionComplete, allProgress } = useRoleProgress(roleId as UserRole);
   const { isRoleComplete, getRoleCompletionProgress } = useBadges();
+  const { hasCompletedAssessment, getRecommendedFocus } = usePreAssessment();
 
   // Validate roleId
   const validRoles: UserRole[] = ['compliance', 'it-ot', 'physical-security', 'hr-training', 'leadership', 'other'];
@@ -71,6 +83,9 @@ export default function RoleTrainingDetail() {
 
   const roleComplete = isRoleComplete(role, allProgress[role]);
   const completionProgress = getRoleCompletionProgress(role, allProgress[role]);
+  const hasAssessment = hasCompletedAssessment(role);
+  const recommendedFocus = getRecommendedFocus(role);
+  const reflectionContext = getReflectionContextForRole(role);
 
   return (
     <Layout>
@@ -178,6 +193,56 @@ export default function RoleTrainingDetail() {
         </div>
       </section>
 
+      {/* Pre-Assessment Banner or Recommendations */}
+      <section className="py-6 border-b border-border/50">
+        <div className="container">
+          <div className="max-w-4xl mx-auto">
+            {!hasAssessment ? (
+              <Card className="border-primary/30 bg-primary/5">
+                <CardHeader className="pb-2">
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <ClipboardCheck className="h-5 w-5 text-primary" />
+                    Quick Knowledge Check
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    New here? Take a quick 10-question assessment so we can suggest where to start your training journey.
+                  </p>
+                  <PreAssessment role={role} />
+                </CardContent>
+              </Card>
+            ) : recommendedFocus && (
+              <Card className="border-success/30 bg-success/5">
+                <CardHeader className="pb-2">
+                  <CardTitle className="flex items-center gap-2 text-base text-success">
+                    <Lightbulb className="h-5 w-5" />
+                    Recommended Starting Focus
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Based on your assessment (avg: {Math.round(recommendedFocus.averageScore)}%), we recommend focusing on:
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {recommendedFocus.weakestDomains.map(domain => (
+                      <Badge key={domain} variant="outline" className="bg-background">
+                        {domainLabels[domain]}
+                      </Badge>
+                    ))}
+                  </div>
+                  {recommendedFocus.needsFoundations && (
+                    <p className="text-xs text-muted-foreground">
+                      Start with Phase 1 – Foundations before diving into specialized content.
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* Role Overview */}
       <section className="py-8 border-b border-border/50">
         <div className="container">
@@ -205,9 +270,11 @@ export default function RoleTrainingDetail() {
         <div className="container">
           <div className="max-w-4xl mx-auto">
             <Tabs defaultValue="phases" className="space-y-6">
-              <TabsList className="grid grid-cols-4 w-full max-w-lg mx-auto">
-                <TabsTrigger value="phases">Phased Plan</TabsTrigger>
+              <TabsList className="grid grid-cols-6 w-full max-w-2xl mx-auto">
+                <TabsTrigger value="phases">Phases</TabsTrigger>
                 <TabsTrigger value="missions">Missions</TabsTrigger>
+                <TabsTrigger value="scenario">Scenario</TabsTrigger>
+                <TabsTrigger value="pitfalls">Pitfalls</TabsTrigger>
                 <TabsTrigger value="timeline">Timeline</TabsTrigger>
                 <TabsTrigger value="generator">Export</TabsTrigger>
               </TabsList>
@@ -289,6 +356,52 @@ export default function RoleTrainingDetail() {
                     onToggleComplete={toggleMission}
                   />
                 ))}
+                
+                {/* Reflection Panel for Missions */}
+                <ReflectionPanel
+                  role={role}
+                  contextType="mission"
+                  contextId={`${role}-missions`}
+                  reflectionContext={reflectionContext}
+                />
+              </TabsContent>
+
+              {/* Scenario Tab */}
+              <TabsContent value="scenario" className="space-y-6">
+                <div className="bg-muted/30 rounded-xl border border-border/50 p-6 mb-6">
+                  <div className="flex items-center gap-3 mb-2">
+                    <BookOpen className="h-5 w-5 text-accent" />
+                    <h3 className="font-semibold text-navy">Interactive Branching Scenario</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Experience a realistic scenario where your decisions matter. Navigate through challenges 
+                    and see how different choices lead to different outcomes.
+                  </p>
+                </div>
+                <RoleScenarioPlayer role={role} />
+                
+                {/* Reflection Panel for Scenario */}
+                <ReflectionPanel
+                  role={role}
+                  contextType="scenario"
+                  contextId={`${role}-scenario`}
+                  reflectionContext={reflectionContext}
+                />
+              </TabsContent>
+
+              {/* Pitfalls Tab */}
+              <TabsContent value="pitfalls" className="space-y-6">
+                <div className="bg-muted/30 rounded-xl border border-border/50 p-6 mb-6">
+                  <div className="flex items-center gap-3 mb-2">
+                    <AlertTriangle className="h-5 w-5 text-amber" />
+                    <h3 className="font-semibold text-navy">Common Pitfalls & Audit Red Flags</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Learn from common mistakes others have made and understand what patterns make auditors 
+                    look more closely at your compliance program.
+                  </p>
+                </div>
+                <PitfallsSection role={role} />
               </TabsContent>
 
               {/* Timeline View */}

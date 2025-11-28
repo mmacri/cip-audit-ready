@@ -78,6 +78,9 @@ export interface ProgressBackup {
   finalExamPassed?: boolean;
   finalExamDate?: string;
   badges?: Record<string, BadgeId[]>;
+  reflectionNotes?: Record<string, { updatedAt: string; text: string }>;
+  scenarioProgress?: Record<string, { completedAt?: string; pathTaken?: string[]; outcomeType?: string }>;
+  preAssessment?: Record<string, { completedAt: string; domainScores: Record<string, number> }>;
 }
 
 // Role completion requirements

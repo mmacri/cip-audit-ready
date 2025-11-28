@@ -20,6 +20,7 @@ import Certificate from "./pages/Certificate";
 import RoleCertificate from "./pages/RoleCertificate";
 import Achievements from "./pages/Achievements";
 import ProgressBackup from "./pages/ProgressBackup";
+import ManagerGuide from "./pages/ManagerGuide";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,6 +49,7 @@ const App = () => (
           <Route path="/certificate" element={<Certificate />} />
           <Route path="/achievements" element={<Achievements />} />
           <Route path="/progress-backup" element={<ProgressBackup />} />
+          <Route path="/manager-guide" element={<ManagerGuide />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
