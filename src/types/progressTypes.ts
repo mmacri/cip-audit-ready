@@ -92,17 +92,17 @@ export interface RoleCompletionRequirements {
 
 export const roleCompletionRequirements: Record<UserRole, RoleCompletionRequirements> = {
   compliance: {
-    requiredModules: [1, 3, 7, 9, 10],
+    requiredModules: [1, 3, 7, 9, 10, 11, 12],
     minimumMissions: 3,
     requiredPhases: ['foundations', 'deep-dives', 'practice', 'lead'],
   },
   'it-ot': {
-    requiredModules: [1, 2, 5, 6, 7, 8],
+    requiredModules: [1, 2, 5, 6, 7, 8, 11],
     minimumMissions: 3,
     requiredPhases: ['foundations', 'deep-dives', 'practice', 'lead'],
   },
   'physical-security': {
-    requiredModules: [1, 2, 5, 7],
+    requiredModules: [1, 2, 5, 7, 12],
     minimumMissions: 3,
     requiredPhases: ['foundations', 'deep-dives', 'practice', 'lead'],
   },
@@ -112,7 +112,7 @@ export const roleCompletionRequirements: Record<UserRole, RoleCompletionRequirem
     requiredPhases: ['foundations', 'deep-dives', 'practice', 'lead'],
   },
   leadership: {
-    requiredModules: [1, 3, 10],
+    requiredModules: [1, 3, 10, 11, 12],
     minimumMissions: 3,
     requiredPhases: ['foundations', 'deep-dives', 'practice', 'lead'],
   },

@@ -42,7 +42,9 @@ export const moduleNames: Record<number, string> = {
   7: "Incident Response & Recovery",
   8: "Configuration & Vulnerability Management",
   9: "Information Protection & Supply Chain",
-  10: "Audit Simulation & Continuous Improvement"
+  10: "Audit Simulation & Continuous Improvement",
+  11: "Control Center Communications (CIP-012)",
+  12: "Physical Security of Transmission Assets (CIP-014)"
 };
 
 export const roleTrainingPlans: Record<UserRole, RoleTrainingPlan> = {
@@ -74,12 +76,16 @@ export const roleTrainingPlans: Record<UserRole, RoleTrainingPlan> = {
         modules: [
           { id: 7, name: moduleNames[7], required: true },
           { id: 9, name: moduleNames[9], required: true },
+          { id: 11, name: moduleNames[11], required: true },
+          { id: 12, name: moduleNames[12], required: true },
         ],
         tasks: [
           { id: 'comp-p2-1', label: 'Complete Module 7 and review your incident response plan documentation', moduleLink: 7 },
           { id: 'comp-p2-2', label: 'Complete Module 9 and audit your BES Cyber System Information protection practices', moduleLink: 9 },
-          { id: 'comp-p2-3', label: 'Use the Evidence Lab to map evidence to CIP-003 and CIP-004 requirements', toolLink: '/evidence-lab' },
-          { id: 'comp-p2-4', label: 'Review supply chain risk management documentation with procurement' },
+          { id: 'comp-p2-3', label: 'Complete Module 11 to understand CIP-012 control center communication requirements', moduleLink: 11 },
+          { id: 'comp-p2-4', label: 'Complete Module 12 to understand CIP-014 transmission asset physical security', moduleLink: 12 },
+          { id: 'comp-p2-5', label: 'Use the Evidence Lab to map evidence to CIP-003 and CIP-004 requirements', toolLink: '/evidence-lab' },
+          { id: 'comp-p2-6', label: 'Review supply chain risk management documentation with procurement' },
         ],
       },
       {
@@ -190,13 +196,15 @@ export const roleTrainingPlans: Record<UserRole, RoleTrainingPlan> = {
           { id: 5, name: moduleNames[5], required: true },
           { id: 6, name: moduleNames[6], required: true },
           { id: 8, name: moduleNames[8], required: true },
+          { id: 11, name: moduleNames[11], required: true },
         ],
         tasks: [
           { id: 'itot-p2-1', label: 'Complete Module 5 and verify all ESP access points are documented', moduleLink: 5 },
           { id: 'itot-p2-2', label: 'Complete Module 6 and review your patch management process timeline', moduleLink: 6 },
           { id: 'itot-p2-3', label: 'Complete Module 8 and verify baseline configurations are current', moduleLink: 8 },
-          { id: 'itot-p2-4', label: 'Document your log review process and retention periods' },
-          { id: 'itot-p2-5', label: 'Use the Evidence Lab to map evidence for CIP-007 requirements', toolLink: '/evidence-lab' },
+          { id: 'itot-p2-4', label: 'Complete Module 11 to understand CIP-012 control center communication security', moduleLink: 11 },
+          { id: 'itot-p2-5', label: 'Document your log review process and retention periods' },
+          { id: 'itot-p2-6', label: 'Use the Evidence Lab to map evidence for CIP-007 requirements', toolLink: '/evidence-lab' },
         ],
       },
       {
@@ -303,12 +311,15 @@ export const roleTrainingPlans: Record<UserRole, RoleTrainingPlan> = {
         description: 'Master PSP requirements and access control procedures.',
         modules: [
           { id: 5, name: moduleNames[5], required: true },
+          { id: 12, name: moduleNames[12], required: true },
         ],
         tasks: [
           { id: 'phys-p2-1', label: 'Complete Module 5 focusing on PSP and PACS requirements', moduleLink: 5 },
-          { id: 'phys-p2-2', label: 'Document your visitor management process end-to-end' },
-          { id: 'phys-p2-3', label: 'Review testing schedules for all physical access control systems' },
-          { id: 'phys-p2-4', label: 'Use the Evidence Lab to map CIP-006 evidence', toolLink: '/evidence-lab' },
+          { id: 'phys-p2-2', label: 'Complete Module 12 to understand CIP-014 transmission station physical security', moduleLink: 12 },
+          { id: 'phys-p2-3', label: 'Document your visitor management process end-to-end' },
+          { id: 'phys-p2-4', label: 'Review testing schedules for all physical access control systems' },
+          { id: 'phys-p2-5', label: 'Understand the differences between CIP-006 PSP and CIP-014 requirements' },
+          { id: 'phys-p2-6', label: 'Use the Evidence Lab to map CIP-006 and CIP-014 evidence', toolLink: '/evidence-lab' },
         ],
       },
       {
@@ -525,12 +536,16 @@ export const roleTrainingPlans: Record<UserRole, RoleTrainingPlan> = {
         description: 'Develop deeper understanding of compliance risks and audit processes.',
         modules: [
           { id: 10, name: moduleNames[10], required: true },
+          { id: 11, name: moduleNames[11], required: true },
+          { id: 12, name: moduleNames[12], required: true },
         ],
         tasks: [
           { id: 'lead-p2-1', label: 'Complete Module 10 on audit simulation and improvement', moduleLink: 10 },
-          { id: 'lead-p2-2', label: 'Review recent audit findings and corrective actions with the compliance team' },
-          { id: 'lead-p2-3', label: 'Understand the potential financial and operational impacts of non-compliance' },
-          { id: 'lead-p2-4', label: 'Assess whether the compliance program has adequate budget and staffing' },
+          { id: 'lead-p2-2', label: 'Complete Module 11 to understand CIP-012 resource and documentation requirements', moduleLink: 11 },
+          { id: 'lead-p2-3', label: 'Complete Module 12 to understand CIP-014 third-party review and mitigation obligations', moduleLink: 12 },
+          { id: 'lead-p2-4', label: 'Review recent audit findings and corrective actions with the compliance team' },
+          { id: 'lead-p2-5', label: 'Understand the potential financial and operational impacts of non-compliance' },
+          { id: 'lead-p2-6', label: 'Assess whether the compliance program has adequate budget and staffing' },
         ],
       },
       {

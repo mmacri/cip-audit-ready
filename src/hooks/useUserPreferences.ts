@@ -34,12 +34,12 @@ export const experienceLabels: Record<ExperienceLevel, string> = {
 };
 
 export const roleModules: Record<UserRole, number[]> = {
-  'compliance': [1, 3, 7, 9, 10],
-  'it-ot': [1, 2, 5, 6, 7, 8],
-  'physical-security': [1, 2, 5, 7],
+  'compliance': [1, 3, 7, 9, 10, 11, 12],
+  'it-ot': [1, 2, 5, 6, 7, 8, 11],
+  'physical-security': [1, 2, 5, 7, 12],
   'hr-training': [1, 3, 4],
-  'leadership': [1, 3, 10],
-  'other': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  'leadership': [1, 3, 10, 11, 12],
+  'other': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
 };
 
 export function useUserPreferences() {

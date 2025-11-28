@@ -86,7 +86,7 @@ export function useProgress() {
   }, [progress.checklistStates]);
 
   const getCompletionPercentage = useCallback(() => {
-    return Math.round((progress.completedModules.length / 10) * 100);
+    return Math.round((progress.completedModules.length / 12) * 100);
   }, [progress.completedModules]);
 
   const resetProgress = useCallback(() => {

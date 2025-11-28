@@ -35,11 +35,11 @@ const tracks = [
     title: "Role-Based Track",
     description: "Select modules based on your specific job function. Each role has different compliance responsibilities and needs focused training on the requirements most relevant to their work.",
     roles: [
-      { name: "Compliance / Risk Manager", modules: [1, 3, 7, 9, 10], why: "Focus on governance, documentation, and audit readiness" },
-      { name: "IT/OT Engineer", modules: [1, 2, 5, 6, 7, 8], why: "Focus on technical controls and system security" },
-      { name: "Physical Security", modules: [1, 2, 5, 7], why: "Focus on perimeters and incident response" },
+      { name: "Compliance / Risk Manager", modules: [1, 3, 7, 9, 10, 11, 12], why: "Focus on governance, documentation, CIP-012/CIP-014 oversight, and audit readiness" },
+      { name: "IT/OT Engineer", modules: [1, 2, 5, 6, 7, 8, 11], why: "Focus on technical controls, system security, and CIP-012 communications" },
+      { name: "Physical Security", modules: [1, 2, 5, 7, 12], why: "Focus on perimeters, incident response, and CIP-014 transmission security" },
       { name: "HR/Training", modules: [1, 3, 4], why: "Focus on people, policies, and training requirements" },
-      { name: "Leadership", modules: [1, 3, 10], why: "Focus on oversight, governance, and continuous improvement" }
+      { name: "Leadership", modules: [1, 3, 10, 11, 12], why: "Focus on oversight, governance, CIP-012/CIP-014 resources, and continuous improvement" }
     ],
     color: "bg-accent/10 text-accent border-accent/30",
     note: "Visit the Role-Based Training page for detailed responsibilities and scenarios for each role."
@@ -49,7 +49,7 @@ const tracks = [
     icon: Wrench,
     title: "Implementation & Audit Track",
     description: "For teams building evidence inventories, audit playbooks, and continuous improvement cycles. This track focuses on practical implementation and preparing for the actual audit experience.",
-    modules: [6, 7, 8, 9, 10],
+    modules: [6, 7, 8, 9, 10, 11, 12],
     color: "bg-success/10 text-success border-success/30",
     audience: "Compliance managers, audit coordinators, senior technical staff"
   }

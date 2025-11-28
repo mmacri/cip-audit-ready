@@ -1493,4 +1493,28 @@ Downloadable Excel templates using xlsx library:
 
 ---
 
+## Changelog
+
+### November 2025 - Module 11 & 12 Role Integration
+
+**Module 11 (CIP-012 - Control Center Communications)** integrated into:
+- **IT/OT Engineer** (Phase 2: Deep Dives) - Primary technical responsibility for securing real-time data links
+- **Compliance/Risk Manager** (Phase 2: Deep Dives) - Understand scope, risk, and documentation requirements
+- **Leadership** (Phase 2: Deep Dives) - Understand resource allocation and oversight requirements
+
+**Module 12 (CIP-014 - Physical Security of Transmission Assets)** integrated into:
+- **Physical Security** (Phase 2: Deep Dives) - Primary responsibility after Module 5 (CIP-006)
+- **Compliance/Risk Manager** (Phase 2: Deep Dives) - Programmatic duties and third-party review requirements
+- **Leadership** (Phase 2: Deep Dives) - Third-party review and mitigation obligations oversight
+
+**HR/Training** role does not include Module 11 or 12 unless staff are cross-trained on network operations or physical security assessments.
+
+Files modified:
+- `src/data/roleTrainingData.ts` - Added moduleNames entries, updated role phases
+- `src/hooks/useUserPreferences.ts` - Updated roleModules mapping
+- `src/types/progressTypes.ts` - Updated roleCompletionRequirements
+- `src/pages/LearningPath.tsx` - Updated track role module listings
+
+---
+
 *This documentation was last updated November 2025 based on the complete codebase analysis of CIP Readiness Academy.*
