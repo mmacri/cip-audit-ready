@@ -21,6 +21,10 @@ import RoleCertificate from "./pages/RoleCertificate";
 import Achievements from "./pages/Achievements";
 import ProgressBackup from "./pages/ProgressBackup";
 import ManagerGuide from "./pages/ManagerGuide";
+import NercCip101 from "./pages/NercCip101";
+import AuditJourney from "./pages/AuditJourney";
+import SoftSkillsTraining from "./pages/SoftSkillsTraining";
+import ScopeMatrix from "./pages/ScopeMatrix";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -50,6 +54,10 @@ const App = () => (
           <Route path="/achievements" element={<Achievements />} />
           <Route path="/progress-backup" element={<ProgressBackup />} />
           <Route path="/manager-guide" element={<ManagerGuide />} />
+          <Route path="/nerc-cip-101" element={<NercCip101 />} />
+          <Route path="/audit-journey" element={<AuditJourney />} />
+          <Route path="/soft-skills" element={<SoftSkillsTraining />} />
+          <Route path="/scope-matrix" element={<ScopeMatrix />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

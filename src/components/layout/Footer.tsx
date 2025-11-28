@@ -64,6 +64,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/scope-matrix" className="text-navy-foreground/70 hover:text-white transition-colors">
+                  Scope Matrix & TCA
+                </Link>
+              </li>
+              <li>
                 <Link to="/resources#glossary" className="text-navy-foreground/70 hover:text-white transition-colors">
                   Glossary
                 </Link>
