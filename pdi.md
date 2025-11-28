@@ -1495,6 +1495,33 @@ Downloadable Excel templates using xlsx library:
 
 ## Changelog
 
+### November 2025 - CMEP Audit Readiness Enhancements
+
+**New Page: RSAW Tutorial (`/rsaw-tutorial`)**
+- Complete RSAW walkthrough with section-by-section guidance
+- Sample responses comparing good vs. poor RSAW narratives
+- Evidence naming conventions and best practices
+- Common pitfalls to avoid
+
+**Enhanced Global Search**
+- Module deep links now navigate directly to specific modules (e.g., `/modules#module-11`)
+- Added Modules 11 & 12 to search index with CIP-012/CIP-014 keywords
+- Added RSAW tutorial and Manager Guide to search results
+- Enhanced keyword coverage for CIP-003-9, CIP-013-2, EACMS, PACS
+
+**Audit Journey Enhancements**
+- Added downloadable checklists section for CIP-012, CIP-014, and RSAW
+- Links to relevant modules and tutorials
+
+**Footer & Navigation Updates**
+- Added Auditor Etiquette link to Quick Links
+- Added Manager Guide link to Resources section
+
+**Mobile Responsiveness**
+- Added responsive text utilities in CSS
+- Touch-friendly button sizing for mobile
+- Responsive section padding and grid gaps
+
 ### November 2025 - Module 11 & 12 Role Integration
 
 **Module 11 (CIP-012 - Control Center Communications)** integrated into:

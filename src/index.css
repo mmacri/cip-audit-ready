@@ -147,4 +147,58 @@
   .prose-academy li {
     @apply text-muted-foreground;
   }
+
+  /* Mobile responsiveness improvements */
+  .container {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Responsive text utilities */
+  .text-responsive-sm {
+    @apply text-sm sm:text-base;
+  }
+
+  .text-responsive-lg {
+    @apply text-lg sm:text-xl md:text-2xl;
+  }
+
+  .text-responsive-xl {
+    @apply text-xl sm:text-2xl md:text-3xl;
+  }
+
+  .text-responsive-hero {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  /* Mobile-friendly cards */
+  .card-responsive {
+    @apply p-4 sm:p-6;
+  }
+
+  /* Touch-friendly button sizes on mobile */
+  @media (max-width: 640px) {
+    .btn-touch {
+      @apply min-h-[44px] min-w-[44px];
+    }
+  }
+
+  /* Improved mobile spacing */
+  .section-padding {
+    @apply py-8 sm:py-12 md:py-16;
+  }
+
+  /* Mobile-friendly grid gaps */
+  .grid-gap-responsive {
+    @apply gap-4 sm:gap-6 md:gap-8;
+  }
+
+  /* Hide on mobile utility */
+  .hide-mobile {
+    @apply hidden sm:block;
+  }
+
+  /* Show only on mobile utility */
+  .show-mobile {
+    @apply block sm:hidden;
+  }
 }

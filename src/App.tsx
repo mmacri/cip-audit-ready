@@ -25,6 +25,7 @@ import NercCip101 from "./pages/NercCip101";
 import AuditJourney from "./pages/AuditJourney";
 import SoftSkillsTraining from "./pages/SoftSkillsTraining";
 import ScopeMatrix from "./pages/ScopeMatrix";
+import RSAWTutorial from "./pages/RSAWTutorial";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -58,6 +59,7 @@ const App = () => (
           <Route path="/audit-journey" element={<AuditJourney />} />
           <Route path="/soft-skills" element={<SoftSkillsTraining />} />
           <Route path="/scope-matrix" element={<ScopeMatrix />} />
+          <Route path="/rsaw-tutorial" element={<RSAWTutorial />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
