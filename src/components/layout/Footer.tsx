@@ -42,6 +42,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/soft-skills" className="text-navy-foreground/70 hover:text-white transition-colors">
+                  Auditor Etiquette
+                </Link>
+              </li>
+              <li>
                 <Link to="/self-assessment" className="text-navy-foreground/70 hover:text-white transition-colors">
                   Self-Assessment
                 </Link>
@@ -66,6 +71,11 @@ export function Footer() {
               <li>
                 <Link to="/scope-matrix" className="text-navy-foreground/70 hover:text-white transition-colors">
                   Scope Matrix & TCA
+                </Link>
+              </li>
+              <li>
+                <Link to="/manager-guide" className="text-navy-foreground/70 hover:text-white transition-colors">
+                  Manager Guide
                 </Link>
               </li>
               <li>

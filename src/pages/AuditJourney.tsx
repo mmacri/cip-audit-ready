@@ -419,6 +419,142 @@ export default function AuditJourney() {
         </div>
       </section>
 
+      {/* Downloadable Checklists Section */}
+      <section className="py-12 md:py-16 bg-muted/50">
+        <div className="container">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-2xl md:text-3xl font-bold text-navy mb-4">Audit Preparation Checklists</h2>
+              <p className="text-muted-foreground text-lg">
+                Download these checklists to prepare for specific CIP standard audits.
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <Card className="hover:shadow-card-hover transition-shadow">
+                <CardHeader className="pb-3">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
+                    <Shield className="h-5 w-5 text-primary" />
+                  </div>
+                  <CardTitle className="text-lg">CIP-012 Checklist</CardTitle>
+                  <CardDescription>Control Center Communications</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="text-sm text-muted-foreground space-y-2 mb-4">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary">□</span>
+                      Inventory all Control Center communication links
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary">□</span>
+                      Document encryption methods for each link
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary">□</span>
+                      Verify integrity protection implementation
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary">□</span>
+                      Test encryption is operational (not just configured)
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary">□</span>
+                      Review ICCP/Real-time data link security
+                    </li>
+                  </ul>
+                  <Button variant="outline" size="sm" className="w-full" asChild>
+                    <Link to="/modules#module-11">
+                      <FileText className="mr-2 h-4 w-4" />
+                      View CIP-012 Module
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-card-hover transition-shadow">
+                <CardHeader className="pb-3">
+                  <div className="w-10 h-10 rounded-lg bg-amber/10 flex items-center justify-center mb-2">
+                    <Building className="h-5 w-5 text-amber" />
+                  </div>
+                  <CardTitle className="text-lg">CIP-014 Checklist</CardTitle>
+                  <CardDescription>Physical Security of Transmission</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="text-sm text-muted-foreground space-y-2 mb-4">
+                    <li className="flex items-start gap-2">
+                      <span className="text-amber">□</span>
+                      Complete risk assessment (every 30 months)
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-amber">□</span>
+                      Obtain third-party verification of assessment
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-amber">□</span>
+                      Conduct threat/vulnerability evaluation
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-amber">□</span>
+                      Develop physical security plan
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-amber">□</span>
+                      Get third-party plan review
+                    </li>
+                  </ul>
+                  <Button variant="outline" size="sm" className="w-full" asChild>
+                    <Link to="/modules#module-12">
+                      <FileText className="mr-2 h-4 w-4" />
+                      View CIP-014 Module
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-card-hover transition-shadow">
+                <CardHeader className="pb-3">
+                  <div className="w-10 h-10 rounded-lg bg-teal/10 flex items-center justify-center mb-2">
+                    <FileSearch className="h-5 w-5 text-teal" />
+                  </div>
+                  <CardTitle className="text-lg">RSAW Walkthrough</CardTitle>
+                  <CardDescription>Complete Tutorial</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="text-sm text-muted-foreground space-y-2 mb-4">
+                    <li className="flex items-start gap-2">
+                      <span className="text-teal">□</span>
+                      Understand RSAW structure
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-teal">□</span>
+                      Learn evidence naming conventions
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-teal">□</span>
+                      Review sample responses
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-teal">□</span>
+                      Practice writing narratives
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-teal">□</span>
+                      Organize evidence packages
+                    </li>
+                  </ul>
+                  <Button variant="outline" size="sm" className="w-full" asChild>
+                    <Link to="/rsaw-tutorial">
+                      <FileText className="mr-2 h-4 w-4" />
+                      RSAW Tutorial
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-12 md:py-16 bg-navy text-navy-foreground">
         <div className="container">
