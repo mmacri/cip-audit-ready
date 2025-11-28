@@ -175,7 +175,8 @@ const modulesData: ModuleData[] = [
     objectives: [
       "Describe the role of the CIP Senior Manager",
       "Identify required cyber security policies",
-      "Understand policy review and approval cycles"
+      "Understand policy review and approval cycles",
+      "Explain CIP-003-9 low-impact BES Cyber System requirements"
     ],
     content: [
       {
@@ -193,11 +194,27 @@ const modulesData: ModuleData[] = [
       {
         title: "Delegation of Authority",
         text: "While the CIP Senior Manager has overall accountability, they can delegate specific responsibilities to qualified individuals. These delegations must be documented. Common delegations include day-to-day compliance management, technical security functions, and training administration. Each delegation should clearly define the scope of responsibility."
+      },
+      {
+        title: "CIP-003-9: Low-Impact BES Cyber System Requirements",
+        text: "CIP-003-9 significantly expanded requirements for low-impact BES Cyber Systems. Organizations must now implement cyber security awareness, physical security controls, electronic access controls, and Cyber Security Incident response for low-impact assets. These requirements apply to ALL low-impact BES Cyber Systems—not just a subset."
+      },
+      {
+        title: "Low-Impact Transient Cyber Asset (TCA) Management",
+        text: "CIP-003-9 requires specific controls for Transient Cyber Assets connecting to low-impact BES Cyber Systems. Before connecting removable media or transient devices, you must either: review authorization of the device, use an entity-managed TCA with documented security controls, or use methods to mitigate software vulnerabilities (antivirus scans, application whitelisting). USB drives are a top violation area."
+      },
+      {
+        title: "Low-Impact Password and Authentication Controls",
+        text: "For low-impact BES Cyber Systems with External Routable Connectivity, CIP-003-9 requires: changing default passwords, establishing minimum password parameters or using multi-factor authentication, and having processes for password changes when personnel no longer require access. These are often overlooked for devices like RTUs and relays."
+      },
+      {
+        title: "Low-Impact Patching Requirements",
+        text: "CIP-003-9 requires a patch management process for low-impact assets. You must identify security patches, assess applicability, and either install or document why you chose not to install. While less prescriptive than High/Medium requirements, you still need documented evidence of patch evaluation for low-impact systems."
       }
     ],
     exercise: {
-      title: "Policy Gap Analysis",
-      description: "Review your organization's current cyber security policies against the CIP-003 requirements. For each required topic area, verify you have a policy that addresses it, check the last review and approval date, and confirm the CIP Senior Manager's approval is documented. Create an action list for any gaps."
+      title: "Low-Impact Inventory Review",
+      description: "Review your low-impact BES Cyber System inventory. For each asset type (RTUs, relays, communication equipment), verify: Are default passwords changed? Is there a documented patching process? How are TCAs managed when connecting? Create an action plan for any gaps specific to CIP-003-9 requirements."
     },
     quiz: [
       {
@@ -216,15 +233,27 @@ const modulesData: ModuleData[] = [
       },
       {
         id: 3,
-        question: "Can the CIP Senior Manager delegate their accountability?",
+        question: "What does CIP-003-9 require for low-impact BES Cyber Systems with External Routable Connectivity?",
         options: [
-          "Yes, to anyone they choose",
-          "Yes, but only to executives",
-          "No, accountability cannot be delegated",
-          "Only during audits"
+          "No password requirements",
+          "Changing default passwords and minimum password parameters",
+          "Only physical security",
+          "No requirements apply"
         ],
-        correctAnswer: 2,
-        explanation: "The CIP Senior Manager can delegate specific tasks but not overall accountability for the program."
+        correctAnswer: 1,
+        explanation: "CIP-003-9 requires changing default passwords and establishing minimum password parameters or using multi-factor authentication for low-impact systems with External Routable Connectivity."
+      },
+      {
+        id: 4,
+        question: "What must be done before connecting a USB drive to a low-impact BES Cyber System?",
+        options: [
+          "Nothing is required",
+          "Use documented methods to mitigate software vulnerabilities",
+          "Only label the USB drive",
+          "Format the drive"
+        ],
+        correctAnswer: 1,
+        explanation: "CIP-003-9 requires methods to mitigate software vulnerabilities on TCAs, such as antivirus scanning, before connecting to low-impact BES Cyber Systems."
       }
     ]
   },
@@ -414,39 +443,64 @@ const modulesData: ModuleData[] = [
     id: 7,
     title: "Incident Response & Recovery (CIP-008 / CIP-009)",
     objectives: [
-      "Describe incident response plan requirements",
-      "Understand incident reporting obligations",
-      "Explain recovery plan testing requirements"
+      "Describe incident response plan requirements and ES-ISAC coordination",
+      "Understand incident classification and reporting timelines",
+      "Explain recovery plan testing requirements and backup verification",
+      "Document lessons learned from incidents and exercises"
     ],
     content: [
       {
-        title: "Incident Response Plans",
-        text: "CIP-008 requires documented Cyber Security Incident response plans that identify, classify, and respond to incidents. Plans must include roles and responsibilities, incident handling procedures, and communication procedures. The plan must address Reportable Cyber Security Incidents that compromise or disrupt BES Cyber Systems."
+        title: "Cyber Security Incident Response Plans (CIP-008 R1)",
+        text: "CIP-008 requires documented Cyber Security Incident response plans that identify, classify, and respond to incidents. Plans must include: one or more processes to identify and classify incidents, response actions for incidents including containment, eradication, and recovery procedures, and roles and responsibilities. Plans must be specific enough to guide responders but flexible enough to handle unknown situations."
       },
       {
-        title: "Incident Reporting",
-        text: "Reportable Cyber Security Incidents must be reported to the Electricity Information Sharing and Analysis Center (E-ISAC) within one hour of identification. This includes incidents that compromise or disrupt BES Cyber Systems, Electronic Security Perimeters, or associated Electronic Access Control Systems."
+        title: "Incident Classification: Reportable vs. Non-Reportable",
+        text: "Not all incidents require external reporting. A Reportable Cyber Security Incident is one that compromised or disrupted: (1) a BES Cyber System that performs a reliability task, (2) an Electronic Security Perimeter, or (3) an associated Electronic Access Control or Monitoring System. Your plan must include clear criteria for making this determination—this is often tested by auditors."
       },
       {
-        title: "Recovery Plans",
-        text: "CIP-009 requires recovery plans for BES Cyber Systems. These plans must include conditions for activation, roles and responsibilities, and procedures for recovering BES Cyber System functionality. Plans must address backup and storage of information, and verification of successful backup completion."
+        title: "ES-ISAC Reporting Requirements",
+        text: "Reportable incidents must be reported to the Electricity Information Sharing and Analysis Center (ES-ISAC) within ONE HOUR of determination that an incident is reportable. The initial report can be brief—you are not required to have all details. You must also submit follow-up reports as additional information becomes available. Document all notification times carefully."
       },
       {
-        title: "Testing Requirements",
-        text: "Both incident response and recovery plans must be tested. Incident response plans must be tested at least once every 15 calendar months through operational exercises, tabletops, or actual incidents. Recovery plans must also be tested at least once every 15 calendar months with additional requirements for testing backup media."
+        title: "Notification Timeline Evidence",
+        text: "Auditors will verify your notification timelines. Document: (1) When the incident was detected, (2) When it was classified as a Reportable Cyber Security Incident, (3) When ES-ISAC was notified (must be within 1 hour of #2), (4) Who made the report and the method used. Many violations occur from late reporting or inadequate documentation of timeline."
+      },
+      {
+        title: "Incident Response Plan Testing (CIP-008 R2)",
+        text: "Plans must be tested at least once every 15 calendar months through: (1) responding to an actual incident, (2) paper drills or tabletop exercises, or (3) operational exercises. Testing must include both the Cyber Security Incident response plan and the process for making initial notifications. Document participants, scenarios, and test results."
+      },
+      {
+        title: "Lessons Learned (CIP-008 R3)",
+        text: "After a Reportable Cyber Security Incident or test completion, you must conduct a lessons learned review within 90 days. Document what worked well, what needs improvement, and specific corrective actions. Update your incident response plan if the review identifies gaps. This drives continuous improvement of your response capability."
+      },
+      {
+        title: "Recovery Plans (CIP-009 R1)",
+        text: "CIP-009 requires recovery plans for BES Cyber Systems. Plans must include: conditions for activation, roles and responsibilities, specific procedures for recovering BES Cyber System functionality, and processes for backup and storage of information required for recovery. Recovery plans should enable restoration of critical functions within acceptable timeframes."
+      },
+      {
+        title: "Backup and Storage Requirements (CIP-009 R1)",
+        text: "Recovery plans must address information preservation. You must: identify information needed for recovery, document backup processes, verify successful backup completion, and protect backup media (stored at safe locations, protected from unauthorized access). Test that you can actually restore from your backups—a backup that cannot be restored is not a backup."
+      },
+      {
+        title: "Recovery Plan Testing (CIP-009 R2)",
+        text: "Recovery plans must be tested at least once every 15 calendar months. Testing includes: exercising the recovery plan in a paper drill, operational exercise, or actual recovery, and testing backup media to ensure information essential for recovery is retrievable. Many organizations combine incident response and recovery testing for efficiency."
+      },
+      {
+        title: "Recovery Plan Updating",
+        text: "Update recovery plans within 60 days of changes to roles or responsibilities, changes to recovery procedures, or lessons learned from exercises/actual recoveries. Maintain a version history showing when plans were updated and what changed. Auditors will compare your current plan to your testing evidence."
       }
     ],
     exercise: {
-      title: "Incident Response Tabletop",
-      description: "Conduct a tabletop exercise with your incident response team. Present a scenario: 'An operator reports unusual behavior on an HMI workstation.' Walk through your response plan. Who is notified? What initial actions are taken? How do you determine if this is a Reportable Cyber Security Incident? Document lessons learned."
+      title: "Incident Classification Drill",
+      description: "Review these scenarios and determine if each is a Reportable Cyber Security Incident: (1) Malware detected on an office workstation with no BES connectivity, (2) Failed login attempts on an ESP firewall, (3) Ransomware encryption of an EMS server. For each, document your classification rationale and who would be notified. Practice the ES-ISAC notification call script."
     },
     quiz: [
       {
         id: 1,
-        question: "How quickly must Reportable Cyber Security Incidents be reported to E-ISAC?",
+        question: "How quickly must Reportable Cyber Security Incidents be reported to ES-ISAC?",
         options: ["15 minutes", "1 hour", "24 hours", "72 hours"],
         correctAnswer: 1,
-        explanation: "Reportable incidents must be reported within one hour of identification."
+        explanation: "Reportable incidents must be reported within one hour of determination that the incident is reportable."
       },
       {
         id: 2,
@@ -457,15 +511,22 @@ const modulesData: ModuleData[] = [
       },
       {
         id: 3,
-        question: "What must recovery plans address?",
+        question: "Within how many days must lessons learned be documented after a Reportable Cyber Security Incident?",
+        options: ["30 days", "60 days", "90 days", "120 days"],
+        correctAnswer: 2,
+        explanation: "Lessons learned must be documented within 90 calendar days of completing a Reportable Cyber Security Incident response or test."
+      },
+      {
+        id: 4,
+        question: "What must recovery plans address for backup and storage?",
         options: [
-          "Only hardware replacement",
-          "Backup, storage, and verification of BES Cyber System information",
-          "Only network connectivity",
-          "Insurance claims"
+          "Only hardware replacement procedures",
+          "Information needed for recovery, backup processes, and verification of successful backups",
+          "Only cloud storage options",
+          "Insurance claim procedures"
         ],
         correctAnswer: 1,
-        explanation: "Recovery plans must address backup, storage of information, and verification of successful backups."
+        explanation: "Recovery plans must address identifying information needed for recovery, backup processes, and verification that backups were successful."
       }
     ]
   },
@@ -532,9 +593,10 @@ const modulesData: ModuleData[] = [
     id: 9,
     title: "Information Protection & Supply Chain (CIP-011 / CIP-013)",
     objectives: [
-      "Define BES Cyber System Information (BCSI)",
-      "Describe BCSI protection and handling requirements",
-      "Understand supply chain risk management requirements"
+      "Define BES Cyber System Information (BCSI) and protection requirements",
+      "Describe BCSI storage, transit, and disposal requirements",
+      "Understand CIP-013-2 supply chain risk management for EACMS and PACS",
+      "Explain vendor verification and third-party remote access security"
     ],
     content: [
       {
@@ -542,58 +604,90 @@ const modulesData: ModuleData[] = [
         text: "BES Cyber System Information (BCSI) is information about BES Cyber Systems that could be used to gain unauthorized access or pose a security threat. This includes network diagrams, security configuration information, floor plans showing BES Cyber System locations, and detailed equipment specifications. BCSI must be identified, protected, and properly handled throughout its lifecycle."
       },
       {
-        title: "BCSI Protection Requirements",
-        text: "BCSI must be protected both in storage and in transit. This means implementing access controls so only authorized personnel can view BCSI, encrypting BCSI when transmitting over public networks, and properly disposing of BCSI when no longer needed. The key is preventing unauthorized access to information that could enable attacks."
+        title: "BCSI Protection in Storage (CIP-011 R1)",
+        text: "BCSI must be protected in storage locations—both physical and electronic. Implement access controls so only authorized personnel can access BCSI. Track access to BCSI storage locations. For shared storage systems, ensure BCSI is segregated and protected. Document who has access and conduct periodic reviews to verify access remains appropriate."
       },
       {
-        title: "Supply Chain Risk Management",
-        text: "CIP-013 requires a supply chain cyber security risk management plan. This plan must address vendor notification of incidents affecting products, coordination of responses to vulnerabilities, verification of software integrity, and authentication of vendor remote access. The goal is to manage risks introduced through your supply chain."
+        title: "BCSI Protection in Transit",
+        text: "BCSI must be encrypted when transmitted over public networks or through untrusted channels. Use secure file transfer protocols, encrypted email, or VPNs when sharing BCSI externally. For physical transit of BCSI (USB drives, paper documents), implement chain of custody controls. Never email unencrypted BCSI externally."
       },
       {
-        title: "Vendor Management",
-        text: "Your supply chain plan should establish processes for evaluating vendors before procurement, including security practices during the planning and procurement phases. You must also have methods to verify the authenticity and integrity of products you receive and procedures for terminating vendor access when no longer needed."
+        title: "BCSI Disposal Requirements",
+        text: "When BCSI is no longer needed, it must be properly destroyed or disposed of to prevent unauthorized retrieval. This includes sanitizing electronic media (secure wiping, degaussing, or physical destruction) and shredding paper documents. Document disposal actions—auditors will ask for evidence of proper BCSI disposal."
+      },
+      {
+        title: "CIP-013-2: Expanded Supply Chain Scope",
+        text: "CIP-013-2 significantly expanded supply chain requirements to include EACMS (Electronic Access Control or Monitoring Systems) and PACS (Physical Access Control Systems). Previously focused on BES Cyber Systems, you must now verify vendor security practices for firewalls, intrusion detection systems, badge readers, and cameras that support your CIP program."
+      },
+      {
+        title: "Supply Chain Risk Management Plan",
+        text: "Your CIP-013 plan must address: (1) Notification by vendors of incidents related to products, (2) Coordination of responses to vendor-disclosed vulnerabilities, (3) Verification of software integrity and authenticity before installation, (4) Controls for vendor-initiated remote access. The plan applies during procurement planning—not just after purchase."
+      },
+      {
+        title: "EACMS and PACS Vendor Verification",
+        text: "For EACMS (firewalls, authentication servers, logging systems) and PACS (badge systems, cameras, door controllers), you must: assess vendor security practices before procurement, verify software/firmware integrity before deployment, coordinate vulnerability responses with vendors, and control remote access by vendor personnel. Many organizations overlook these 'supporting' systems."
+      },
+      {
+        title: "Third-Party Remote Access Security",
+        text: "CIP-013-2 requires controls for vendor remote access to EACMS and PACS. Establish procedures for: authorizing vendor remote access, authenticating remote users, monitoring vendor sessions, logging vendor activities, and terminating access when no longer needed. Treat vendor access with the same rigor as employee access to critical systems."
+      },
+      {
+        title: "Software Integrity Verification",
+        text: "Before installing software or firmware on BES Cyber Systems, EACMS, or PACS, verify its authenticity and integrity. Methods include: verifying digital signatures, comparing hash values against vendor-published values, obtaining software from trusted sources only, and documenting verification activities. This prevents supply chain attacks through compromised software."
       }
     ],
     exercise: {
-      title: "BCSI Inventory",
-      description: "Conduct an inventory of BCSI in your environment. Where are network diagrams stored? Who has access? How are security configurations protected? Document all locations where BCSI exists and verify that appropriate protections are in place. Create an action plan for any gaps."
+      title: "EACMS/PACS Supply Chain Review",
+      description: "Identify all EACMS and PACS in your environment (firewalls, IDS, badge systems, cameras). For each system: Who is the vendor? What is your process for receiving vulnerability notifications? How do you verify software integrity before updates? How is vendor remote access controlled? Document gaps against CIP-013-2 requirements."
     },
     quiz: [
       {
         id: 1,
-        question: "What is BES Cyber System Information (BCSI)?",
+        question: "What does CIP-013-2 add to supply chain requirements?",
         options: [
-          "Public information about the grid",
-          "Information that could enable unauthorized access to BES Cyber Systems",
-          "Marketing materials about your organization",
-          "Employee personal information"
+          "Only BES Cyber Systems",
+          "EACMS and PACS in addition to BES Cyber Systems",
+          "Only network equipment",
+          "No changes from CIP-013-1"
         ],
         correctAnswer: 1,
-        explanation: "BCSI is information about BES Cyber Systems that could enable unauthorized access or pose a security threat."
+        explanation: "CIP-013-2 expanded supply chain requirements to include EACMS and PACS, not just BES Cyber Systems."
       },
       {
         id: 2,
-        question: "What must a supply chain risk management plan address?",
+        question: "What must be verified before installing vendor software on applicable systems?",
         options: [
-          "Only product pricing",
-          "Only delivery schedules",
-          "Vendor incident notification and vulnerability coordination",
-          "Only warranty terms"
+          "Only the price",
+          "Software integrity and authenticity",
+          "Only the installation date",
+          "Only the file size"
         ],
-        correctAnswer: 2,
-        explanation: "Plans must address vendor incident notification, vulnerability coordination, software integrity, and vendor access."
+        correctAnswer: 1,
+        explanation: "CIP-013 requires verification of software integrity and authenticity, typically through digital signatures or hash verification."
       },
       {
         id: 3,
-        question: "How must BCSI be protected during transmission?",
+        question: "How must BCSI be protected during transmission over public networks?",
         options: [
           "No protection is required",
-          "Only over internal networks",
+          "Only password protection",
           "Encryption when transmitted over public networks",
           "Only during business hours"
         ],
         correctAnswer: 2,
         explanation: "BCSI must be encrypted when transmitted over public networks."
+      },
+      {
+        id: 4,
+        question: "What systems are considered EACMS?",
+        options: [
+          "Only office computers",
+          "Firewalls, intrusion detection, authentication servers, and logging systems",
+          "Only printers",
+          "Only backup systems"
+        ],
+        correctAnswer: 1,
+        explanation: "EACMS include systems that control or monitor electronic access, such as firewalls, IDS, authentication servers, and logging systems."
       }
     ]
   },
@@ -663,6 +757,186 @@ const modulesData: ModuleData[] = [
         ],
         correctAnswer: 1,
         explanation: "Effective evidence is dated, shows who performed actions, and clearly demonstrates compliance."
+      }
+    ]
+  },
+  {
+    id: 11,
+    title: "Control Center Communications (CIP-012)",
+    objectives: [
+      "Understand CIP-012 applicability to Control Centers",
+      "Explain requirements for protecting Real-time data between Control Centers",
+      "Describe encryption and integrity protection methods",
+      "Identify what constitutes Real-time Assessment and Monitoring data"
+    ],
+    content: [
+      {
+        title: "CIP-012 Overview and Applicability",
+        text: "CIP-012 protects the confidentiality and integrity of Real-time Assessment and Real-time monitoring data transmitted between Control Centers. This standard applies when data is transmitted between: (1) Control Centers operated by the same entity, (2) Control Centers operated by different entities, or (3) a Control Center and any other location with EMS applications. Unlike most CIP standards, this focuses on data in transit, not systems."
+      },
+      {
+        title: "What is Real-time Assessment and Monitoring Data?",
+        text: "Protected data includes information used for Real-time situational awareness: generation output, load data, tie-line flows, voltage levels, breaker status, and other data exchanged for reliable grid operation. This data, if intercepted or manipulated, could enable attackers to understand grid state or inject false information affecting operator decisions."
+      },
+      {
+        title: "Protection Requirements (CIP-012 R1)",
+        text: "You must implement one or more documented plan(s) to mitigate risks of unauthorized disclosure and modification of Real-time data while in transit. Plans must address both confidentiality (preventing eavesdropping) and integrity (preventing modification). Encryption alone is not sufficient—you must also protect against tampering."
+      },
+      {
+        title: "Encryption Methods for Control Center Communications",
+        text: "Common methods include: TLS/SSL encryption for ICCP links, IPsec VPNs for dedicated circuits, and encryption built into application protocols. When selecting methods, consider: algorithm strength (avoid deprecated protocols like SSL 3.0), key management procedures, and performance impact on Real-time data delivery. Document your encryption standards."
+      },
+      {
+        title: "Integrity Protection",
+        text: "Beyond encryption, protect data integrity using: message authentication codes (MACs), digital signatures, or integrity verification built into protocols. The goal is detecting if data was modified in transit. If an attacker could change generation readings or breaker status mid-transmission, operators might make decisions based on false information."
+      },
+      {
+        title: "ICCP and Inter-Control Center Communications",
+        text: "Many utilities use ICCP (Inter-Control Center Communications Protocol) for data exchange. CIP-012 doesn't mandate specific protocols but requires protection of the data. If using ICCP, implement ICCP Secure (TASE.2 with TLS) or protect the underlying transport. Document how your ICCP links are secured and evidence that encryption is active."
+      },
+      {
+        title: "Evidence and Documentation",
+        text: "Maintain documentation showing: what communication links are in scope, the protection methods applied to each, configuration evidence (encryption settings, certificates), and testing that protections are operational. Auditors will ask to see proof that encryption is actually enabled, not just planned."
+      }
+    ],
+    exercise: {
+      title: "Control Center Communications Inventory",
+      description: "Create an inventory of all data links between your Control Center and other Control Centers or EMS-connected locations. For each link: What protocol is used (ICCP, DNP3, proprietary)? Is the link encrypted? What integrity protection exists? Document any gaps and prioritize remediation."
+    },
+    quiz: [
+      {
+        id: 1,
+        question: "What does CIP-012 protect?",
+        options: [
+          "Physical access to Control Centers",
+          "Real-time Assessment and monitoring data in transit between Control Centers",
+          "Only backup data",
+          "Employee personal information"
+        ],
+        correctAnswer: 1,
+        explanation: "CIP-012 protects the confidentiality and integrity of Real-time Assessment and monitoring data transmitted between Control Centers."
+      },
+      {
+        id: 2,
+        question: "What two properties must be protected under CIP-012?",
+        options: [
+          "Availability and performance",
+          "Confidentiality and integrity",
+          "Speed and reliability",
+          "Cost and efficiency"
+        ],
+        correctAnswer: 1,
+        explanation: "CIP-012 requires protection of both confidentiality (preventing unauthorized disclosure) and integrity (preventing unauthorized modification) of data in transit."
+      },
+      {
+        id: 3,
+        question: "When does CIP-012 apply?",
+        options: [
+          "Only within a single Control Center",
+          "When Real-time data is transmitted between Control Centers or to EMS-connected locations",
+          "Only for backup communications",
+          "Only for voice communications"
+        ],
+        correctAnswer: 1,
+        explanation: "CIP-012 applies when Real-time Assessment or monitoring data is transmitted between Control Centers or to other locations with EMS applications."
+      }
+    ]
+  },
+  {
+    id: 12,
+    title: "Physical Security of Transmission Assets (CIP-014)",
+    objectives: [
+      "Distinguish CIP-014 from CIP-006 physical security requirements",
+      "Understand risk assessment requirements for transmission stations",
+      "Explain threat and vulnerability evaluation processes",
+      "Describe physical security plan development and third-party review"
+    ],
+    content: [
+      {
+        title: "CIP-014 vs. CIP-006: Key Differences",
+        text: "CIP-006 protects Physical Security Perimeters around BES Cyber Systems—focused on cyber assets. CIP-014 protects transmission stations and substations themselves from physical attack, regardless of cyber systems. CIP-014 addresses the risk that physical destruction of critical transmission facilities could cause widespread outages affecting the grid's ability to serve load."
+      },
+      {
+        title: "Applicability: Which Facilities Are In Scope?",
+        text: "CIP-014 applies to Transmission Owners and Transmission Operators for: (1) Transmission stations and substations operated at 500 kV or higher, and (2) Transmission stations and substations that meet specific criteria indicating their loss could result in instability, uncontrolled separation, or cascading failures. Not all substations are in scope—only those critical to grid stability."
+      },
+      {
+        title: "Risk Assessment (CIP-014 R1)",
+        text: "You must perform an initial risk assessment and subsequent assessments at least once every 30 months to identify transmission stations and substations that if rendered inoperable or damaged could result in instability, uncontrolled separation, or cascading within an Interconnection. This is an engineering analysis, not a cyber assessment."
+      },
+      {
+        title: "Third-Party Verification (CIP-014 R2)",
+        text: "Your risk assessment must be verified by an unaffiliated third party. This reviewer must have relevant transmission planning or operations experience. They verify the methodology and results—confirming that the correct facilities were identified (or not identified) as critical. This adds independent oversight to self-assessments."
+      },
+      {
+        title: "Threat and Vulnerability Evaluation (CIP-014 R4)",
+        text: "For identified facilities, conduct a threat and vulnerability evaluation at least once every 30 months. Consider: physical attack methods (ballistic, intrusion, explosives), current security measures, facility characteristics affecting vulnerability, and potential attack impacts. This evaluation informs your security plan development."
+      },
+      {
+        title: "Physical Security Plan (CIP-014 R5)",
+        text: "Develop and implement a physical security plan that addresses threats identified in your evaluation. Plans may include: enhanced perimeter barriers, lighting improvements, video surveillance, intrusion detection, hardening of critical equipment, and coordination with law enforcement. Plans must be reviewed by an unaffiliated third party."
+      },
+      {
+        title: "Third-Party Review of Security Plans",
+        text: "Physical security plans must be reviewed by an unaffiliated third party with relevant physical security expertise. They evaluate whether the plan addresses identified threats and vulnerabilities. Consider using physical security consultants, law enforcement advisors, or industry peers (not competitors in the same market area)."
+      },
+      {
+        title: "Sensitive Information Protection",
+        text: "CIP-014 information is highly sensitive—it identifies your most critical facilities and their vulnerabilities. Protect this information carefully. Limit distribution, control storage, and be cautious about who has access. Improper disclosure could literally provide attackers a target list and vulnerability assessment."
+      }
+    ],
+    exercise: {
+      title: "Facility Criticality Review",
+      description: "Using publicly available transmission maps, identify which of your facilities might meet CIP-014 criteria (500 kV and above, or critical to grid stability). Consider: What would happen if this facility were destroyed? Could load be served through alternate paths? This exercise builds intuition for the risk assessment process."
+    },
+    quiz: [
+      {
+        id: 1,
+        question: "What is the primary difference between CIP-014 and CIP-006?",
+        options: [
+          "CIP-014 is older than CIP-006",
+          "CIP-006 protects cyber assets in PSPs; CIP-014 protects transmission facilities from physical attack",
+          "CIP-014 only applies to generators",
+          "There is no difference"
+        ],
+        correctAnswer: 1,
+        explanation: "CIP-006 focuses on physical security of areas containing BES Cyber Systems, while CIP-014 protects critical transmission facilities from physical attack regardless of cyber systems."
+      },
+      {
+        id: 2,
+        question: "How often must CIP-014 risk assessments be performed?",
+        options: [
+          "Every 12 months",
+          "Every 24 months",
+          "Every 30 months",
+          "Every 60 months"
+        ],
+        correctAnswer: 2,
+        explanation: "CIP-014 risk assessments must be performed at least once every 30 calendar months."
+      },
+      {
+        id: 3,
+        question: "Who must review a CIP-014 physical security plan?",
+        options: [
+          "Only internal staff",
+          "The CIP Senior Manager only",
+          "An unaffiliated third party with relevant expertise",
+          "No review is required"
+        ],
+        correctAnswer: 2,
+        explanation: "CIP-014 physical security plans must be reviewed by an unaffiliated third party with physical security expertise."
+      },
+      {
+        id: 4,
+        question: "What types of facilities are potentially in scope for CIP-014?",
+        options: [
+          "All substations regardless of voltage",
+          "Only generation facilities",
+          "Transmission stations at 500 kV+ or critical to grid stability",
+          "Only Control Centers"
+        ],
+        correctAnswer: 2,
+        explanation: "CIP-014 applies to transmission stations operated at 500 kV or higher, plus those whose loss could cause instability, uncontrolled separation, or cascading."
       }
     ]
   }

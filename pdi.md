@@ -1412,6 +1412,12 @@ export default defineConfig(({ mode }) => {
   - CIP 101 and Audit Journey added to main navigation
   - Soft Skills, Scope Matrix added to More dropdown
 - **Fixed Broken Links:** Footer links to NERC CIP 101, Audit Journey, and Templates now work
+- **Expanded Module Content:**
+  - **Module 3 (CIP-003):** Added CIP-003-9 low-impact BES Cyber System requirements including TCA management, password controls, and patching for low-impact devices
+  - **Module 7 (CIP-008/CIP-009):** Expanded with ES-ISAC reporting timelines, notification evidence requirements, incident classification criteria, lessons learned documentation, backup verification
+  - **Module 9 (CIP-011/CIP-013):** Added CIP-013-2 EACMS and PACS coverage, third-party remote access security, software integrity verification
+  - **New Module 11 (CIP-012):** Control Center Communications - Real-time data protection, ICCP security, encryption methods
+  - **New Module 12 (CIP-014):** Physical Security of Transmission Assets - Risk assessments, threat evaluations, physical security plans, third-party reviews
 
 ---
 
