@@ -21,7 +21,7 @@ export function ProgressWidget() {
         <div>
           <h3 className="font-semibold text-navy">Your Progress</h3>
           <p className="text-sm text-muted-foreground">
-            You have completed {completed} of 10 modules
+            You have completed {completed} of 12 modules
           </p>
         </div>
       </div>
