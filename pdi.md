@@ -1398,6 +1398,86 @@ export default defineConfig(({ mode }) => {
 - Added Manager/Team Guide page
 - Extended Progress Backup to include new data types
 
+### Version 1.3 (November 2025)
+- **New Pages:**
+  - `/nerc-cip-101` - NERC CIP 101 foundational overview with all 13 CIP standards
+  - `/audit-journey` - Complete 90-day audit timeline with phases, tips, and interview best practices
+  - `/soft-skills` - Auditor etiquette training with interactive practice scenarios
+  - `/scope-matrix` - Interactive BES Cyber Asset classification tool and TCA handling guidance
+- **Global Search:** Site-wide search (Cmd+K) for modules, pages, glossary terms
+- **Excel Downloads:** Templates now available in both PDF and Excel formats (xlsx package)
+- **Updated External Links:** Current NERC Standards Library, FERC CIP Orders, Compliance Guidance
+- **Content Version Tracking:** Resources page shows last updated date and verification status
+- **Navigation Updates:** 
+  - CIP 101 and Audit Journey added to main navigation
+  - Soft Skills, Scope Matrix added to More dropdown
+- **Fixed Broken Links:** Footer links to NERC CIP 101, Audit Journey, and Templates now work
+
+---
+
+## New Pages Detail (v1.3)
+
+### NERC CIP 101 (`/nerc-cip-101`)
+**File:** `src/pages/NercCip101.tsx`
+
+Overview page introducing NERC CIP fundamentals:
+- Why NERC CIP matters (penalties, grid protection)
+- Key terminology (BES, ESP, PSP, EACMS, PACS, BCSI, etc.)
+- All 13 CIP standards with descriptions and module links
+- Compliance framework (NERC → Regional Entities → Registered Entities)
+
+### Audit Journey (`/audit-journey`)
+**File:** `src/pages/AuditJourney.tsx`
+
+Complete audit timeline covering:
+- **90-Day Notice** - Receiving notification, initial steps
+- **Pre-Audit Information Request** - Evidence compilation (Days 1-30)
+- **Internal Preparation** - Mock audits, SME training (Days 30-75)
+- **Pre-Audit Conference Call** - Logistics coordination (Days 75-80)
+- **Audit Week(s)** - On-site activities, interviews (Days 80-90)
+- **Post-Audit Activities** - Findings, mitigation, closeout (Days 90+)
+
+Also includes:
+- Interview best practices ("I don't know" protocol)
+- Sample interview dialogues (good vs. poor responses)
+
+### Soft Skills Training (`/soft-skills`)
+**File:** `src/pages/SoftSkillsTraining.tsx`
+
+Auditor etiquette training featuring:
+- Core interview principles (answer only what's asked, defer appropriately)
+- Interactive practice scenarios with CIP-specific questions
+- Compare good vs. poor responses with explanations
+- Script examples for common situations
+
+### Scope Matrix & TCA (`/scope-matrix`)
+**File:** `src/pages/ScopeMatrix.tsx`
+
+Asset scoping tool with:
+- Interactive questionnaire for BES Cyber Asset determination
+- Impact rating guidance (High/Medium/Low)
+- Comprehensive TCA (Transient Cyber Asset) handling guidance
+- USB drive and maintenance laptop requirements
+- Best practices checklist
+
+### Global Search Component
+**File:** `src/components/GlobalSearch.tsx`
+
+Site-wide search using shadcn Command component:
+- Keyboard shortcut: ⌘K / Ctrl+K
+- Searches modules, pages, role training, glossary terms
+- Categorized results with icons
+- Direct navigation on selection
+
+### Excel Templates
+**File:** `src/utils/excelTemplates.ts`
+
+Downloadable Excel templates using xlsx library:
+- Evidence Inventory Spreadsheet
+- Training Matrix
+- Patch Assessment Tracker (with Legend sheet)
+- Access Review Documentation
+
 ---
 
 ## Contact & Support
@@ -1407,4 +1487,4 @@ export default defineConfig(({ mode }) => {
 
 ---
 
-*This documentation was generated based on the complete codebase analysis of CIP Readiness Academy.*
+*This documentation was last updated November 2025 based on the complete codebase analysis of CIP Readiness Academy.*

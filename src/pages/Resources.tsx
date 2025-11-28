@@ -1,12 +1,16 @@
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { 
   FileSpreadsheet, 
   FileText, 
   Download, 
   ExternalLink,
   BookOpen,
-  Table
+  Table,
+  AlertTriangle,
+  Calendar
 } from "lucide-react";
 import {
   generateEvidenceInventory,
@@ -16,6 +20,12 @@ import {
   generatePatchTracker,
   generateAccessReviewForm,
 } from "@/utils/pdfTemplates";
+import {
+  generateEvidenceInventoryExcel,
+  generateTrainingMatrixExcel,
+  generatePatchTrackerExcel,
+  generateAccessReviewExcel,
+} from "@/utils/excelTemplates";
 
 interface Template {
   icon: typeof FileSpreadsheet;
@@ -26,6 +36,7 @@ interface Template {
   fields?: string[];
   sections?: string[];
   generatePdf: () => void;
+  generateExcel?: () => void;
 }
 
 const templates: Template[] = [
@@ -33,17 +44,19 @@ const templates: Template[] = [
     icon: FileSpreadsheet,
     title: "Evidence Inventory Spreadsheet",
     description: "Track all evidence documents mapped to CIP requirements, including owners, dates, and locations.",
-    format: "PDF with Example Data",
+    format: "PDF or Excel",
     columns: ["CIP Requirement ID", "Evidence Description", "Document Location", "Owner", "Last Updated", "Expiration Date", "Status"],
     generatePdf: generateEvidenceInventory,
+    generateExcel: generateEvidenceInventoryExcel,
   },
   {
     icon: Table,
     title: "Training Matrix",
     description: "Map personnel to required training, track completion dates, and identify upcoming renewals.",
-    format: "PDF with Example Data",
+    format: "PDF or Excel",
     columns: ["Employee Name", "Role", "Required Training", "Completion Date", "Next Due Date", "Trainer", "Status"],
     generatePdf: generateTrainingMatrix,
+    generateExcel: generateTrainingMatrixExcel,
   },
   {
     icon: FileText,
@@ -65,17 +78,19 @@ const templates: Template[] = [
     icon: FileSpreadsheet,
     title: "Patch Assessment Tracker",
     description: "Track security patches from identification through assessment and implementation or mitigation.",
-    format: "PDF with Example Data",
+    format: "PDF or Excel",
     columns: ["Patch ID", "Vendor", "Affected Systems", "Release Date", "Assessment Due", "Disposition", "Implementation Date", "Mitigation Details"],
     generatePdf: generatePatchTracker,
+    generateExcel: generatePatchTrackerExcel,
   },
   {
     icon: FileText,
     title: "Access Review Documentation Form",
     description: "Standardized form for documenting quarterly access reviews with approval signatures.",
-    format: "PDF with Example Data",
+    format: "PDF or Excel",
     fields: ["Review Period", "System/Application", "Access List Reviewed", "Reviewer Name", "Date", "Discrepancies Found", "Corrective Actions", "Approver Signature"],
     generatePdf: generateAccessReviewForm,
+    generateExcel: generateAccessReviewExcel,
   }
 ];
 
@@ -159,14 +174,19 @@ const glossaryTerms = [
 
 const externalLinks = [
   {
-    title: "NERC Official Website",
-    description: "Access official NERC standards, implementation guidance, and reliability resources.",
-    url: "https://www.nerc.com"
+    title: "NERC Standards Library",
+    description: "Official NERC Standards library with all current reliability standards, including CIP standards and implementation guidance.",
+    url: "https://www.nerc.com/pa/Stand/Pages/ReliabilityStandards.aspx"
   },
   {
-    title: "NERC CIP Standards Page",
-    description: "Direct link to all current CIP reliability standards and associated documents.",
+    title: "NERC CIP Standards (Direct)",
+    description: "Direct link to Critical Infrastructure Protection reliability standards and associated documents.",
     url: "https://www.nerc.com/pa/Stand/Pages/CIPStandards.aspx"
+  },
+  {
+    title: "FERC CIP Orders",
+    description: "Federal Energy Regulatory Commission orders related to CIP standards approval and directives.",
+    url: "https://www.ferc.gov/industries-data/electric/industry-activities/cyber-security-cip"
   },
   {
     title: "E-ISAC Portal",
@@ -177,6 +197,11 @@ const externalLinks = [
     title: "Regional Entity Websites",
     description: "Find your regional entity (SERC, RF, WECC, NPCC, MRO, Texas RE) for region-specific guidance and reporting.",
     url: "https://www.nerc.com/pa/comp/Pages/Regional-Entities.aspx"
+  },
+  {
+    title: "NERC Compliance Guidance",
+    description: "Implementation guidance documents, FAQs, and compliance application notices.",
+    url: "https://www.nerc.com/pa/comp/guidance/Pages/default.aspx"
   }
 ];
 
@@ -204,9 +229,31 @@ export default function Resources() {
             </h1>
             <p className="text-lg text-muted-foreground">
               Practical tools, templates, and reference materials to support your 
-              NERC CIP compliance program. Download PDF templates with pre-filled examples.
+              NERC CIP compliance program. Download PDF or Excel templates with pre-filled examples.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Content Version Notice */}
+      <section className="py-4 border-b border-border/50">
+        <div className="container">
+          <Alert className="max-w-4xl mx-auto border-primary/20 bg-primary/5">
+            <Calendar className="h-4 w-4 text-primary" />
+            <AlertTitle className="text-primary">Content Last Updated: November 2025</AlertTitle>
+            <AlertDescription className="text-muted-foreground">
+              Templates and external links verified against NERC CIP Standards effective as of November 2025. 
+              NERC updates standards periodically—always verify requirements against the{" "}
+              <a 
+                href="https://www.nerc.com/pa/Stand/Pages/ReliabilityStandards.aspx" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                official NERC Standards Library
+              </a>.
+            </AlertDescription>
+          </Alert>
         </div>
       </section>
 
@@ -231,18 +278,29 @@ export default function Resources() {
                       <template.icon className="h-6 w-6 text-primary" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-4 mb-1">
+                      <div className="flex items-start justify-between gap-4 mb-1 flex-wrap">
                         <h3 className="font-semibold text-navy group-hover:text-primary transition-colors">
                           {template.title}
                         </h3>
-                        <Button 
-                          size="sm" 
-                          onClick={template.generatePdf}
-                          className="shrink-0"
-                        >
-                          <Download className="h-4 w-4 mr-1" />
-                          Download PDF
-                        </Button>
+                        <div className="flex gap-2 shrink-0">
+                          <Button 
+                            size="sm" 
+                            onClick={template.generatePdf}
+                          >
+                            <Download className="h-4 w-4 mr-1" />
+                            PDF
+                          </Button>
+                          {template.generateExcel && (
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={template.generateExcel}
+                            >
+                              <FileSpreadsheet className="h-4 w-4 mr-1" />
+                              Excel
+                            </Button>
+                          )}
+                        </div>
                       </div>
                       <p className="text-sm text-muted-foreground mb-3">{template.description}</p>
                       

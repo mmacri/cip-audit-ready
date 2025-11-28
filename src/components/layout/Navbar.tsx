@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { UserRoleBadge } from "@/components/UserRoleBadge";
+import { GlobalSearch } from "@/components/GlobalSearch";
 import { Menu, X, GraduationCap, MoreHorizontal } from "lucide-react";
 import {
   DropdownMenu,
@@ -13,15 +14,19 @@ import {
 
 const mainNavItems = [
   { label: "Home", href: "/" },
-  { label: "Learning Path", href: "/learning-path" },
+  { label: "CIP 101", href: "/nerc-cip-101" },
   { label: "Modules", href: "/modules" },
   { label: "Role Training", href: "/role-training" },
-  { label: "Evidence Lab", href: "/evidence-lab" },
+  { label: "Audit Journey", href: "/audit-journey" },
 ];
 
 const moreNavItems = [
+  { label: "Learning Path", href: "/learning-path" },
+  { label: "Evidence Lab", href: "/evidence-lab" },
   { label: "Case Studies", href: "/case-studies" },
   { label: "Audit Simulator", href: "/audit-simulator" },
+  { label: "Soft Skills Training", href: "/soft-skills" },
+  { label: "Scope Matrix & TCA", href: "/scope-matrix" },
   { label: "Readiness Plan", href: "/readiness-plan" },
   { label: "Self-Assessment", href: "/self-assessment" },
   { label: "Achievements", href: "/achievements" },
@@ -97,7 +102,8 @@ export function Navbar() {
             </DropdownMenu>
           </nav>
           
-          <div className="ml-2 pl-2 border-l border-border">
+          <div className="ml-2 pl-2 border-l border-border flex items-center gap-2">
+            <GlobalSearch />
             <UserRoleBadge />
           </div>
         </div>
