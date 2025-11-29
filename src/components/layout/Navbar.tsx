@@ -45,11 +45,14 @@ const navGroups: NavGroup[] = [
     label: "Resources",
     icon: FolderOpen,
     items: [
+      { label: "Case Studies", href: "/case-studies", description: "Real-world scenarios" },
       { label: "Scope & TCA Matrix", href: "/scope-matrix", description: "Asset classification guide" },
       { label: "Templates & Downloads", href: "/resources", description: "Checklists, matrices, forms" },
       { label: "Manager Guide", href: "/manager-guide", description: "Team training delivery" },
-      { label: "Progress Backup", href: "/progress-backup", description: "Export/import your data" },
+      { label: "Final Exam", href: "/final-exam", description: "Test your knowledge" },
+      { label: "Certificate", href: "/certificate", description: "Get your completion certificate" },
       { label: "Achievements", href: "/achievements", description: "View earned badges" },
+      { label: "Progress Backup", href: "/progress-backup", description: "Export/import your data" },
     ],
   },
   {
@@ -57,9 +60,6 @@ const navGroups: NavGroup[] = [
     icon: Info,
     items: [
       { label: "About CIP Academy", href: "/about", description: "Mission & contact" },
-      { label: "Case Studies", href: "/case-studies", description: "Real-world scenarios" },
-      { label: "Final Exam", href: "/final-exam", description: "Test your knowledge" },
-      { label: "Certificate", href: "/certificate", description: "Get your completion certificate" },
     ],
   },
 ];
