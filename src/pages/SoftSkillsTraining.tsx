@@ -256,7 +256,7 @@ export default function SoftSkillsTraining() {
             <Badge variant="secondary" className="mb-4">
               Soft Skills Training
             </Badge>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-navy-foreground">
               Auditor Etiquette & Interview Skills
             </h1>
             <p className="text-xl text-navy-foreground/80 mb-8 leading-relaxed">

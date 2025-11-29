@@ -134,7 +134,7 @@ export default function NercCip101() {
             <Badge variant="secondary" className="mb-4">
               Foundational Knowledge
             </Badge>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-navy-foreground">
               NERC CIP 101: Your Starting Point
             </h1>
             <p className="text-xl text-navy-foreground/80 mb-8 leading-relaxed">

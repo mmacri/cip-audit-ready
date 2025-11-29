@@ -205,7 +205,7 @@ export default function ScopeMatrix() {
             <Badge variant="secondary" className="mb-4">
               Asset Scoping Tool
             </Badge>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-navy-foreground">
               Scope & Applicability Matrix
             </h1>
             <p className="text-xl text-navy-foreground/80 mb-8 leading-relaxed">
