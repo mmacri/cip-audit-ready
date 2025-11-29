@@ -22,6 +22,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { 
   Target, 
   BookOpen, 
@@ -35,7 +36,8 @@ import {
   Award,
   ClipboardCheck,
   AlertTriangle,
-  Lightbulb
+  Lightbulb,
+  ChevronDown
 } from 'lucide-react';
 
 const roleIcons: Record<UserRole, typeof Target> = {
@@ -202,12 +204,12 @@ export default function RoleTrainingDetail() {
                 <CardHeader className="pb-2">
                   <CardTitle className="flex items-center gap-2 text-base">
                     <ClipboardCheck className="h-5 w-5 text-primary" />
-                    Quick Knowledge Check
+                    Readiness Assessment
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-4">
-                    New here? Take a quick 10-question assessment so we can suggest where to start your training journey.
+                    Take a quick 10-question assessment to identify your focus areas and get personalized recommendations.
                   </p>
                   <PreAssessment role={role} />
                 </CardContent>
@@ -265,22 +267,19 @@ export default function RoleTrainingDetail() {
         </div>
       </section>
 
-      {/* Main Content Tabs */}
+      {/* Main Content Tabs - Consolidated into Plan and Tools */}
       <section className="py-8 md:py-12">
         <div className="container">
           <div className="max-w-4xl mx-auto">
-            <Tabs defaultValue="phases" className="space-y-6">
-              <TabsList className="grid grid-cols-6 w-full max-w-2xl mx-auto">
-                <TabsTrigger value="phases">Phases</TabsTrigger>
-                <TabsTrigger value="missions">Missions</TabsTrigger>
-                <TabsTrigger value="scenario">Scenario</TabsTrigger>
-                <TabsTrigger value="pitfalls">Pitfalls</TabsTrigger>
-                <TabsTrigger value="timeline">Timeline</TabsTrigger>
-                <TabsTrigger value="generator">Export</TabsTrigger>
+            <Tabs defaultValue="plan" className="space-y-6">
+              <TabsList className="grid grid-cols-2 w-full max-w-md mx-auto">
+                <TabsTrigger value="plan">Plan</TabsTrigger>
+                <TabsTrigger value="tools">Tools</TabsTrigger>
               </TabsList>
 
-              {/* Phased Training Plan */}
-              <TabsContent value="phases" className="space-y-6">
+              {/* Plan Tab - Phases, Missions, with collapsible Scenario/Pitfalls */}
+              <TabsContent value="plan" className="space-y-6">
+                {/* Phased Training Plan */}
                 {rolePlan.phases.map((phase, index) => (
                   <div key={phase.id} className="bg-card rounded-xl border border-border/50 overflow-hidden">
                     <div className="bg-muted/50 px-6 py-4 border-b border-border/50">
@@ -304,7 +303,8 @@ export default function RoleTrainingDetail() {
                               <Link
                                 key={module.id}
                                 to={`/modules#module-${module.id}`}
-                                className="inline-flex items-center gap-2 bg-muted hover:bg-muted/80 rounded-lg px-3 py-2 text-sm transition-colors group"
+                                className="inline-flex items-center gap-2 bg-muted hover:bg-primary/10 rounded-lg px-3 py-2 text-sm transition-colors group border border-transparent hover:border-primary/30"
+                                title="Click to open module"
                               >
                                 <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                                   {module.id}
@@ -315,8 +315,10 @@ export default function RoleTrainingDetail() {
                                 <Badge variant={module.required ? "default" : "secondary"} className="text-[10px]">
                                   {module.required ? 'Required' : 'Recommended'}
                                 </Badge>
-                                {progress.completedModules.includes(module.id) && (
+                                {progress.completedModules.includes(module.id) ? (
                                   <CheckCircle2 className="h-4 w-4 text-success" />
+                                ) : (
+                                  <ExternalLink className="h-3 w-3 text-muted-foreground group-hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
                                 )}
                               </Link>
                             ))}
@@ -334,78 +336,99 @@ export default function RoleTrainingDetail() {
                     </div>
                   </div>
                 ))}
+
+                {/* Missions Section */}
+                <div className="bg-card rounded-xl border border-border/50 overflow-hidden">
+                  <div className="bg-accent/10 px-6 py-4 border-b border-border/50">
+                    <div className="flex items-center gap-3">
+                      <Rocket className="h-5 w-5 text-accent" />
+                      <div>
+                        <h3 className="font-semibold text-navy">Role Missions</h3>
+                        <p className="text-xs text-muted-foreground">Scenario-based assignments that apply what you've learned</p>
+                      </div>
+                      <Badge variant="secondary" className="ml-auto">{completedMissions}/{totalMissions}</Badge>
+                    </div>
+                  </div>
+                  <div className="p-6 space-y-4">
+                    {missions.map((mission) => (
+                      <MissionCard
+                        key={mission.id}
+                        mission={mission}
+                        isComplete={isMissionComplete(mission.id)}
+                        onToggleComplete={toggleMission}
+                      />
+                    ))}
+                    <ReflectionPanel
+                      role={role}
+                      contextType="mission"
+                      contextId={`${role}-missions`}
+                      reflectionContext={reflectionContext}
+                    />
+                  </div>
+                </div>
+
+                {/* Collapsible Scenario Section */}
+                <Collapsible>
+                  <div className="bg-card rounded-xl border border-border/50 overflow-hidden">
+                    <CollapsibleTrigger className="w-full bg-muted/50 px-6 py-4 border-b border-border/50 flex items-center justify-between hover:bg-muted/70 transition-colors">
+                      <div className="flex items-center gap-3">
+                        <BookOpen className="h-5 w-5 text-accent" />
+                        <div className="text-left">
+                          <h3 className="font-semibold text-navy">Interactive Branching Scenario</h3>
+                          <p className="text-xs text-muted-foreground">Practice decision-making in realistic situations</p>
+                        </div>
+                      </div>
+                      <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <div className="p-6 space-y-4">
+                        <RoleScenarioPlayer role={role} />
+                        <ReflectionPanel
+                          role={role}
+                          contextType="scenario"
+                          contextId={`${role}-scenario`}
+                          reflectionContext={reflectionContext}
+                        />
+                      </div>
+                    </CollapsibleContent>
+                  </div>
+                </Collapsible>
+
+                {/* Collapsible Pitfalls Section */}
+                <Collapsible>
+                  <div className="bg-card rounded-xl border border-border/50 overflow-hidden">
+                    <CollapsibleTrigger className="w-full bg-muted/50 px-6 py-4 border-b border-border/50 flex items-center justify-between hover:bg-muted/70 transition-colors">
+                      <div className="flex items-center gap-3">
+                        <AlertTriangle className="h-5 w-5 text-amber" />
+                        <div className="text-left">
+                          <h3 className="font-semibold text-navy">Common Pitfalls & Audit Red Flags</h3>
+                          <p className="text-xs text-muted-foreground">Learn from mistakes and recognize warning signs</p>
+                        </div>
+                      </div>
+                      <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <div className="p-6">
+                        <PitfallsSection role={role} />
+                      </div>
+                    </CollapsibleContent>
+                  </div>
+                </Collapsible>
               </TabsContent>
 
-              {/* Missions Tab */}
-              <TabsContent value="missions" className="space-y-6">
+              {/* Tools Tab - Timeline and Export */}
+              <TabsContent value="tools" className="space-y-6">
+                {/* Timeline View */}
                 <div className="bg-muted/30 rounded-xl border border-border/50 p-6 mb-6">
                   <div className="flex items-center gap-3 mb-2">
-                    <Rocket className="h-5 w-5 text-accent" />
-                    <h3 className="font-semibold text-navy">Role Missions</h3>
+                    <Clock className="h-5 w-5 text-primary" />
+                    <h3 className="font-semibold text-navy">Timeline View</h3>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    Scenario-based assignments that apply what you've learned. Each mission simulates a real-world 
-                    situation you might face in your role. Complete the steps and mark the mission done to track your progress.
+                    Organize your training by time horizon. Use these milestones to plan your progress.
                   </p>
                 </div>
-                {missions.map((mission) => (
-                  <MissionCard
-                    key={mission.id}
-                    mission={mission}
-                    isComplete={isMissionComplete(mission.id)}
-                    onToggleComplete={toggleMission}
-                  />
-                ))}
                 
-                {/* Reflection Panel for Missions */}
-                <ReflectionPanel
-                  role={role}
-                  contextType="mission"
-                  contextId={`${role}-missions`}
-                  reflectionContext={reflectionContext}
-                />
-              </TabsContent>
-
-              {/* Scenario Tab */}
-              <TabsContent value="scenario" className="space-y-6">
-                <div className="bg-muted/30 rounded-xl border border-border/50 p-6 mb-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <BookOpen className="h-5 w-5 text-accent" />
-                    <h3 className="font-semibold text-navy">Interactive Branching Scenario</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Experience a realistic scenario where your decisions matter. Navigate through challenges 
-                    and see how different choices lead to different outcomes.
-                  </p>
-                </div>
-                <RoleScenarioPlayer role={role} />
-                
-                {/* Reflection Panel for Scenario */}
-                <ReflectionPanel
-                  role={role}
-                  contextType="scenario"
-                  contextId={`${role}-scenario`}
-                  reflectionContext={reflectionContext}
-                />
-              </TabsContent>
-
-              {/* Pitfalls Tab */}
-              <TabsContent value="pitfalls" className="space-y-6">
-                <div className="bg-muted/30 rounded-xl border border-border/50 p-6 mb-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <AlertTriangle className="h-5 w-5 text-amber" />
-                    <h3 className="font-semibold text-navy">Common Pitfalls & Audit Red Flags</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Learn from common mistakes others have made and understand what patterns make auditors 
-                    look more closely at your compliance program.
-                  </p>
-                </div>
-                <PitfallsSection role={role} />
-              </TabsContent>
-
-              {/* Timeline View */}
-              <TabsContent value="timeline" className="space-y-6">
                 {rolePlan.timeHorizons.map((horizon) => (
                   <div key={horizon.id} className="bg-card rounded-xl border border-border/50 overflow-hidden">
                     <div className="bg-muted/50 px-6 py-4 border-b border-border/50 flex items-center gap-3">
@@ -422,11 +445,20 @@ export default function RoleTrainingDetail() {
                     </div>
                   </div>
                 ))}
-              </TabsContent>
 
-              {/* Training Plan Generator */}
-              <TabsContent value="generator">
-                <TrainingPlanGenerator role={role} />
+                {/* Training Plan Generator */}
+                <div className="bg-card rounded-xl border border-border/50 overflow-hidden">
+                  <div className="bg-muted/50 px-6 py-4 border-b border-border/50 flex items-center gap-3">
+                    <Target className="h-5 w-5 text-primary" />
+                    <div>
+                      <h3 className="font-semibold text-navy">Export Training Plan</h3>
+                      <p className="text-xs text-muted-foreground">Generate a personalized plan to share or print</p>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <TrainingPlanGenerator role={role} />
+                  </div>
+                </div>
               </TabsContent>
             </Tabs>
           </div>
@@ -451,8 +483,8 @@ export default function RoleTrainingDetail() {
                 </Link>
               </Button>
               <Button variant="outline" asChild size="lg">
-                <Link to="/self-assessment">
-                  Take Self-Assessment
+                <Link to="/get-started">
+                  Back to My Training Plan
                 </Link>
               </Button>
             </div>

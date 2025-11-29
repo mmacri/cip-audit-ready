@@ -62,6 +62,7 @@ const App = () => (
           <Route path="/audit-journey" element={<Navigate to="/modules#module-10" replace />} />
           <Route path="/learning-path" element={<Navigate to="/get-started" replace />} />
           <Route path="/self-assessment" element={<Navigate to="/get-started" replace />} />
+          <Route path="/index.html" element={<Navigate to="/" replace />} />
           
           <Route path="*" element={<NotFound />} />
         </Routes>

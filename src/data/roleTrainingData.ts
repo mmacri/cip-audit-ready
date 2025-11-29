@@ -131,7 +131,7 @@ export const roleTrainingPlans: Record<UserRole, RoleTrainingPlan> = {
         name: 'Next 60 Days',
         tasks: [
           { id: 'comp-60-1', label: 'Complete Modules 7, 9, and 10', moduleLink: 7 },
-          { id: 'comp-60-2', label: 'Conduct a gap analysis using the Self-Assessment tool', toolLink: '/self-assessment' },
+          { id: 'comp-60-2', label: 'Conduct a gap analysis using the Readiness Assessment', toolLink: '/get-started' },
           { id: 'comp-60-3', label: 'Run the Audit Simulator and practice evidence retrieval', toolLink: '/audit-simulator' },
           { id: 'comp-60-4', label: 'Update or create standard operating procedures for evidence collection' },
         ],
@@ -161,7 +161,7 @@ export const roleTrainingPlans: Record<UserRole, RoleTrainingPlan> = {
     keyTools: [
       { name: 'Evidence Lab', link: '/evidence-lab', description: 'Map and organize your compliance evidence' },
       { name: 'Audit Simulator', link: '/audit-simulator', description: 'Practice responding to audit requests' },
-      { name: 'Self-Assessment', link: '/self-assessment', description: 'Evaluate your compliance readiness' },
+      { name: 'Readiness Assessment', link: '/get-started', description: 'Evaluate your compliance readiness' },
       { name: 'Readiness Plan', link: '/readiness-plan', description: 'Build your action plan' },
     ],
     riskAreas: ['Scope & Asset Clarity', 'Evidence Organization & Audit Readiness', 'Training & Personnel', 'Technical Controls & Patching', 'Incident Response & Recovery'],
@@ -616,7 +616,7 @@ export const roleTrainingPlans: Record<UserRole, RoleTrainingPlan> = {
       },
     ],
     keyTools: [
-      { name: 'Self-Assessment', link: '/self-assessment', description: 'Evaluate organizational readiness' },
+      { name: 'Readiness Assessment', link: '/get-started', description: 'Evaluate organizational readiness' },
       { name: 'Audit Simulator', link: '/audit-simulator', description: 'Understand audit expectations' },
       { name: 'Readiness Plan', link: '/readiness-plan', description: 'Review the organizational action plan' },
     ],
@@ -655,7 +655,7 @@ export const roleTrainingPlans: Record<UserRole, RoleTrainingPlan> = {
           { id: 6, name: moduleNames[6], required: false },
         ],
         tasks: [
-          { id: 'other-p2-1', label: 'Complete the Self-Assessment to identify focus areas', toolLink: '/self-assessment' },
+          { id: 'other-p2-1', label: 'Complete the Readiness Assessment to identify focus areas', toolLink: '/get-started' },
           { id: 'other-p2-2', label: 'Review modules most relevant to your work', moduleLink: 4 },
           { id: 'other-p2-3', label: 'Understand how your actions affect compliance' },
         ],
@@ -701,7 +701,7 @@ export const roleTrainingPlans: Record<UserRole, RoleTrainingPlan> = {
         name: 'Next 60 Days',
         tasks: [
           { id: 'other-60-1', label: 'Complete additional modules based on interest' },
-          { id: 'other-60-2', label: 'Take the Self-Assessment', toolLink: '/self-assessment' },
+          { id: 'other-60-2', label: 'Take the Readiness Assessment', toolLink: '/get-started' },
           { id: 'other-60-3', label: 'Explore the Evidence Lab and Audit Simulator' },
         ],
       },
@@ -725,7 +725,7 @@ export const roleTrainingPlans: Record<UserRole, RoleTrainingPlan> = {
       },
     ],
     keyTools: [
-      { name: 'Self-Assessment', link: '/self-assessment', description: 'Evaluate your CIP knowledge' },
+      { name: 'Readiness Assessment', link: '/get-started', description: 'Evaluate your CIP knowledge' },
       { name: 'Audit Simulator', link: '/audit-simulator', description: 'Understand audit requests' },
       { name: 'Final Exam', link: '/final-exam', description: 'Test your overall knowledge' },
     ],
