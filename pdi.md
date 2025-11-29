@@ -221,7 +221,7 @@ Each role has 4 training phases:
 4. **Lead & Improve** - Advanced topics and continuous improvement
 
 ### 3. Module System
-- **10 Modules** covering all NERC CIP standards
+- **12 Modules** covering all NERC CIP standards (including CIP-012 and CIP-014)
 - **Role Recommendations:** Modules tagged as Required/Recommended per role
 - **Quizzes:** Each module has completion quiz
 - **Progress Tracking:** Completion persisted to localStorage
@@ -1574,6 +1574,91 @@ Files modified:
 - Mobile responsiveness CSS utilities in index.css
 - Entrance/Exit meeting guidance in Soft Skills Training
 - SME Interview Checklist (Before/During/After)
+
+---
+
+## Changelog - November 2025 Usability & Navigation Overhaul
+
+### Unified Assessment System
+- **Consolidated assessments** into single "Readiness Assessment" in Get Started onboarding flow
+- Removed separate pre-assessment and self-assessment tools - now integrated into one guided experience
+- Assessment results drive personalized module recommendations on dashboard
+- 9-question diagnostic covering governance, technical controls, and evidence/audit readiness domains
+- `/self-assessment` route now redirects to `/get-started`
+
+### Streamlined Navigation Structure
+**Navigation reorganized into 4 logical groups:**
+1. **My Training** - My Training Plan, All Modules, Role-Based Paths, Soft Skills, Achievements, Final Exam
+2. **Practice** - Evidence Lab, Audit Simulator, Readiness Plan Builder, RSAW Tutorial
+3. **Resources** - Scope & TCA Matrix, Templates & Downloads, Manager Guide, Progress Backup
+4. **About** - About CIP Academy, Case Studies
+
+**Key changes:**
+- Moved Final Exam and Achievements from Resources to My Training (completion milestones belong with training)
+- Moved Case Studies from Resources to About (informational content)
+- Removed redundant "Certificate" nav item - accessible via Final Exam results
+- Streamlined Resources to focus on tools and reference materials
+
+### Guided Onboarding Wizard (`/get-started`)
+**Step-by-step onboarding flow:**
+1. **Role Selection** - Choose from 6 roles with descriptions
+2. **Experience Level** - New, Some Experience, or Experienced (experienced users can skip assessment)
+3. **Readiness Assessment** - 9-question diagnostic identifying weak areas
+4. **Personalized Dashboard** - Shows progress, recommended modules, learning journey checklist
+
+**Dashboard features:**
+- Module completion progress (X of 12 modules)
+- Role-specific task tracking
+- Quick access resources panel
+- Personalized focus area based on assessment results
+
+### Final Exam Updates
+- **Expanded to 24 questions** covering all 12 modules
+- Added questions for CIP-012 (Control Center Communications) and CIP-014 (Physical Security)
+- Updated instructions to reference "12 modules" throughout
+- Clear path to certificate after passing (80% required)
+
+### Content Consolidation
+**Removed standalone pages (now redirect to modules):**
+- `/nerc-cip-101` → redirects to `/modules#module-1` (content merged into Module 1: Foundations)
+- `/audit-journey` → redirects to `/modules#module-10` (content merged into Module 10: Audit Simulation)
+- `/learning-path` → redirects to `/get-started` (replaced by unified training plan)
+
+### Footer Updates
+**Removed outdated links:**
+- CIP 101 (merged into Module 1)
+- Audit Journey (merged into Module 10)
+- Self-Assessment (merged into Get Started)
+- Role-Based Training (accessible via My Training Plan)
+
+**Updated footer sections:**
+- **Training**: Get Started, All Modules, Role Training Plans, Soft Skills & Etiquette, Final Exam & Certificate
+- **Resources**: Evidence Lab, Templates & Downloads, Scope Matrix & TCA, RSAW Tutorial, Manager Guide
+
+### Certificate Page Updates
+- Updated to reference "12 modules" instead of "10 modules"
+- Recommended steps now include "Review the Readiness Plan" instead of separate self-assessment
+- Direct link from Final Exam results page after passing
+
+### NotFound (404) Page Updates
+- "Start Learning" button now links to `/get-started` instead of removed `/nerc-cip-101`
+- Maintains proper navigation after encountering broken links
+
+### ModuleCrossLinks Component Enhancements
+- Updated contextual resource links within each module
+- Fixed broken links that pointed to removed pages
+- Added module-specific resources (e.g., TCA checklist in Module 3, Scope Matrix in Module 2)
+- Split into "Key Resources for This Module" and "Other Related Resources" sections
+
+### Files Modified
+- `src/App.tsx` - Added redirects for consolidated routes
+- `src/components/layout/Navbar.tsx` - Reorganized navigation groups
+- `src/components/layout/Footer.tsx` - Updated link structure
+- `src/pages/GetStarted.tsx` - New guided onboarding wizard with assessment
+- `src/pages/FinalExam.tsx` - Expanded to 24 questions covering 12 modules
+- `src/pages/Certificate.tsx` - Updated module count references
+- `src/pages/NotFound.tsx` - Updated navigation links
+- `src/components/ModuleCrossLinks.tsx` - Fixed broken links, enhanced resource mapping
 
 ---
 
