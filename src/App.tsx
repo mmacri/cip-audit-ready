@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import GetStarted from "./pages/GetStarted";
 import LearningPath from "./pages/LearningPath";
@@ -22,8 +22,6 @@ import RoleCertificate from "./pages/RoleCertificate";
 import Achievements from "./pages/Achievements";
 import ProgressBackup from "./pages/ProgressBackup";
 import ManagerGuide from "./pages/ManagerGuide";
-import NercCip101 from "./pages/NercCip101";
-import AuditJourney from "./pages/AuditJourney";
 import SoftSkillsTraining from "./pages/SoftSkillsTraining";
 import ScopeMatrix from "./pages/ScopeMatrix";
 import RSAWTutorial from "./pages/RSAWTutorial";
@@ -57,11 +55,14 @@ const App = () => (
           <Route path="/achievements" element={<Achievements />} />
           <Route path="/progress-backup" element={<ProgressBackup />} />
           <Route path="/manager-guide" element={<ManagerGuide />} />
-          <Route path="/nerc-cip-101" element={<NercCip101 />} />
-          <Route path="/audit-journey" element={<AuditJourney />} />
           <Route path="/soft-skills" element={<SoftSkillsTraining />} />
           <Route path="/scope-matrix" element={<ScopeMatrix />} />
           <Route path="/rsaw-tutorial" element={<RSAWTutorial />} />
+          
+          {/* Redirects for removed pages */}
+          <Route path="/nerc-cip-101" element={<Navigate to="/modules#module-1" replace />} />
+          <Route path="/audit-journey" element={<Navigate to="/modules#module-10" replace />} />
+          
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
