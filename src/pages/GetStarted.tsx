@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useUserPreferences, UserRole, roleLabels, experienceLabels, ExperienceLevel } from "@/hooks/useUserPreferences";
 import { useProgress } from "@/hooks/useProgress";
+import { ProgressDashboard } from "@/components/ProgressDashboard";
 import { cn } from "@/lib/utils";
 import { 
   ArrowRight, 
   CheckCircle2, 
-  Circle, 
   GraduationCap, 
   Target, 
   ClipboardCheck,
@@ -282,27 +281,55 @@ export default function GetStarted() {
           {/* Step 3: Ready - Show Learning Path */}
           {step === 'ready' && (
             <div className="max-w-5xl mx-auto">
-              {/* Current Role Display */}
-              {preferences.role && (
-                <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 mb-8 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    {(() => {
-                      const Icon = roleIcons[preferences.role];
-                      return <Icon className="h-5 w-5 text-primary" />;
-                    })()}
-                    <div>
-                      <span className="text-sm text-muted-foreground">Learning as: </span>
-                      <span className="font-semibold text-navy">{roleLabels[preferences.role]}</span>
-                      {preferences.experience && (
-                        <span className="text-sm text-muted-foreground"> · {experienceLabels[preferences.experience]}</span>
-                      )}
-                    </div>
-                  </div>
-                  <Button variant="outline" size="sm" onClick={() => setStep('role')}>
-                    Change Role
-                  </Button>
+              {/* Progress Dashboard & Role Display */}
+              <div className="grid lg:grid-cols-3 gap-6 mb-8">
+                {/* Progress Dashboard */}
+                <div className="lg:col-span-2">
+                  <ProgressDashboard />
                 </div>
-              )}
+
+                {/* Current Role Display */}
+                <div className="bg-card rounded-xl border border-border p-6 flex flex-col justify-between">
+                  {preferences.role ? (
+                    <>
+                      <div>
+                        <div className="flex items-center gap-3 mb-4">
+                          {(() => {
+                            const Icon = roleIcons[preferences.role];
+                            return (
+                              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                                <Icon className="h-5 w-5 text-primary" />
+                              </div>
+                            );
+                          })()}
+                          <div>
+                            <p className="text-xs text-muted-foreground uppercase tracking-wide">Your Role</p>
+                            <p className="font-semibold text-navy">{roleLabels[preferences.role]}</p>
+                          </div>
+                        </div>
+                        {preferences.experience && (
+                          <Badge variant="secondary" className="mb-4">
+                            {experienceLabels[preferences.experience]}
+                          </Badge>
+                        )}
+                        <p className="text-sm text-muted-foreground">
+                          {roleDescriptions[preferences.role]}
+                        </p>
+                      </div>
+                      <Button variant="outline" size="sm" onClick={() => setStep('role')} className="mt-4">
+                        Change Role
+                      </Button>
+                    </>
+                  ) : (
+                    <div className="text-center py-4">
+                      <p className="text-muted-foreground mb-4">No role selected</p>
+                      <Button variant="outline" size="sm" onClick={() => setStep('role')}>
+                        Select Role
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </div>
 
               {/* Getting Started Steps */}
               <div className="mb-12">
