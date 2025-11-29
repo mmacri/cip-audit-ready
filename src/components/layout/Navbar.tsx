@@ -3,8 +3,9 @@ import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { UserRoleBadge } from "@/components/UserRoleBadge";
-import { GlobalSearch } from "@/components/GlobalSearch";
-import { Menu, X, GraduationCap, MoreHorizontal } from "lucide-react";
+import { EnhancedGlobalSearch } from "@/components/EnhancedGlobalSearch";
+import { QuickResourcesPanel } from "@/components/QuickResourcesPanel";
+import { Menu, X, GraduationCap, MoreHorizontal, Sparkles } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,21 +13,28 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const mainNavItems = [
-  { label: "Home", href: "/" },
+interface NavItem {
+  label: string;
+  href: string;
+  highlight?: boolean;
+}
+
+const mainNavItems: NavItem[] = [
+  { label: "Get Started", href: "/get-started", highlight: true },
   { label: "CIP 101", href: "/nerc-cip-101" },
   { label: "Modules", href: "/modules" },
   { label: "Role Training", href: "/role-training" },
   { label: "Audit Journey", href: "/audit-journey" },
 ];
 
-const moreNavItems = [
+const moreNavItems: NavItem[] = [
   { label: "Learning Path", href: "/learning-path" },
   { label: "Evidence Lab", href: "/evidence-lab" },
   { label: "Case Studies", href: "/case-studies" },
   { label: "Audit Simulator", href: "/audit-simulator" },
   { label: "Soft Skills Training", href: "/soft-skills" },
   { label: "Scope Matrix & TCA", href: "/scope-matrix" },
+  { label: "RSAW Tutorial", href: "/rsaw-tutorial" },
   { label: "Readiness Plan", href: "/readiness-plan" },
   { label: "Self-Assessment", href: "/self-assessment" },
   { label: "Achievements", href: "/achievements" },
@@ -64,12 +72,14 @@ export function Navbar() {
                 key={item.href}
                 to={item.href}
                 className={cn(
-                  "px-3 py-2 text-sm font-medium rounded-lg transition-colors",
+                  "px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1",
+                  item.highlight && location.pathname !== item.href && "text-primary",
                   location.pathname === item.href
                     ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    : !item.highlight && "text-muted-foreground hover:text-foreground hover:bg-muted"
                 )}
               >
+                {item.highlight && <Sparkles className="h-3 w-3" />}
                 {item.label}
               </Link>
             ))}
@@ -85,7 +95,7 @@ export function Navbar() {
                   More <MoreHorizontal className="h-4 w-4" />
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end" className="w-48 max-h-[70vh] overflow-y-auto">
                 {moreNavItems.map((item) => (
                   <DropdownMenuItem key={item.href} asChild>
                     <Link
@@ -103,12 +113,14 @@ export function Navbar() {
           </nav>
           
           <div className="ml-2 pl-2 border-l border-border flex items-center gap-2">
-            <GlobalSearch />
+            <QuickResourcesPanel />
+            <EnhancedGlobalSearch />
             <UserRoleBadge />
           </div>
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
+          <EnhancedGlobalSearch />
           <UserRoleBadge />
           <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -117,7 +129,7 @@ export function Navbar() {
       </div>
 
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-border bg-white">
+        <div className="lg:hidden border-t border-border bg-white max-h-[70vh] overflow-y-auto">
           <nav className="container py-4 flex flex-col gap-1">
             {allNavItems.map((item) => (
               <Link
@@ -125,12 +137,14 @@ export function Navbar() {
                 to={item.href}
                 onClick={() => setMobileMenuOpen(false)}
                 className={cn(
-                  "px-4 py-3 text-sm font-medium rounded-lg transition-colors",
+                  "px-4 py-3 text-sm font-medium rounded-lg transition-colors flex items-center gap-2",
+                  item.highlight && location.pathname !== item.href && "text-primary",
                   location.pathname === item.href
                     ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    : !item.highlight && "text-muted-foreground hover:text-foreground hover:bg-muted"
                 )}
               >
+                {item.highlight && <Sparkles className="h-3 w-3" />}
                 {item.label}
               </Link>
             ))}

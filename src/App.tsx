@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
+import GetStarted from "./pages/GetStarted";
 import LearningPath from "./pages/LearningPath";
 import Modules from "./pages/Modules";
 import RoleTraining from "./pages/RoleTraining";
@@ -38,6 +39,7 @@ const App = () => (
       <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/get-started" element={<GetStarted />} />
           <Route path="/learning-path" element={<LearningPath />} />
           <Route path="/modules" element={<Modules />} />
           <Route path="/role-training" element={<RoleTraining />} />

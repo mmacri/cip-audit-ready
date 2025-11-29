@@ -273,4 +273,86 @@
   .show-mobile {
     @apply block sm:hidden;
   }
+
+  /* Mobile table scrolling with visual cue */
+  .table-responsive {
+    @apply overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-responsive::after {
+    content: '';
+    @apply absolute right-0 top-0 bottom-0 w-8 pointer-events-none;
+    background: linear-gradient(to left, hsl(var(--background)), transparent);
+  }
+
+  /* Mobile collapsible tables */
+  .table-collapse-mobile {
+    @apply block sm:table;
+  }
+
+  .table-collapse-mobile thead {
+    @apply hidden sm:table-header-group;
+  }
+
+  .table-collapse-mobile tbody {
+    @apply block sm:table-row-group;
+  }
+
+  .table-collapse-mobile tr {
+    @apply block sm:table-row mb-4 sm:mb-0 border rounded-lg sm:border-0 p-4 sm:p-0 bg-card sm:bg-transparent;
+  }
+
+  .table-collapse-mobile td {
+    @apply block sm:table-cell text-right sm:text-left relative pl-[50%] sm:pl-4 py-2 sm:py-4 border-b sm:border-b-0 last:border-b-0;
+  }
+
+  .table-collapse-mobile td::before {
+    content: attr(data-label);
+    @apply absolute left-4 font-medium text-muted-foreground sm:hidden;
+  }
+
+  /* Touch-friendly interactive elements */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+  }
+
+  /* Horizontal scroll indicator */
+  .scroll-hint {
+    @apply relative;
+  }
+
+  .scroll-hint::after {
+    content: '→ Scroll';
+    @apply absolute right-2 top-2 text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded sm:hidden;
+    animation: pulse 2s ease-in-out 3;
+  }
+
+  /* Module navigation styles */
+  .module-nav-grid {
+    @apply grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2;
+  }
+
+  .module-nav-item {
+    @apply p-2 sm:p-3 rounded-lg border text-center transition-all cursor-pointer;
+    @apply hover:border-primary/30 hover:bg-muted/50;
+  }
+
+  .module-nav-item.active {
+    @apply border-primary bg-primary/10 ring-2 ring-primary/30;
+  }
+
+  .module-nav-item.complete {
+    @apply border-success/50 bg-success/5;
+  }
+
+  /* Breadcrumb responsive */
+  .breadcrumb-responsive {
+    @apply flex items-center gap-1 text-xs sm:text-sm overflow-x-auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .breadcrumb-responsive::-webkit-scrollbar {
+    @apply hidden;
+  }
 }
