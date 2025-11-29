@@ -1,8 +1,9 @@
 import { useProgress } from '@/hooks/useProgress';
 import { useRoleProgress } from '@/hooks/useRoleProgress';
-import { useUserPreferences, UserRole, roleLabels, roleModules } from '@/hooks/useUserPreferences';
+import { useUserPreferences, roleLabels, roleModules } from '@/hooks/useUserPreferences';
+import { useBadges } from '@/hooks/useBadges';
+import { badgeDefinitions, BadgeId } from '@/types/progressTypes';
 import { Progress } from '@/components/ui/progress';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { 
   Trophy, 
@@ -10,16 +11,33 @@ import {
   Target, 
   CheckCircle2,
   Rocket,
-  TrendingUp
+  TrendingUp,
+  Compass,
+  FolderSearch,
+  Shield,
+  AlertTriangle,
+  ClipboardCheck,
+  Award
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const TOTAL_MODULES = 12;
 
+// Map icon strings to actual Lucide components
+const badgeIconMap: Record<string, React.ElementType> = {
+  Compass,
+  FolderSearch,
+  Shield,
+  AlertTriangle,
+  ClipboardCheck,
+  Trophy,
+};
+
 export function ProgressDashboard() {
   const { preferences, isLoaded: prefsLoaded } = useUserPreferences();
   const { progress, getCompletionPercentage, isLoaded: progressLoaded } = useProgress();
-  const { getProgressStats, isLoaded: roleProgressLoaded } = useRoleProgress(preferences.role);
+  const { getCurrentRoleProgress, getProgressStats, isLoaded: roleProgressLoaded } = useRoleProgress(preferences.role);
+  const { evaluateBadgesForRole } = useBadges();
 
   if (!prefsLoaded || !progressLoaded || !roleProgressLoaded) {
     return null;
@@ -35,6 +53,12 @@ export function ProgressDashboard() {
   const roleModulePercentage = roleRequiredModules.length > 0 
     ? Math.round((roleModulesCompleted / roleRequiredModules.length) * 100) 
     : 0;
+
+  // Evaluate earned badges
+  const roleProgress = getCurrentRoleProgress();
+  const earnedBadges = preferences.role 
+    ? evaluateBadgesForRole({ roleProgress, role: preferences.role })
+    : [];
 
   return (
     <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
@@ -113,11 +137,68 @@ export function ProgressDashboard() {
           </div>
         )}
 
+        {/* Achievement Badges */}
+        {preferences.role && (
+          <div className="pt-4 border-t border-border">
+            <div className="flex items-center gap-2 mb-3">
+              <Award className="h-4 w-4 text-amber-500" />
+              <span className="text-sm font-medium text-navy">Achievement Badges</span>
+              <Badge variant="outline" className="text-[10px] ml-auto">
+                {earnedBadges.length}/{badgeDefinitions.length}
+              </Badge>
+            </div>
+            
+            <div className="grid grid-cols-3 gap-2">
+              {badgeDefinitions.map((badge) => {
+                const isEarned = earnedBadges.includes(badge.id);
+                const IconComponent = badgeIconMap[badge.icon] || Award;
+                
+                return (
+                  <div
+                    key={badge.id}
+                    className={cn(
+                      "relative rounded-lg p-2 text-center transition-all group",
+                      isEarned 
+                        ? "bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/30" 
+                        : "bg-muted/50 border border-transparent opacity-50"
+                    )}
+                    title={isEarned ? badge.description : `${badge.name} - ${badge.criteria}`}
+                  >
+                    <IconComponent 
+                      className={cn(
+                        "h-5 w-5 mx-auto mb-1",
+                        isEarned ? "text-amber-500" : "text-muted-foreground"
+                      )} 
+                    />
+                    <p className={cn(
+                      "text-[10px] font-medium leading-tight",
+                      isEarned ? "text-amber-700 dark:text-amber-400" : "text-muted-foreground"
+                    )}>
+                      {badge.name}
+                    </p>
+                    {isEarned && (
+                      <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 flex items-center justify-center">
+                        <CheckCircle2 className="h-3 w-3 text-white" />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            
+            {earnedBadges.length === 0 && (
+              <p className="text-xs text-muted-foreground text-center mt-2">
+                Complete modules and tasks to earn badges
+              </p>
+            )}
+          </div>
+        )}
+
         {/* No role selected hint */}
         {!preferences.role && (
           <div className="pt-4 border-t border-border">
             <p className="text-sm text-muted-foreground text-center">
-              Select your role to see personalized progress tracking
+              Select your role to see personalized progress and badges
             </p>
           </div>
         )}
