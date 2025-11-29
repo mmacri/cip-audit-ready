@@ -4,6 +4,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { OnboardingModal } from "@/components/OnboardingModal";
+import { QuickResourcesPanel } from "@/components/QuickResourcesPanel";
 import { useUserPreferences } from "@/hooks/useUserPreferences";
 import { 
   BookOpen, 
@@ -16,7 +17,8 @@ import {
   Lightbulb,
   Target,
   Trophy,
-  Save
+  Save,
+  Sparkles
 } from "lucide-react";
 
 const learnCards = [
@@ -109,14 +111,14 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90 shadow-lg">
-                <Link to="/learning-path">
-                  View the Learning Path
+                <Link to="/get-started">
+                  Get Started
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10">
-                <Link to="/self-assessment">
-                  Start the Readiness Self-Assessment
+                <Link to="/learning-path">
+                  View Learning Path
                 </Link>
               </Button>
             </div>
@@ -187,6 +189,24 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Quick Access Resources */}
+      <section className="py-12 md:py-16 border-y bg-muted/30">
+        <div className="container">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <h3 className="text-xl font-semibold text-navy mb-2 flex items-center justify-center gap-2">
+                <Sparkles className="h-5 w-5 text-primary" />
+                Quick Access Tools
+              </h3>
+              <p className="text-muted-foreground text-sm">
+                Essential resources used throughout your training
+              </p>
+            </div>
+            <QuickResourcesPanel variant="inline" />
+          </div>
+        </div>
+      </section>
+
       {/* Quick Start */}
       <section className="py-16 md:py-20">
         <div className="container">
@@ -201,24 +221,24 @@ export default function Home() {
             </div>
             <div className="grid sm:grid-cols-3 gap-4">
               <Link 
+                to="/get-started" 
+                className="bg-card rounded-xl p-6 border border-primary/30 hover:border-primary hover:shadow-md transition-all text-center group"
+              >
+                <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                  <Sparkles className="h-6 w-6" />
+                </div>
+                <p className="font-semibold text-navy mb-1">New to CIP?</p>
+                <p className="text-sm text-muted-foreground">Start with our guided onboarding</p>
+              </Link>
+              <Link 
                 to="/self-assessment" 
                 className="bg-card rounded-xl p-6 border border-border/50 hover:border-primary/30 hover:shadow-md transition-all text-center group"
               >
                 <div className="w-12 h-12 rounded-full bg-warning/10 text-warning flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                   <ClipboardCheck className="h-6 w-6" />
                 </div>
-                <p className="font-semibold text-navy mb-1">New to CIP?</p>
-                <p className="text-sm text-muted-foreground">Take the Self-Assessment to identify gaps</p>
-              </Link>
-              <Link 
-                to="/learning-path" 
-                className="bg-card rounded-xl p-6 border border-border/50 hover:border-primary/30 hover:shadow-md transition-all text-center group"
-              >
-                <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                  <Target className="h-6 w-6" />
-                </div>
-                <p className="font-semibold text-navy mb-1">Know the Basics?</p>
-                <p className="text-sm text-muted-foreground">View the Learning Path and choose your track</p>
+                <p className="font-semibold text-navy mb-1">Know Some Basics?</p>
+                <p className="text-sm text-muted-foreground">Assess your current knowledge</p>
               </Link>
               <Link 
                 to="/modules" 
@@ -228,7 +248,7 @@ export default function Home() {
                   <Trophy className="h-6 w-6" />
                 </div>
                 <p className="font-semibold text-navy mb-1">Ready to Learn?</p>
-                <p className="text-sm text-muted-foreground">Jump into Module 1 and start learning</p>
+                <p className="text-sm text-muted-foreground">Jump straight into Module 1</p>
               </Link>
             </div>
           </div>

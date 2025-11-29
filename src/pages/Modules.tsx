@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation, Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Quiz, QuizQuestion } from "@/components/Quiz";
 import { useProgress } from "@/hooks/useProgress";
@@ -7,6 +8,7 @@ import { roleTrainingPlans } from "@/data/roleTrainingData";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Collapsible,
   CollapsibleContent,
@@ -15,6 +17,7 @@ import {
 import { ModuleRecap } from "@/components/ModuleRecap";
 import { SpacedReviewQuiz } from "@/components/SpacedReviewQuiz";
 import { RoleModuleCallout } from "@/components/RoleModuleCallout";
+import { ModuleCrossLinks } from "@/components/ModuleCrossLinks";
 import { ESPPSPDiagram } from "@/components/diagrams/ESPPSPDiagram";
 import { PatchManagementDiagram } from "@/components/diagrams/PatchManagementDiagram";
 import { IncidentResponseDiagram } from "@/components/diagrams/IncidentResponseDiagram";
@@ -22,13 +25,30 @@ import { TrainingMatrixDiagram } from "@/components/diagrams/TrainingMatrixDiagr
 import { 
   BookOpen, 
   ChevronDown, 
+  ChevronLeft,
+  ChevronRight,
   CheckCircle2,
   Target,
   Lightbulb,
   GraduationCap,
   Star,
-  Shield
+  Shield,
+  Eye,
+  Zap,
+  Users,
+  FileText,
+  AlertTriangle
 } from "lucide-react";
+
+// Module categories for simplified navigation
+const moduleCategories = [
+  { id: 'foundations', title: 'Foundations', icon: BookOpen, modules: [1, 2, 3], color: 'bg-primary' },
+  { id: 'people-access', title: 'People & Access', icon: Users, modules: [4, 5], color: 'bg-teal' },
+  { id: 'technical', title: 'Technical Controls', icon: Shield, modules: [6, 8], color: 'bg-sky' },
+  { id: 'incidents', title: 'Incidents & Recovery', icon: AlertTriangle, modules: [7], color: 'bg-warning' },
+  { id: 'protection', title: 'Info & Supply Chain', icon: FileText, modules: [9], color: 'bg-accent' },
+  { id: 'advanced', title: 'Advanced & Audit', icon: Zap, modules: [10, 11, 12], color: 'bg-navy' },
+];
 
 interface ModuleData {
   id: number;
@@ -944,8 +964,36 @@ const modulesData: ModuleData[] = [
 
 export default function Modules() {
   const [openModules, setOpenModules] = useState<number[]>([]);
+  const [viewMode, setViewMode] = useState<'basic' | 'advanced'>('basic');
+  const [activeCategory, setActiveCategory] = useState<string>('all');
   const { isModuleComplete, markModuleComplete, isLoaded } = useProgress();
   const { isModuleRecommended, preferences } = useUserPreferences();
+  const location = useLocation();
+
+  // Basic modules (7 core) vs all modules (12)
+  const basicModuleIds = [1, 2, 3, 4, 5, 6, 7];
+  const visibleModuleIds = viewMode === 'basic' ? basicModuleIds : modulesData.map(m => m.id);
+
+  // Filter by category
+  const filteredModules = activeCategory === 'all' 
+    ? modulesData.filter(m => visibleModuleIds.includes(m.id))
+    : modulesData.filter(m => {
+        const cat = moduleCategories.find(c => c.id === activeCategory);
+        return cat?.modules.includes(m.id) && visibleModuleIds.includes(m.id);
+      });
+
+  // Handle hash navigation
+  useEffect(() => {
+    if (location.hash) {
+      const moduleId = parseInt(location.hash.replace('#module-', ''));
+      if (!isNaN(moduleId)) {
+        setOpenModules(prev => prev.includes(moduleId) ? prev : [...prev, moduleId]);
+        setTimeout(() => {
+          document.getElementById(`module-${moduleId}`)?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [location.hash]);
 
   const toggleModule = (moduleId: number) => {
     setOpenModules(prev => 
@@ -953,6 +1001,25 @@ export default function Modules() {
         ? prev.filter(id => id !== moduleId)
         : [...prev, moduleId]
     );
+  };
+
+  const navigateToModule = (moduleId: number) => {
+    if (!openModules.includes(moduleId)) {
+      setOpenModules(prev => [...prev, moduleId]);
+    }
+    setTimeout(() => {
+      document.getElementById(`module-${moduleId}`)?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
+  const getNextModule = (currentId: number) => {
+    const currentIndex = visibleModuleIds.indexOf(currentId);
+    return currentIndex < visibleModuleIds.length - 1 ? visibleModuleIds[currentIndex + 1] : null;
+  };
+
+  const getPrevModule = (currentId: number) => {
+    const currentIndex = visibleModuleIds.indexOf(currentId);
+    return currentIndex > 0 ? visibleModuleIds[currentIndex - 1] : null;
   };
 
   // Diagram components for specific modules
@@ -967,33 +1034,124 @@ export default function Modules() {
     markModuleComplete(moduleId);
   };
 
+  const completedCount = visibleModuleIds.filter(id => isLoaded && isModuleComplete(id)).length;
+
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary/5 to-accent/5 py-16 md:py-20">
+      <section className="bg-gradient-to-br from-primary/5 to-accent/5 py-12 md:py-16">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center">
             <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-6">
               <BookOpen className="h-8 w-8 text-primary" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-navy mb-4">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-navy mb-4">
               Training Modules
             </h1>
-            <p className="text-lg text-muted-foreground">
-              Work through each module to build comprehensive NERC CIP knowledge. 
-              Complete the quiz at the end of each module to track your progress.
+            <p className="text-lg text-muted-foreground mb-6">
+              Work through each module to build comprehensive NERC CIP knowledge.
             </p>
+            
+            {/* Progress indicator */}
+            <div className="inline-flex items-center gap-2 bg-card rounded-full px-4 py-2 border">
+              <CheckCircle2 className="h-4 w-4 text-success" />
+              <span className="text-sm font-medium">{completedCount} of {visibleModuleIds.length} modules complete</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Navigation Controls */}
+      <section className="border-b bg-card sticky top-16 z-40">
+        <div className="container py-4">
+          <div className="max-w-4xl mx-auto">
+            {/* View Mode Toggle */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+              <div className="flex items-center gap-2">
+                <Button
+                  variant={viewMode === 'basic' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setViewMode('basic')}
+                  className="gap-2"
+                >
+                  <Eye className="h-4 w-4" />
+                  Basic ({basicModuleIds.length})
+                </Button>
+                <Button
+                  variant={viewMode === 'advanced' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setViewMode('advanced')}
+                  className="gap-2"
+                >
+                  <Zap className="h-4 w-4" />
+                  All ({modulesData.length})
+                </Button>
+              </div>
+              
+              <span className="text-sm text-muted-foreground">
+                {viewMode === 'basic' ? 'Showing core modules for beginners' : 'Showing all modules including advanced'}
+              </span>
+            </div>
+
+            {/* Category Tabs */}
+            <Tabs value={activeCategory} onValueChange={setActiveCategory}>
+              <TabsList className="w-full flex flex-wrap h-auto gap-1 bg-muted/50 p-1">
+                <TabsTrigger value="all" className="text-xs">All</TabsTrigger>
+                {moduleCategories.map((cat) => {
+                  const hasVisibleModules = cat.modules.some(m => visibleModuleIds.includes(m));
+                  if (!hasVisibleModules) return null;
+                  
+                  const Icon = cat.icon;
+                  return (
+                    <TabsTrigger 
+                      key={cat.id} 
+                      value={cat.id}
+                      className="text-xs gap-1"
+                    >
+                      <Icon className="h-3 w-3" />
+                      <span className="hidden sm:inline">{cat.title}</span>
+                    </TabsTrigger>
+                  );
+                })}
+              </TabsList>
+            </Tabs>
+
+            {/* Quick Module Navigation */}
+            <div className="mt-4 flex flex-wrap gap-2">
+              {visibleModuleIds.map((moduleId) => {
+                const isComplete = isLoaded && isModuleComplete(moduleId);
+                const isOpen = openModules.includes(moduleId);
+                
+                return (
+                  <button
+                    key={moduleId}
+                    onClick={() => navigateToModule(moduleId)}
+                    className={cn(
+                      "w-9 h-9 rounded-lg border text-sm font-medium transition-all",
+                      isOpen ? "ring-2 ring-primary/30" : "",
+                      isComplete 
+                        ? "bg-success/10 border-success/50 text-success" 
+                        : "bg-card border-border hover:border-primary/30 hover:bg-muted/50"
+                    )}
+                  >
+                    {isComplete ? <CheckCircle2 className="h-4 w-4 mx-auto" /> : moduleId}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
 
       {/* Module List */}
-      <section className="py-12 md:py-16">
+      <section className="py-8 md:py-12">
         <div className="container">
           <div className="max-w-4xl mx-auto space-y-4">
-            {modulesData.map((module) => {
+            {filteredModules.map((module) => {
               const isComplete = isLoaded && isModuleComplete(module.id);
               const isOpen = openModules.includes(module.id);
+              const nextModule = getNextModule(module.id);
+              const prevModule = getPrevModule(module.id);
               
               // Check if module is required or recommended for current role
               const rolePlan = preferences.role ? roleTrainingPlans[preferences.role] : null;
@@ -1021,44 +1179,44 @@ export default function Modules() {
                   )}
                 >
                   <Collapsible open={isOpen} onOpenChange={() => toggleModule(module.id)}>
-                    <CollapsibleTrigger className="w-full p-6 text-left hover:bg-muted/50 transition-colors">
-                      <div className="flex items-start gap-4">
+                    <CollapsibleTrigger className="w-full p-4 sm:p-6 text-left hover:bg-muted/50 transition-colors">
+                      <div className="flex items-start gap-3 sm:gap-4">
                         <div className={cn(
-                          "w-12 h-12 rounded-xl flex items-center justify-center shrink-0 font-bold text-lg",
+                          "w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shrink-0 font-bold text-base sm:text-lg",
                           isComplete 
                             ? "bg-success text-success-foreground" 
                             : isRequired
                               ? "bg-primary text-primary-foreground"
                               : "bg-primary/10 text-primary"
                         )}>
-                          {isComplete ? <CheckCircle2 className="h-6 w-6" /> : module.id}
+                          {isComplete ? <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6" /> : module.id}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1 flex-wrap">
-                            <h2 className="text-lg font-semibold text-navy">
+                            <h2 className="text-base sm:text-lg font-semibold text-navy">
                               Module {module.id}: {module.title}
                             </h2>
                             {isComplete && preferences.role && (
                               <Badge variant="default" className="bg-success text-success-foreground text-[10px]">
-                                <CheckCircle2 className="h-3 w-3 mr-1" /> Complete for your role
+                                <CheckCircle2 className="h-3 w-3 mr-1" /> Complete
                               </Badge>
                             )}
                             {!isComplete && isRequired && (
                               <Badge variant="default" className="text-[10px]">
-                                <Shield className="h-3 w-3 mr-1" /> Required for your role
+                                <Shield className="h-3 w-3 mr-1" /> Required
                               </Badge>
                             )}
                             {!isComplete && isRecommended && (
                               <Badge variant="secondary" className="text-[10px]">
-                                <Star className="h-3 w-3 mr-1" /> Recommended for your role
+                                <Star className="h-3 w-3 mr-1" /> Recommended
                               </Badge>
                             )}
                           </div>
-                          <ul className="text-sm text-muted-foreground space-y-1">
-                            {module.objectives.map((obj, i) => (
+                          <ul className="text-xs sm:text-sm text-muted-foreground space-y-1 hidden sm:block">
+                            {module.objectives.slice(0, 2).map((obj, i) => (
                               <li key={i} className="flex items-start gap-2">
                                 <Target className="h-3 w-3 shrink-0 mt-1" />
-                                {obj}
+                                <span className="line-clamp-1">{obj}</span>
                               </li>
                             ))}
                           </ul>
@@ -1071,11 +1229,16 @@ export default function Modules() {
                     </CollapsibleTrigger>
                     
                     <CollapsibleContent>
-                      <div className="px-6 pb-6 space-y-8 border-t border-border">
-                        {/* Module Recap - Shows key points from previous module */}
-                        <div className="pt-6">
-                          <ModuleRecap moduleId={module.id} />
+                      <div className="px-4 sm:px-6 pb-6 space-y-6 sm:space-y-8 border-t border-border">
+                        {/* Breadcrumb */}
+                        <div className="pt-4 flex items-center gap-2 text-xs text-muted-foreground breadcrumb-responsive">
+                          <Link to="/modules" className="hover:text-foreground">Modules</Link>
+                          <ChevronRight className="h-3 w-3" />
+                          <span className="text-foreground font-medium">Module {module.id}: {module.title}</span>
                         </div>
+
+                        {/* Module Recap - Shows key points from previous module */}
+                        <ModuleRecap moduleId={module.id} />
 
                         {/* Learning Objectives */}
                         <div>
@@ -1085,7 +1248,7 @@ export default function Modules() {
                           </div>
                           <ul className="space-y-2">
                             {module.objectives.map((obj, i) => (
-                              <li key={i} className="flex items-start gap-2 text-muted-foreground">
+                              <li key={i} className="flex items-start gap-2 text-muted-foreground text-sm sm:text-base">
                                 <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-1" />
                                 {obj}
                               </li>
@@ -1096,12 +1259,15 @@ export default function Modules() {
                         {/* Role-Specific Callout */}
                         <RoleModuleCallout moduleId={module.id} />
 
+                        {/* Cross-Navigation Links */}
+                        <ModuleCrossLinks moduleId={module.id} />
+
                         {/* Content Sections */}
                         <div className="space-y-6">
                           {module.content.map((section, i) => (
                             <div key={i}>
                               <h4 className="font-semibold text-navy mb-2">{section.title}</h4>
-                              <p className="text-muted-foreground leading-relaxed">{section.text}</p>
+                              <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">{section.text}</p>
                             </div>
                           ))}
                         </div>
@@ -1115,7 +1281,7 @@ export default function Modules() {
                         )}
 
                         {/* Exercise */}
-                        <div className="bg-accent/10 border border-accent/30 rounded-xl p-6">
+                        <div className="bg-accent/10 border border-accent/30 rounded-xl p-4 sm:p-6">
                           <div className="flex items-center gap-2 mb-3">
                             <Lightbulb className="h-5 w-5 text-accent" />
                             <h4 className="font-semibold text-navy">Apply This: {module.exercise.title}</h4>
@@ -1132,6 +1298,44 @@ export default function Modules() {
 
                         {/* Spaced Review Questions */}
                         <SpacedReviewQuiz currentModule={module.id} />
+
+                        {/* Prev/Next Navigation */}
+                        <div className="flex items-center justify-between pt-6 border-t">
+                          {prevModule ? (
+                            <Button
+                              variant="outline"
+                              onClick={() => navigateToModule(prevModule)}
+                              className="gap-2"
+                            >
+                              <ChevronLeft className="h-4 w-4" />
+                              <span className="hidden sm:inline">Module {prevModule}</span>
+                              <span className="sm:hidden">Prev</span>
+                            </Button>
+                          ) : <div />}
+                          
+                          <span className="text-sm text-muted-foreground">
+                            {module.id} of {visibleModuleIds.length}
+                          </span>
+                          
+                          {nextModule ? (
+                            <Button
+                              variant="outline"
+                              onClick={() => navigateToModule(nextModule)}
+                              className="gap-2"
+                            >
+                              <span className="hidden sm:inline">Module {nextModule}</span>
+                              <span className="sm:hidden">Next</span>
+                              <ChevronRight className="h-4 w-4" />
+                            </Button>
+                          ) : (
+                            <Button asChild>
+                              <Link to="/final-exam">
+                                Take Final Exam
+                                <ChevronRight className="h-4 w-4 ml-2" />
+                              </Link>
+                            </Button>
+                          )}
+                        </div>
                       </div>
                     </CollapsibleContent>
                   </Collapsible>
