@@ -41,7 +41,7 @@ export const roleMissions: Record<UserRole, RoleMission[]> = {
       ],
       relevantModules: [3, 1],
       toolLinks: [
-        { name: 'Self-Assessment', link: '/self-assessment' },
+        { name: 'Readiness Assessment', link: '/get-started' },
         { name: 'Readiness Plan', link: '/readiness-plan' }
       ]
     },
@@ -325,7 +325,7 @@ export const roleMissions: Record<UserRole, RoleMission[]> = {
       ],
       relevantModules: [4, 3],
       toolLinks: [
-        { name: 'Self-Assessment', link: '/self-assessment' }
+        { name: 'Readiness Assessment', link: '/get-started' }
       ]
     },
     {
@@ -408,7 +408,7 @@ export const roleMissions: Record<UserRole, RoleMission[]> = {
       ],
       relevantModules: [3, 4],
       toolLinks: [
-        { name: 'Self-Assessment', link: '/self-assessment' }
+        { name: 'Readiness Assessment', link: '/get-started' }
       ]
     },
     {
@@ -444,7 +444,7 @@ export const roleMissions: Record<UserRole, RoleMission[]> = {
       ],
       relevantModules: [1, 3],
       toolLinks: [
-        { name: 'Self-Assessment', link: '/self-assessment' }
+        { name: 'Readiness Assessment', link: '/get-started' }
       ]
     },
     {

@@ -181,7 +181,7 @@ export default function GetStarted() {
   // Steps for the checklist
   const gettingStartedSteps = [
     { id: 'role', title: 'Select Your Role', description: 'Personalize your learning path', completed: !!preferences.role },
-    { id: 'assessment', title: 'Complete Assessment', description: 'Identify your focus areas', completed: showAssessmentResults },
+    { id: 'assessment', title: 'Complete Readiness Assessment', description: 'Identify your focus areas', completed: showAssessmentResults },
     { id: 'foundations', title: 'Complete Module 1', description: 'Build your NERC CIP foundation', completed: isModuleComplete(1), path: '/modules#module-1' },
     { id: 'role-training', title: 'Follow Your Role Path', description: 'Complete role-specific modules', completed: completedModulesCount >= 5, path: preferences.role ? `/role-training/${preferences.role}` : '/role-training' },
     { id: 'final-exam', title: 'Pass the Final Exam', description: 'Earn your certificate', completed: localStorage.getItem('finalExamPassed') === 'true', path: '/final-exam' },
@@ -323,14 +323,14 @@ export default function GetStarted() {
             </div>
           )}
 
-          {/* Step 3: Quick Assessment */}
+          {/* Step 3: Readiness Assessment */}
           {step === 'assessment' && (
             <div className="max-w-3xl mx-auto">
               <div className="text-center mb-8">
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
                   <ClipboardCheck className="h-6 w-6 text-primary" />
                 </div>
-                <h2 className="text-2xl font-bold text-navy mb-2">Step 3: Quick Readiness Check</h2>
+                <h2 className="text-2xl font-bold text-navy mb-2">Step 3: Readiness Assessment</h2>
                 <p className="text-muted-foreground">
                   Answer these 9 questions to identify your focus areas. Be honest—this helps personalize your path.
                 </p>
