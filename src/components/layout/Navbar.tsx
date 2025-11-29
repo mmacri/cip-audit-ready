@@ -31,6 +31,7 @@ const navGroups: NavGroup[] = [
       { label: "Soft Skills", href: "/soft-skills", description: "Audit interview techniques" },
       { label: "Achievements", href: "/achievements", description: "View earned badges" },
       { label: "Final Exam", href: "/final-exam", description: "Earn your certificate" },
+      { label: "Progress Backup", href: "/progress-backup", description: "Export/import your data" },
     ],
   },
   {
@@ -51,7 +52,6 @@ const navGroups: NavGroup[] = [
       { label: "Scope & TCA Matrix", href: "/scope-matrix", description: "Asset classification guide" },
       { label: "Templates & Downloads", href: "/resources", description: "Checklists, matrices, forms" },
       { label: "Manager Guide", href: "/manager-guide", description: "Team training delivery" },
-      { label: "Progress Backup", href: "/progress-backup", description: "Export/import your data" },
     ],
   },
   {
