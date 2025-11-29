@@ -22,6 +22,8 @@ import { ESPPSPDiagram } from "@/components/diagrams/ESPPSPDiagram";
 import { PatchManagementDiagram } from "@/components/diagrams/PatchManagementDiagram";
 import { IncidentResponseDiagram } from "@/components/diagrams/IncidentResponseDiagram";
 import { TrainingMatrixDiagram } from "@/components/diagrams/TrainingMatrixDiagram";
+import { CIPStandardsRelationshipDiagram } from "@/components/diagrams/CIPStandardsRelationshipDiagram";
+import { AuditTimelineFlowchart } from "@/components/AuditTimelineFlowchart";
 import { 
   BookOpen, 
   ChevronDown, 
@@ -71,8 +73,9 @@ const modulesData: ModuleData[] = [
     title: "Foundations of NERC and CIP",
     objectives: [
       "Understand NERC's role in North American grid reliability",
-      "Identify the 11 CIP standards and their general purpose",
-      "Explain the relationship between NERC, Regional Entities, and Registered Entities"
+      "Identify the 13 CIP standards and their general purpose",
+      "Explain the relationship between NERC, Regional Entities, and Registered Entities",
+      "Define key CIP terminology (BES, ESP, PSP, BCSI, EACMS, PACS)"
     ],
     content: [
       {
@@ -80,21 +83,29 @@ const modulesData: ModuleData[] = [
         text: "The North American Electric Reliability Corporation (NERC) is a not-for-profit international regulatory authority responsible for ensuring the reliability of the bulk power system in North America. NERC develops and enforces reliability standards, monitors the grid, and assesses future adequacy. It operates under oversight from the Federal Energy Regulatory Commission (FERC) in the United States and governmental authorities in Canada."
       },
       {
-        title: "The Purpose of CIP Standards",
-        text: "Critical Infrastructure Protection (CIP) standards are a set of requirements designed to secure the cyber assets essential to operating the bulk electric system. Following the 2003 Northeast blackout and growing concerns about cyber threats to critical infrastructure, NERC developed CIP standards to establish baseline security requirements for the electricity sector. These standards address everything from physical security to incident response."
+        title: "Why CIP Standards Matter",
+        text: "Critical Infrastructure Protection (CIP) standards are mandatory reliability standards that apply to the bulk power system in North America. Following the 2003 Northeast blackout and growing cyber threats, NERC developed CIP to protect grid operations. Violations can result in penalties up to $1 million per violation per day—but beyond penalties, non-compliance creates real risks to grid reliability and public safety."
       },
       {
-        title: "The 11 CIP Standards Overview",
-        text: "The CIP standards are numbered CIP-002 through CIP-014 (with some numbers retired or reserved). CIP-002 covers asset categorization. CIP-003 through CIP-011 address security management, personnel, electronic and physical perimeters, systems security, incident response, recovery, configuration management, and information protection. CIP-013 addresses supply chain risk management, and CIP-014 covers physical security of transmission stations."
+        title: "The 13 CIP Standards Overview",
+        text: "The CIP standards are numbered CIP-002 through CIP-014 (with some numbers retired). CIP-002 covers asset categorization. CIP-003 addresses security management and low-impact requirements. CIP-004 covers personnel and training. CIP-005/006 address electronic and physical perimeters. CIP-007 covers system security. CIP-008/009 address incident response and recovery. CIP-010 covers configuration management. CIP-011 addresses information protection. CIP-012 covers control center communications. CIP-013 addresses supply chain risk. CIP-014 covers physical security of transmission stations."
       },
       {
-        title: "Compliance Enforcement",
-        text: "NERC delegates compliance monitoring and enforcement to six Regional Entities across North America. These Regional Entities conduct audits, spot checks, and investigations. Violations can result in penalties up to $1 million per violation per day. Beyond financial penalties, non-compliance creates real risks to grid reliability and public safety."
+        title: "Key CIP Terminology",
+        text: "Understanding CIP vocabulary is essential for audit conversations. BES (Bulk Electric System) is the electrical generation and transmission infrastructure. A BES Cyber Asset is a programmable device that could impact BES reliability within 15 minutes if compromised. BES Cyber Systems are logical groupings of these assets. ESP (Electronic Security Perimeter) is the logical border around networks containing BES Cyber Systems. PSP (Physical Security Perimeter) is the physical border around BES Cyber Systems. EACMS (Electronic Access Control or Monitoring Systems) manage electronic access. PACS (Physical Access Control Systems) manage physical access. BCSI (BES Cyber System Information) is sensitive information about BES Cyber Systems."
+      },
+      {
+        title: "The Compliance Framework",
+        text: "NERC delegates compliance monitoring and enforcement to six Regional Entities (SERC, RF, WECC, NPCC, MRO, Texas RE). Your organization registers with NERC for specific functions (Generation Owner, Transmission Operator, etc.) and is responsible for meeting applicable CIP requirements. Compliance is demonstrated through the RSAW (Reliability Standard Audit Worksheet)—the official audit tool that lists specific evidence requirements for each standard."
+      },
+      {
+        title: "Understanding Impact Levels",
+        text: "CIP requirements vary based on system impact. High impact includes control centers operating 1,500+ MW. Medium impact includes certain generation facilities, transmission stations, and smaller control centers. Low impact covers all other BES Cyber Systems. Higher impact means more stringent requirements—but CIP-003-9 significantly expanded low-impact requirements, so no system is exempt from baseline security controls."
       }
     ],
     exercise: {
       title: "Map Your Organization",
-      description: "Create a simple diagram showing your organization's relationship to NERC. Identify your Regional Entity, your registration categories (e.g., Generation Owner, Transmission Operator), and list which CIP standards apply to your registration. This exercise helps you understand exactly which requirements your organization must meet."
+      description: "Create a diagram showing your organization's relationship to NERC. Identify: (1) Your Regional Entity, (2) Your registration categories (e.g., Generation Owner, Transmission Operator), (3) Which CIP standards apply to your registration, (4) Your High, Medium, and Low impact systems. This exercise helps you understand exactly which requirements your organization must meet."
     },
     quiz: [
       {
@@ -112,9 +123,9 @@ const modulesData: ModuleData[] = [
       {
         id: 2,
         question: "How many CIP standards are currently in effect?",
-        options: ["5", "8", "11", "14"],
-        correctAnswer: 2,
-        explanation: "There are 11 active CIP standards (CIP-002 through CIP-014, with some numbers retired or reserved)."
+        options: ["5", "8", "11", "13"],
+        correctAnswer: 3,
+        explanation: "There are 13 active CIP standards (CIP-002 through CIP-014, with some numbers retired or reserved)."
       },
       {
         id: 3,
@@ -127,6 +138,30 @@ const modulesData: ModuleData[] = [
         ],
         correctAnswer: 2,
         explanation: "Regional Entities conduct compliance monitoring and enforcement activities on behalf of NERC."
+      },
+      {
+        id: 4,
+        question: "What does ESP stand for in CIP terminology?",
+        options: [
+          "Emergency Security Protocol",
+          "Electronic Security Perimeter",
+          "Essential System Protection",
+          "External Security Program"
+        ],
+        correctAnswer: 1,
+        explanation: "ESP stands for Electronic Security Perimeter—the logical border surrounding networks containing BES Cyber Systems."
+      },
+      {
+        id: 5,
+        question: "What is the 15-minute rule used for?",
+        options: [
+          "Determining if an asset is a BES Cyber Asset",
+          "Setting incident response time limits",
+          "Scheduling patch installations",
+          "Training completion requirements"
+        ],
+        correctAnswer: 0,
+        explanation: "The 15-minute rule determines if an asset's compromise could adversely impact BES reliability within 15 minutes—if yes, it's likely a BES Cyber Asset."
       }
     ]
   },
@@ -715,31 +750,45 @@ const modulesData: ModuleData[] = [
     id: 10,
     title: "Audit Simulation & Continuous Improvement",
     objectives: [
-      "Prepare for the NERC CIP audit process",
+      "Understand the complete NERC CIP audit lifecycle",
+      "Prepare for the 90-day audit process from notice to closeout",
       "Conduct effective internal mock audits",
-      "Build a continuous improvement program"
+      "Build a continuous improvement program",
+      "Master interview best practices and the 'I don't know' protocol"
     ],
     content: [
       {
-        title: "Understanding the Audit Process",
-        text: "NERC CIP audits are conducted by Regional Entities and typically follow a structured process: advance notification, data request submission, on-site or virtual audit week, and post-audit reporting. Understanding this process helps you prepare effectively. Auditors will request evidence, conduct interviews, and observe operations."
+        title: "The Audit Lifecycle: 90-Day Notice to Closeout",
+        text: "NERC CIP audits follow a structured timeline. Day 0: Receive formal 90-day notification specifying audit scope, standards, and audit team. Days 1-30: Compile and submit pre-audit documentation through the secure portal. Days 30-75: Conduct internal readiness activities including mock audits and SME training. Days 75-80: Pre-audit conference call to confirm logistics. Days 80-90: On-site or virtual audit week with interviews and evidence review. Day 90+: Receive draft report, submit corrections, develop mitigation plans."
       },
       {
-        title: "Evidence Preparation",
-        text: "Before an audit, organize your evidence to align with the RSAW (Reliability Standard Audit Worksheet). Pre-stage evidence packages for each requirement. Ensure evidence is properly dated, shows who performed actions, and clearly demonstrates compliance. Practice retrieving evidence quickly—auditors notice when you struggle to find documentation."
+        title: "Pre-Audit Information Request",
+        text: "Within the first 30 days, you'll receive a formal data request. Gather policies, procedures, network diagrams (ESP/PSP documentation), personnel lists, and training records. Submit early if possible—don't wait for deadlines. Use the RSAW to verify completeness. Document what was submitted and when. Have a second set of eyes review everything before submission."
       },
       {
-        title: "Conducting Mock Audits",
-        text: "Regular internal audits help identify gaps before official audits. Use the official RSAW format, assign someone to play the auditor role, and treat it as realistically as possible. Document findings, create corrective action plans, and track remediation. Mock audits build confidence and reveal areas needing improvement."
+        title: "Internal Preparation (Days 30-75)",
+        text: "This is your critical preparation window. Run internal mock audits using the actual RSAW. Conduct tabletop exercises for incident response. Update any stale documentation. Train SMEs on interview protocols—especially the 'answer only what's asked' rule. Prepare opening presentation materials. Walk through physical sites. Test evidence retrieval to ensure you can find documents quickly."
+      },
+      {
+        title: "Audit Week Best Practices",
+        text: "During audit week: Answer only the question asked—don't volunteer extra information. It's OK to say 'I don't know' and offer to find out. Use the RSAW to frame your responses. Defer complex questions to the appropriate SME. Keep detailed notes of all questions and responses. Never guess or speculate. Daily status meetings help track progress and address emerging issues."
+      },
+      {
+        title: "The 'I Don't Know' Protocol",
+        text: "If you don't know an answer, say so professionally. Offer to research and provide a response within a specific timeframe. Never speculate or provide uncertain information. Train all SMEs on this protocol before the audit. It's better to pause and verify than to provide incorrect information that creates additional findings."
+      },
+      {
+        title: "Post-Audit Activities",
+        text: "Receive draft audit report 30-45 days after the audit. Review findings carefully. Submit factual corrections within the specified window (usually 14-21 days). Develop mitigation plans immediately—don't wait for the final report. Track mitigation completion and submit evidence. Conduct lessons learned sessions to improve for future audits."
       },
       {
         title: "Building Continuous Improvement",
-        text: "Compliance is not a destination but an ongoing process. Establish metrics to track compliance health: evidence collection rates, training completion percentages, timely patch assessments, and incident response drill results. Review these metrics regularly and adjust your program based on findings. Learn from each audit cycle."
+        text: "Compliance is ongoing, not a destination. Track metrics: evidence collection rates, training completion, patch assessment timeliness, incident response drill results. Review metrics regularly. Use findings from each audit to strengthen your program. Schedule regular internal audits between official audits. Keep documentation current—not just during audit preparation."
       }
     ],
     exercise: {
       title: "Mini Mock Audit",
-      description: "Select one CIP requirement your organization must meet. Review the RSAW for that requirement. Gather the evidence you would present to an auditor. Have a colleague review the evidence as if they were an auditor—does it clearly demonstrate compliance? Document any gaps and create an improvement plan."
+      description: "Select one CIP requirement your organization must meet. Review the RSAW for that requirement. Gather the evidence you would present to an auditor. Have a colleague play the auditor role—ask probing questions, request evidence retrieval, and evaluate response quality. Practice the 'I don't know' protocol. Document gaps and create an improvement plan."
     },
     quiz: [
       {
@@ -752,31 +801,43 @@ const modulesData: ModuleData[] = [
           "Regional System Analysis Window"
         ],
         correctAnswer: 1,
-        explanation: "RSAW stands for Reliability Standard Audit Worksheet, used to structure compliance audits."
+        explanation: "RSAW stands for Reliability Standard Audit Worksheet, the official tool used to structure compliance audits."
       },
       {
         id: 2,
-        question: "Why are mock audits valuable?",
+        question: "When do you receive a NERC CIP audit notification?",
         options: [
-          "They replace official audits",
-          "They help identify gaps before official audits",
-          "They are required by NERC",
-          "They reduce penalties automatically"
+          "The week before the audit",
+          "30 days before the audit",
+          "90 days before the audit",
+          "6 months before the audit"
         ],
-        correctAnswer: 1,
-        explanation: "Mock audits help identify and address gaps before official audits occur."
+        correctAnswer: 2,
+        explanation: "Registered entities receive a 90-day notice before NERC CIP audits."
       },
       {
         id: 3,
-        question: "What makes evidence effective for auditors?",
+        question: "What is the recommended response if you don't know an answer during an audit interview?",
         options: [
-          "Large file sizes",
-          "Proper dates, responsible parties, and clear demonstration of compliance",
-          "Complex formatting",
-          "Verbal explanations only"
+          "Guess based on your experience",
+          "Say 'I don't know' and offer to find out",
+          "Ask a colleague to answer for you immediately",
+          "Change the subject"
         ],
         correctAnswer: 1,
-        explanation: "Effective evidence is dated, shows who performed actions, and clearly demonstrates compliance."
+        explanation: "The 'I don't know' protocol recommends honestly stating you don't know and offering to research and provide an accurate answer."
+      },
+      {
+        id: 4,
+        question: "What makes evidence effective for auditors?",
+        options: [
+          "Large file sizes and complex formatting",
+          "Proper dates, responsible parties, and clear demonstration of compliance",
+          "Verbal explanations only",
+          "Generic templates without customization"
+        ],
+        correctAnswer: 1,
+        explanation: "Effective evidence is dated, shows who performed actions, and clearly demonstrates compliance with specific requirements."
       }
     ]
   },
@@ -1024,10 +1085,12 @@ export default function Modules() {
 
   // Diagram components for specific modules
   const moduleDiagrams: Record<number, React.ReactNode> = {
+    1: <CIPStandardsRelationshipDiagram className="my-6" />,
     4: <TrainingMatrixDiagram className="my-6" />,
     5: <ESPPSPDiagram className="my-6" />,
     6: <PatchManagementDiagram className="my-6" />,
     7: <IncidentResponseDiagram className="my-6" />,
+    10: <AuditTimelineFlowchart />,
   };
 
   const handleQuizPass = (moduleId: number) => {
