@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Quiz, QuizQuestion } from "@/components/Quiz";
@@ -263,19 +263,39 @@ const roles: RoleData[] = [
   }
 ];
 
-export default function RoleTraining() {
-  const [activeRole, setActiveRole] = useState(roles[0].id);
-  const currentRole = roles.find(r => r.id === activeRole) || roles[0];
-  const { preferences } = useUserPreferences();
+// Map UserRole to page role IDs
+const userRoleToRoleId: Record<UserRole, string> = {
+  'compliance': 'compliance-manager',
+  'it-ot': 'it-ot-engineer',
+  'physical-security': 'physical-security',
+  'hr-training': 'hr-training',
+  'leadership': 'leadership',
+  'other': 'compliance-manager',
+};
 
-  // Map role IDs to UserRole type for linking
-  const roleIdToUserRole: Record<string, UserRole> = {
-    'compliance-manager': 'compliance',
-    'it-ot-engineer': 'it-ot',
-    'physical-security': 'physical-security',
-    'hr-training': 'hr-training',
-    'leadership': 'leadership',
-  };
+// Map role IDs to UserRole type for linking
+const roleIdToUserRole: Record<string, UserRole> = {
+  'compliance-manager': 'compliance',
+  'it-ot-engineer': 'it-ot',
+  'physical-security': 'physical-security',
+  'hr-training': 'hr-training',
+  'leadership': 'leadership',
+};
+
+export default function RoleTraining() {
+  const { preferences, isLoaded } = useUserPreferences();
+  
+  // Initialize with saved role preference or default to first role
+  const initialRoleId = preferences.role ? userRoleToRoleId[preferences.role] : roles[0].id;
+  const [activeRole, setActiveRole] = useState(initialRoleId);
+  const currentRole = roles.find(r => r.id === activeRole) || roles[0];
+
+  // Sync activeRole when user preferences change (e.g., from onboarding modal)
+  useEffect(() => {
+    if (isLoaded && preferences.role) {
+      setActiveRole(userRoleToRoleId[preferences.role]);
+    }
+  }, [isLoaded, preferences.role]);
 
   const userRoleId = roleIdToUserRole[currentRole.id] || 'other';
 
