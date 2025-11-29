@@ -1,6 +1,7 @@
 import { Layout } from "@/components/layout/Layout";
 import { InteractiveChecklist } from "@/components/InteractiveChecklist";
 import { SampleArtifact } from "@/components/SampleArtifact";
+import { EvidenceOrganizationDiagram } from "@/components/diagrams/EvidenceOrganizationDiagram";
 import { sampleArtifacts } from "@/data/sampleArtifactsData";
 import { cn } from "@/lib/utils";
 import { 
@@ -75,6 +76,16 @@ export default function EvidenceLab() {
               Learn how to create, organize, and maintain the evidence that proves your compliance. 
               If it is not documented, it did not happen.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Visual: Evidence Organization */}
+      <section className="py-12 md:py-16 bg-background">
+        <div className="container">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-2xl font-bold text-navy mb-6 text-center">Visual Guide: Evidence Organization</h2>
+            <EvidenceOrganizationDiagram className="animate-fade-in" />
           </div>
         </div>
       </section>

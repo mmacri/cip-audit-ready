@@ -1544,4 +1544,37 @@ Files modified:
 
 ---
 
+## Changelog - November 2025 Visual Learning Update
+
+### Visual Timeline & Diagrams Added
+
+**Interactive Audit Timeline Flowchart** (`src/components/AuditTimelineFlowchart.tsx`)
+- Clickable 6-stage audit lifecycle visualization
+- Stage details with tasks, due dates, and pro tips
+- Navigation between stages
+- Integrated into Audit Journey page
+
+**New Visual Diagrams:**
+- `CIPStandardsRelationshipDiagram.tsx` - Shows how CIP standards build upon each other (added to CIP 101 page)
+- `EvidenceOrganizationDiagram.tsx` - Visual guide for evidence folder structure and naming (added to Evidence Lab)
+- `AuditPreparationDiagram.tsx` - 90-day audit workflow visualization
+
+**Audit Journey Enhancements:**
+- Added interactive flowchart section
+- Tabbed view (Timeline View / Checklist View)
+- Printable checklist format for audit preparation
+- Fade-in animations on timeline items
+
+**Other Updates:**
+- Enhanced GlobalSearch with CIP requirement autocomplete (e.g., "CIP-007 R2")
+- Added TCA checklist templates (PDF/Excel)
+- Added Supply Chain questionnaire template
+- Added CIP-014 Risk Assessment template
+- Centralized NERC URLs in `src/config/nercUrls.ts`
+- Mobile responsiveness CSS utilities in index.css
+- Entrance/Exit meeting guidance in Soft Skills Training
+- SME Interview Checklist (Before/During/After)
+
+---
+
 *This documentation was last updated November 2025 based on the complete codebase analysis of CIP Readiness Academy.*

@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AuditTimelineFlowchart } from "@/components/AuditTimelineFlowchart";
 import {
   Calendar,
   FileText,
@@ -20,7 +22,9 @@ import {
   FileSearch,
   Video,
   Shield,
-  Lightbulb
+  Lightbulb,
+  MousePointer,
+  List
 } from "lucide-react";
 
 const timelinePhases = [
@@ -217,92 +221,158 @@ export default function AuditJourney() {
         </div>
       </section>
 
-      {/* Timeline Overview */}
-      <section className="py-12 md:py-16 bg-background">
+      {/* Interactive Timeline Flowchart */}
+      <section className="py-12 md:py-16 bg-muted/30">
         <div className="container">
           <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-navy mb-4">Audit Timeline</h2>
+            <div className="text-center mb-8">
+              <Badge variant="outline" className="mb-4">
+                <MousePointer className="h-3 w-3 mr-1" />
+                Interactive
+              </Badge>
+              <h2 className="text-3xl font-bold text-navy mb-4">Audit Lifecycle Flowchart</h2>
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                A typical NERC CIP compliance audit follows this general timeline. 
-                Actual durations may vary based on scope and Regional Entity.
+                Click each stage to explore tasks, due dates, and pro tips. Navigate through the 
+                complete audit journey from 90-day notice to post-audit activities.
               </p>
             </div>
 
-            <div className="relative">
-              {/* Timeline line */}
-              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-border hidden md:block" />
+            <AuditTimelineFlowchart />
+          </div>
+        </div>
+      </section>
 
-              <div className="space-y-8">
-                {timelinePhases.map((phase, index) => (
-                  <div key={phase.id} className="relative">
-                    <div className="flex flex-col md:flex-row gap-4">
-                      {/* Timeline dot */}
-                      <div className="hidden md:flex items-start">
-                        <div className={`w-16 h-16 rounded-full ${phase.color} flex items-center justify-center text-white z-10`}>
-                          <phase.icon className="h-7 w-7" />
+      {/* Timeline Overview - Detailed View */}
+      <section className="py-12 md:py-16 bg-background">
+        <div className="container">
+          <div className="max-w-5xl mx-auto">
+            <Tabs defaultValue="timeline" className="w-full">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+                <h2 className="text-3xl font-bold text-navy">Detailed Timeline</h2>
+                <TabsList>
+                  <TabsTrigger value="timeline" className="flex items-center gap-2">
+                    <List className="h-4 w-4" />
+                    Timeline View
+                  </TabsTrigger>
+                  <TabsTrigger value="checklist" className="flex items-center gap-2">
+                    <ClipboardCheck className="h-4 w-4" />
+                    Checklist View
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+
+              <TabsContent value="timeline" className="mt-0">
+                <div className="relative">
+                  {/* Timeline line */}
+                  <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-border hidden md:block" />
+
+                  <div className="space-y-8">
+                    {timelinePhases.map((phase, index) => (
+                      <div key={phase.id} className="relative animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
+                        <div className="flex flex-col md:flex-row gap-4">
+                          {/* Timeline dot */}
+                          <div className="hidden md:flex items-start">
+                            <div className={`w-16 h-16 rounded-full ${phase.color} flex items-center justify-center text-white z-10 hover-scale`}>
+                              <phase.icon className="h-7 w-7" />
+                            </div>
+                          </div>
+
+                          {/* Content card */}
+                          <Card className="flex-1 hover:shadow-card-hover transition-all duration-300">
+                            <CardHeader>
+                              <div className="flex items-start justify-between gap-4 flex-wrap">
+                                <div className="flex items-center gap-3">
+                                  <div className={`md:hidden w-10 h-10 rounded-full ${phase.color} flex items-center justify-center text-white`}>
+                                    <phase.icon className="h-5 w-5" />
+                                  </div>
+                                  <div>
+                                    <Badge variant="outline" className="mb-2">
+                                      <Clock className="h-3 w-3 mr-1" />
+                                      {phase.timeframe}
+                                    </Badge>
+                                    <CardTitle className="text-xl">{phase.phase}</CardTitle>
+                                  </div>
+                                </div>
+                              </div>
+                              <CardDescription className="text-base">
+                                {phase.description}
+                              </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="grid md:grid-cols-2 gap-6">
+                                <div>
+                                  <h4 className="font-semibold text-navy mb-3 flex items-center gap-2">
+                                    <CheckCircle2 className="h-4 w-4 text-success" />
+                                    Key Activities
+                                  </h4>
+                                  <ul className="space-y-2">
+                                    {phase.details.map((detail, i) => (
+                                      <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                                        <span className="text-primary mt-1">•</span>
+                                        {detail}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                                <div className="bg-amber/5 rounded-lg p-4">
+                                  <h4 className="font-semibold text-navy mb-3 flex items-center gap-2">
+                                    <Lightbulb className="h-4 w-4 text-amber" />
+                                    Pro Tips
+                                  </h4>
+                                  <ul className="space-y-2">
+                                    {phase.tips.map((tip, i) => (
+                                      <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                                        <span className="text-amber mt-1">→</span>
+                                        {tip}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
                         </div>
                       </div>
-
-                      {/* Content card */}
-                      <Card className="flex-1 hover:shadow-card-hover transition-all duration-300">
-                        <CardHeader>
-                          <div className="flex items-start justify-between gap-4 flex-wrap">
-                            <div className="flex items-center gap-3">
-                              <div className={`md:hidden w-10 h-10 rounded-full ${phase.color} flex items-center justify-center text-white`}>
-                                <phase.icon className="h-5 w-5" />
-                              </div>
-                              <div>
-                                <Badge variant="outline" className="mb-2">
-                                  <Clock className="h-3 w-3 mr-1" />
-                                  {phase.timeframe}
-                                </Badge>
-                                <CardTitle className="text-xl">{phase.phase}</CardTitle>
-                              </div>
-                            </div>
-                          </div>
-                          <CardDescription className="text-base">
-                            {phase.description}
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="grid md:grid-cols-2 gap-6">
-                            <div>
-                              <h4 className="font-semibold text-navy mb-3 flex items-center gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-success" />
-                                Key Activities
-                              </h4>
-                              <ul className="space-y-2">
-                                {phase.details.map((detail, i) => (
-                                  <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                                    <span className="text-primary mt-1">•</span>
-                                    {detail}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                            <div className="bg-amber/5 rounded-lg p-4">
-                              <h4 className="font-semibold text-navy mb-3 flex items-center gap-2">
-                                <Lightbulb className="h-4 w-4 text-amber" />
-                                Pro Tips
-                              </h4>
-                              <ul className="space-y-2">
-                                {phase.tips.map((tip, i) => (
-                                  <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                                    <span className="text-amber mt-1">→</span>
-                                    {tip}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="checklist" className="mt-0">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <ClipboardCheck className="h-5 w-5 text-primary" />
+                      90-Day Audit Preparation Checklist
+                    </CardTitle>
+                    <CardDescription>
+                      Print this checklist to track your progress through audit preparation
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-6">
+                      {timelinePhases.map((phase) => (
+                        <div key={phase.id} className="border-b border-border/50 pb-4 last:border-0">
+                          <h4 className="font-semibold text-navy mb-3 flex items-center gap-2">
+                            <phase.icon className={`h-4 w-4 ${phase.color.replace('bg-', 'text-')}`} />
+                            {phase.phase}
+                            <Badge variant="outline" className="ml-2 text-xs">{phase.timeframe}</Badge>
+                          </h4>
+                          <div className="grid sm:grid-cols-2 gap-2">
+                            {phase.details.map((detail, i) => (
+                              <label key={i} className="flex items-start gap-2 text-sm text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
+                                <span className="text-primary shrink-0">☐</span>
+                                {detail}
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
       </section>

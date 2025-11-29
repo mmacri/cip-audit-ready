@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { CIPStandardsRelationshipDiagram } from "@/components/diagrams/CIPStandardsRelationshipDiagram";
 import { 
   Shield, 
   BookOpen, 
@@ -217,6 +218,22 @@ export default function NercCip101() {
                 </CardContent>
               </Card>
             </div>
+
+            {/* CIP Standards Relationship Diagram */}
+            <Card className="mt-8">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Target className="h-5 w-5 text-primary" />
+                  How CIP Standards Fit Together
+                </CardTitle>
+                <CardDescription>
+                  Understanding how standards relate helps you see the big picture
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <CIPStandardsRelationshipDiagram className="animate-fade-in" />
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
