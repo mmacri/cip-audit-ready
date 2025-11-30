@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
+import { PageIntro } from "@/components/PageIntro";
 import { Quiz, QuizQuestion } from "@/components/Quiz";
 import { useProgress } from "@/hooks/useProgress";
 import { useUserPreferences } from "@/hooks/useUserPreferences";
@@ -1111,15 +1112,39 @@ export default function Modules() {
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-navy mb-4">
               Training Modules
             </h1>
-            <p className="text-lg text-muted-foreground mb-6">
-              Work through each module to build comprehensive NERC CIP knowledge.
-            </p>
             
             {/* Progress indicator */}
-            <div className="inline-flex items-center gap-2 bg-card rounded-full px-4 py-2 border">
+            <div className="inline-flex items-center gap-2 bg-card rounded-full px-4 py-2 border mb-6">
               <CheckCircle2 className="h-4 w-4 text-success" />
               <span className="text-sm font-medium">{completedCount} of {visibleModuleIds.length} modules complete</span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Page Intro & Role Banner */}
+      <section className="py-6 border-b border-border/50">
+        <div className="container">
+          <div className="max-w-4xl mx-auto">
+            <PageIntro>
+              This page is your full lesson library. Use the filters and role badges to find specific modules. 
+              Your main checklist and phases are on your role training page.
+            </PageIntro>
+            
+            {/* Role-specific banner */}
+            {preferences.role && (
+              <div className="bg-primary/5 border border-primary/20 rounded-lg px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <p className="text-sm text-muted-foreground">
+                  Modules are currently annotated for the <span className="font-medium text-foreground">{roleTrainingPlans[preferences.role]?.title}</span> role.
+                </p>
+                <Link 
+                  to={`/role-training/${preferences.role}`}
+                  className="text-sm text-primary hover:underline whitespace-nowrap"
+                >
+                  Go to My Role Training →
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </section>

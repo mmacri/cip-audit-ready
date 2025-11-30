@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { UserRoleBadge } from "@/components/UserRoleBadge";
 import { EnhancedGlobalSearch } from "@/components/EnhancedGlobalSearch";
-import { Menu, X, GraduationCap, Sparkles, ChevronDown, BookOpen, Wrench, FolderOpen, Info } from "lucide-react";
+import { useUserPreferences, roleLabels, UserRole } from "@/hooks/useUserPreferences";
+import { Menu, X, GraduationCap, ChevronDown, BookOpen, Trophy, FolderOpen, User, Home } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,44 +21,46 @@ interface NavGroup {
   items: { label: string; href: string; description?: string }[];
 }
 
+// Map UserRole to URL slugs
+const roleToSlug: Record<UserRole, string> = {
+  'compliance': 'compliance',
+  'it-ot': 'it-ot',
+  'physical-security': 'physical-security',
+  'hr-training': 'hr-training',
+  'leadership': 'leadership',
+  'other': 'compliance',
+};
+
 const navGroups: NavGroup[] = [
   {
-    label: "My Training",
+    label: "Learn",
     icon: BookOpen,
     items: [
-      { label: "My Training Plan", href: "/get-started", description: "Your personalized learning path" },
-      { label: "All Modules", href: "/modules", description: "12 comprehensive training modules" },
-      { label: "Role-Based Paths", href: "/role-training", description: "Training by role" },
-      { label: "Soft Skills", href: "/soft-skills", description: "Audit interview techniques" },
+      { label: "All Modules", href: "/modules", description: "Full library of 12 training modules" },
+      { label: "Soft Skills Training", href: "/soft-skills", description: "Audit interview techniques" },
+    ],
+  },
+  {
+    label: "My Progress",
+    icon: Trophy,
+    items: [
       { label: "Achievements", href: "/achievements", description: "View earned badges" },
       { label: "Final Exam", href: "/final-exam", description: "Earn your certificate" },
       { label: "Progress Backup", href: "/progress-backup", description: "Export/import your data" },
     ],
   },
   {
-    label: "Practice",
-    icon: Wrench,
+    label: "Resources",
+    icon: FolderOpen,
     items: [
       { label: "Evidence Lab", href: "/evidence-lab", description: "Sample artifacts & evidence" },
       { label: "Audit Simulator", href: "/audit-simulator", description: "Practice audit requests" },
       { label: "Readiness Plan Builder", href: "/readiness-plan", description: "Create your audit plan" },
       { label: "RSAW Tutorial", href: "/rsaw-tutorial", description: "Audit worksheet guide" },
-    ],
-  },
-  {
-    label: "Resources",
-    icon: FolderOpen,
-    items: [
       { label: "Case Studies", href: "/case-studies", description: "Real-world compliance scenarios" },
       { label: "Scope & TCA Matrix", href: "/scope-matrix", description: "Asset classification guide" },
       { label: "Templates & Downloads", href: "/resources", description: "Checklists, matrices, forms" },
       { label: "Manager Guide", href: "/manager-guide", description: "Team training delivery" },
-    ],
-  },
-  {
-    label: "About",
-    icon: Info,
-    items: [
       { label: "About CIP Academy", href: "/about", description: "Mission & contact" },
     ],
   },
@@ -69,10 +72,22 @@ const allNavItems = navGroups.flatMap(group => group.items);
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { preferences } = useUserPreferences();
 
   const isActiveInGroup = (group: NavGroup) => {
     return group.items.some(item => location.pathname === item.href);
   };
+
+  const handleMyRoleClick = () => {
+    if (preferences.role) {
+      navigate(`/role-training/${roleToSlug[preferences.role]}`);
+    } else {
+      navigate('/get-started');
+    }
+  };
+
+  const isMyRoleActive = location.pathname.startsWith('/role-training/') && preferences.role;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
@@ -89,22 +104,135 @@ export function Navbar() {
 
         <div className="hidden lg:flex items-center gap-1">
           <nav className="flex items-center gap-1">
-            {/* Get Started - Highlighted */}
+            {/* Start - Links to Home */}
             <Link
-              to="/get-started"
+              to="/"
               className={cn(
                 "px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1",
-                location.pathname === "/get-started"
+                location.pathname === "/"
                   ? "text-primary bg-primary/10"
-                  : "text-primary hover:bg-primary/5"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
               )}
             >
-              <Sparkles className="h-3 w-3" />
-              Get Started
+              <Home className="h-4 w-4" />
+              Start
             </Link>
 
-            {/* Grouped Navigation */}
-            {navGroups.map((group) => (
+            {/* Learn Dropdown */}
+            {navGroups.filter(g => g.label === "Learn").map((group) => (
+              <DropdownMenu key={group.label}>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className={cn(
+                      "px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1",
+                      isActiveInGroup(group)
+                        ? "text-primary bg-primary/10"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    )}
+                  >
+                    <group.icon className="h-4 w-4" />
+                    {group.label}
+                    <ChevronDown className="h-3 w-3" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-64">
+                  <DropdownMenuLabel className="text-xs text-muted-foreground uppercase tracking-wide">
+                    {group.label}
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {group.items.map((item) => (
+                    <DropdownMenuItem key={item.href} asChild>
+                      <Link
+                        to={item.href}
+                        className={cn(
+                          "flex flex-col items-start gap-0.5 py-2",
+                          location.pathname === item.href && "bg-primary/5"
+                        )}
+                      >
+                        <span className={cn(
+                          "font-medium",
+                          location.pathname === item.href && "text-primary"
+                        )}>
+                          {item.label}
+                        </span>
+                        {item.description && (
+                          <span className="text-xs text-muted-foreground">{item.description}</span>
+                        )}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ))}
+
+            {/* My Role - Direct Link */}
+            <button
+              onClick={handleMyRoleClick}
+              className={cn(
+                "px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1",
+                isMyRoleActive
+                  ? "text-primary bg-primary/10"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              )}
+            >
+              <User className="h-4 w-4" />
+              My Role
+              {preferences.role && (
+                <span className="text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded ml-1">
+                  {roleLabels[preferences.role].split(' ')[0]}
+                </span>
+              )}
+            </button>
+
+            {/* My Progress Dropdown */}
+            {navGroups.filter(g => g.label === "My Progress").map((group) => (
+              <DropdownMenu key={group.label}>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className={cn(
+                      "px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1",
+                      isActiveInGroup(group)
+                        ? "text-primary bg-primary/10"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    )}
+                  >
+                    <group.icon className="h-4 w-4" />
+                    {group.label}
+                    <ChevronDown className="h-3 w-3" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-64">
+                  <DropdownMenuLabel className="text-xs text-muted-foreground uppercase tracking-wide">
+                    {group.label}
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {group.items.map((item) => (
+                    <DropdownMenuItem key={item.href} asChild>
+                      <Link
+                        to={item.href}
+                        className={cn(
+                          "flex flex-col items-start gap-0.5 py-2",
+                          location.pathname === item.href && "bg-primary/5"
+                        )}
+                      >
+                        <span className={cn(
+                          "font-medium",
+                          location.pathname === item.href && "text-primary"
+                        )}>
+                          {item.label}
+                        </span>
+                        {item.description && (
+                          <span className="text-xs text-muted-foreground">{item.description}</span>
+                        )}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ))}
+
+            {/* Resources Dropdown */}
+            {navGroups.filter(g => g.label === "Resources").map((group) => (
               <DropdownMenu key={group.label}>
                 <DropdownMenuTrigger asChild>
                   <button
@@ -170,20 +298,42 @@ export function Navbar() {
       {mobileMenuOpen && (
         <div className="lg:hidden border-t border-border bg-white max-h-[70vh] overflow-y-auto">
           <nav className="container py-4 flex flex-col gap-1">
-            {/* Get Started - Highlighted */}
+            {/* Start */}
             <Link
-              to="/get-started"
+              to="/"
               onClick={() => setMobileMenuOpen(false)}
               className={cn(
                 "px-4 py-3 text-sm font-medium rounded-lg transition-colors flex items-center gap-2",
-                location.pathname === "/get-started"
+                location.pathname === "/"
                   ? "text-primary bg-primary/10"
-                  : "text-primary"
+                  : "text-muted-foreground"
               )}
             >
-              <Sparkles className="h-4 w-4" />
-              Get Started
+              <Home className="h-4 w-4" />
+              Start
             </Link>
+
+            {/* My Role */}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleMyRoleClick();
+              }}
+              className={cn(
+                "px-4 py-3 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 text-left",
+                isMyRoleActive
+                  ? "text-primary bg-primary/10"
+                  : "text-muted-foreground"
+              )}
+            >
+              <User className="h-4 w-4" />
+              My Role Training
+              {preferences.role && (
+                <span className="text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                  {roleLabels[preferences.role].split(' ')[0]}
+                </span>
+              )}
+            </button>
 
             {/* Grouped Items */}
             {navGroups.map((group) => (

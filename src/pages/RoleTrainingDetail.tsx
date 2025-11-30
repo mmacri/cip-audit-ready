@@ -1,5 +1,6 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
+import { PageIntro } from '@/components/PageIntro';
 import { useUserPreferences, UserRole, roleLabels, experienceLabels } from '@/hooks/useUserPreferences';
 import { useRoleProgress } from '@/hooks/useRoleProgress';
 import { useProgress } from '@/hooks/useProgress';
@@ -91,10 +92,32 @@ export default function RoleTrainingDetail() {
 
   return (
     <Layout>
-      {/* Hero Section */}
+      {/* Hero Section with Orientation Bar */}
       <section className="bg-gradient-to-br from-primary/5 to-accent/5 py-12 md:py-16">
         <div className="container">
           <div className="max-w-4xl mx-auto">
+            {/* Orientation Bar */}
+            <div className="bg-card/80 backdrop-blur-sm rounded-lg border border-border/50 px-4 py-3 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <RoleIcon className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-navy">
+                    {rolePlan.title} Path
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {completionProgress.overall}% complete
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 text-xs">
+                <Link to="/modules" className="text-muted-foreground hover:text-primary transition-colors">
+                  View all modules →
+                </Link>
+              </div>
+            </div>
+
             <div className="flex items-start gap-4 mb-6">
               <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
                 <RoleIcon className="h-8 w-8 text-primary" />
@@ -103,9 +126,10 @@ export default function RoleTrainingDetail() {
                 <h1 className="text-3xl md:text-4xl font-bold text-navy mb-2">
                   {rolePlan.title} Training Plan
                 </h1>
-                <p className="text-muted-foreground">
-                  Your personalized path to NERC CIP compliance mastery
-                </p>
+                <PageIntro variant="subtle" className="mb-0 p-0">
+                  This is your main training home for the {rolePlan.title} role. Follow the phases, 
+                  complete the steps and missions, and track your progress here.
+                </PageIntro>
               </div>
             </div>
 
