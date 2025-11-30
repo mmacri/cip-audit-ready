@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
+import { PageIntro } from '@/components/PageIntro';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -68,17 +69,21 @@ export default function Achievements() {
       <section className="py-12 md:py-16">
         <div className="container">
           {/* Header */}
-          <div className="text-center mb-10">
+          <div className="text-center mb-6">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 mb-6">
               <Award className="h-8 w-8 text-primary" />
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-navy mb-4">
               Achievements
             </h1>
-            <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-              Track your progress and earn badges as you master NERC CIP compliance concepts 
-              across different role paths.
-            </p>
+          </div>
+
+          {/* Page Intro */}
+          <div className="max-w-2xl mx-auto mb-10">
+            <PageIntro>
+              This page shows the badges you have earned by completing key milestones in the CIP Readiness Academy. 
+              Badges are awarded for completing modules, missions, and demonstrating mastery of specific CIP domains.
+            </PageIntro>
           </div>
 
           {/* Summary Stats */}

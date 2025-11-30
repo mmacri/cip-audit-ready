@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { Layout } from '@/components/layout/Layout';
+import { PageIntro } from '@/components/PageIntro';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -95,18 +96,21 @@ export default function ProgressBackup() {
         <div className="container">
           <div className="max-w-3xl mx-auto">
             {/* Header */}
-            <div className="text-center mb-10">
+            <div className="text-center mb-6">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 mb-6">
                 <Shield className="h-8 w-8 text-primary" />
               </div>
               <h1 className="text-3xl md:text-4xl font-bold text-navy mb-4">
                 Progress Backup
               </h1>
-              <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-                Export your CIP Readiness Academy training progress to back it up or transfer to another device. 
-                Import a previous backup to restore your progress.
-              </p>
             </div>
+
+            {/* Page Intro */}
+            <PageIntro className="mb-8">
+              Use this page to download a backup of your CIP training progress or restore a previous backup 
+              if you change devices or clear your browser. Your progress data is stored locally and this 
+              backup ensures you don't lose your work.
+            </PageIntro>
 
             <div className="grid gap-6">
               {/* Export Section */}

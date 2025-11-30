@@ -4,67 +4,53 @@ import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { OnboardingModal } from "@/components/OnboardingModal";
-import { QuickResourcesPanel } from "@/components/QuickResourcesPanel";
-import { useUserPreferences, UserRole } from "@/hooks/useUserPreferences";
+import { useUserPreferences, UserRole, roleLabels } from "@/hooks/useUserPreferences";
 import { 
-  BookOpen, 
-  FolderSearch, 
-  Users, 
-  ClipboardCheck,
   ArrowRight,
   GraduationCap,
-  CheckCircle2,
-  Lightbulb,
   Target,
-  Trophy,
-  Save,
-  Sparkles
+  BookOpen,
+  Rocket,
+  Award,
+  CheckCircle2,
+  User
 } from "lucide-react";
 
-const learnCards = [
-  {
-    icon: BookOpen,
-    title: "Understand NERC CIP Standards",
-    description: "Learn all 11 CIP standards in plain language, with practical examples and real-world context for every requirement."
-  },
-  {
-    icon: FolderSearch,
-    title: "Build an Evidence System",
-    description: "Create a repeatable documentation and evidence collection process that keeps you audit-ready year-round."
-  },
-  {
-    icon: Users,
-    title: "Train Every Role",
-    description: "Ensure everyone from engineers to executives knows their specific CIP responsibilities and recurring tasks."
-  },
-  {
-    icon: Target,
-    title: "Practice Before the Audit",
-    description: "Run through scenarios and simulations so your team is confident and prepared when auditors arrive."
-  }
-];
+// Map UserRole to URL slugs
+const roleToSlug: Record<UserRole, string> = {
+  'compliance': 'compliance',
+  'it-ot': 'it-ot',
+  'physical-security': 'physical-security',
+  'hr-training': 'hr-training',
+  'leadership': 'leadership',
+  'other': 'compliance',
+};
 
-const howItWorks = [
+const journeySteps = [
   {
-    icon: BookOpen,
-    title: "Module-Based Learning",
-    description: "Work through 10 structured modules covering everything from foundational concepts to advanced audit preparation."
+    number: 1,
+    icon: User,
+    title: "Choose your role",
+    description: "Understand how CIP applies to your specific responsibilities.",
   },
   {
-    icon: ClipboardCheck,
-    title: "Quizzes & Checklists",
-    description: "Test your knowledge with quizzes after each module and track tasks with interactive checklists."
+    number: 2,
+    icon: Target,
+    title: "Follow your role's training steps",
+    description: "Use your role training page as your home base with phases, checklists, and missions.",
   },
   {
-    icon: Lightbulb,
-    title: "Scenarios & Case Studies",
-    description: "Apply your knowledge to realistic situations you might encounter during audits or daily operations."
+    number: 3,
+    icon: Rocket,
+    title: "Practice with missions and tools",
+    description: "Apply what you learn with scenarios, evidence guidance, and audit simulations.",
   },
   {
-    icon: Save,
-    title: "Progress Tracking",
-    description: "Your progress is saved in your browser so you can pick up where you left off anytime."
-  }
+    number: 4,
+    icon: Award,
+    title: "Check your readiness and earn your certificate",
+    description: "Complete your path, review your achievements, and generate a role completion certificate.",
+  },
 ];
 
 export default function Home() {
@@ -74,28 +60,25 @@ export default function Home() {
 
   useEffect(() => {
     if (isLoaded && !preferences.onboardingComplete) {
-      // Small delay to let the page render first
       const timer = setTimeout(() => setShowOnboarding(true), 500);
       return () => clearTimeout(timer);
     }
   }, [isLoaded, preferences.onboardingComplete]);
-
-  // Map UserRole to role training page slugs
-  const roleToSlug: Record<UserRole, string> = {
-    'compliance': 'compliance',
-    'it-ot': 'it-ot',
-    'physical-security': 'physical-security',
-    'hr-training': 'hr-training',
-    'leadership': 'leadership',
-    'other': 'compliance',
-  };
 
   const handleOnboardingComplete = (selectedRole?: UserRole) => {
     setShowOnboarding(false);
     if (selectedRole) {
       navigate(`/role-training/${roleToSlug[selectedRole]}`);
     } else {
-      navigate('/role-training');
+      navigate('/get-started');
+    }
+  };
+
+  const handleChooseRole = () => {
+    if (preferences.role) {
+      navigate(`/role-training/${roleToSlug[preferences.role]}`);
+    } else {
+      navigate('/get-started');
     }
   };
 
@@ -120,19 +103,30 @@ export default function Home() {
               Be NERC CIP Audit-Ready All Year Long
             </h1>
             <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
-              A complete, end-to-end training program for power utilities preparing for NERC CIP audits. 
+              A complete training program for power utilities preparing for NERC CIP audits. 
               Learn the standards, build your evidence system, and practice before auditors arrive.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90 shadow-lg">
-                <Link to="/get-started">
-                  Get Started
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
+              <Button 
+                onClick={handleChooseRole}
+                size="lg" 
+                className="bg-white text-primary hover:bg-white/90 shadow-lg"
+              >
+                {preferences.role ? (
+                  <>
+                    Continue as {roleLabels[preferences.role].split(' ')[0]}
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </>
+                ) : (
+                  <>
+                    Start: Choose Your Role
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </>
+                )}
               </Button>
               <Button asChild size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10">
-                <Link to="/learning-path">
-                  View Learning Path
+                <Link to="/modules">
+                  Browse All Modules
                 </Link>
               </Button>
             </div>
@@ -141,7 +135,119 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent" />
       </section>
 
-      {/* What You'll Learn */}
+      {/* Your CIP Readiness Journey - Golden Path */}
+      <section className="py-16 md:py-20">
+        <div className="container">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-navy mb-3">
+              Your CIP Readiness Journey
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Follow this proven path to build practical audit readiness for your role.
+            </p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-6">
+              {journeySteps.map((step) => (
+                <Card key={step.number} className="relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-bold text-lg shrink-0">
+                        {step.number}
+                      </div>
+                      <div className="flex-1">
+                        <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-3">
+                          <step.icon className="h-5 w-5" />
+                        </div>
+                        <CardTitle className="text-lg text-navy">
+                          {step.title}
+                        </CardTitle>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-sm leading-relaxed">
+                      {step.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Primary CTA */}
+            <div className="mt-10 text-center space-y-4">
+              <Button 
+                onClick={handleChooseRole}
+                size="lg" 
+                className="shadow-lg"
+              >
+                {preferences.role ? (
+                  <>
+                    Go to My Role Training
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </>
+                ) : (
+                  <>
+                    Start: Choose Your Role
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </>
+                )}
+              </Button>
+              <p className="text-sm text-muted-foreground">
+                Or{" "}
+                <Link to="/modules" className="text-primary hover:underline">
+                  browse all modules
+                </Link>
+                {" "}to explore content without committing to a role yet.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Current Role Status (if role selected) */}
+      {preferences.role && (
+        <section className="py-12 md:py-16 bg-muted/30">
+          <div className="container">
+            <div className="max-w-2xl mx-auto">
+              <Card className="border-primary/30">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-navy">
+                    <CheckCircle2 className="h-5 w-5 text-success" />
+                    You're following the {roleLabels[preferences.role]} path
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-muted-foreground text-sm">
+                    Your role training page is your home base. Continue where you left off or explore other areas.
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    <Button asChild>
+                      <Link to={`/role-training/${roleToSlug[preferences.role]}`}>
+                        Go to My Role Training
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline">
+                      <Link to="/achievements">
+                        View Achievements
+                      </Link>
+                    </Button>
+                    <Button asChild variant="ghost">
+                      <Link to="/get-started">
+                        Change Role
+                      </Link>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* What You'll Learn - simplified */}
       <section className="py-16 md:py-20">
         <div className="container">
           <div className="text-center mb-12">
@@ -149,122 +255,27 @@ export default function Home() {
               What You'll Learn
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Master the knowledge and skills needed to build a sustainable compliance program.
+              Build practical knowledge and skills for NERC CIP compliance.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {learnCards.map((card) => (
-              <Card key={card.title} className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-                <CardHeader className="pb-3">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-3">
-                    <card.icon className="h-6 w-6" />
-                  </div>
-                  <CardTitle className="text-lg text-navy">
-                    {card.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-sm leading-relaxed">
-                    {card.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How This Training Works */}
-      <section className="py-16 md:py-20 bg-muted/50">
-        <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-navy mb-3">
-              How This Training Works
-            </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              A structured approach to building audit readiness, designed for busy utility professionals.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {howItWorks.map((item, index) => (
-              <div key={item.title} className="relative">
-                <div className="bg-card rounded-xl border border-border/50 p-6 h-full">
-                  <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center mb-4 font-bold">
-                    {index + 1}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            {[
+              { icon: BookOpen, title: "All 13 CIP Standards", description: "Learn requirements in plain language with practical examples." },
+              { icon: Target, title: "Role-Specific Tasks", description: "Know exactly what's expected for your position." },
+              { icon: Rocket, title: "Hands-On Practice", description: "Build evidence skills through missions and simulations." },
+              { icon: Award, title: "Verifiable Progress", description: "Track completion and earn role certificates." },
+            ].map((item) => (
+              <Card key={item.title} className="text-center h-full">
+                <CardContent className="pt-6">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4">
+                    <item.icon className="h-6 w-6" />
                   </div>
                   <h3 className="font-semibold text-navy mb-2">{item.title}</h3>
                   <p className="text-sm text-muted-foreground">{item.description}</p>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Quick Access Resources */}
-      <section className="py-12 md:py-16 border-y bg-muted/30">
-        <div className="container">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-8">
-              <h3 className="text-xl font-semibold text-navy mb-2 flex items-center justify-center gap-2">
-                <Sparkles className="h-5 w-5 text-primary" />
-                Quick Access Tools
-              </h3>
-              <p className="text-muted-foreground text-sm">
-                Essential resources used throughout your training
-              </p>
-            </div>
-            <QuickResourcesPanel variant="inline" />
-          </div>
-        </div>
-      </section>
-
-      {/* Quick Start */}
-      <section className="py-16 md:py-20">
-        <div className="container">
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-10">
-              <h3 className="text-xl font-semibold text-navy mb-2">
-                Ready to Begin?
-              </h3>
-              <p className="text-muted-foreground">
-                Choose your starting point based on your experience level.
-              </p>
-            </div>
-            <div className="grid sm:grid-cols-3 gap-4">
-              <Link 
-                to="/get-started" 
-                className="bg-card rounded-xl p-6 border border-primary/30 hover:border-primary hover:shadow-md transition-all text-center group"
-              >
-                <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                  <Sparkles className="h-6 w-6" />
-                </div>
-                <p className="font-semibold text-navy mb-1">New to CIP?</p>
-                <p className="text-sm text-muted-foreground">Start with our guided onboarding</p>
-              </Link>
-              <Link 
-                to="/self-assessment" 
-                className="bg-card rounded-xl p-6 border border-border/50 hover:border-primary/30 hover:shadow-md transition-all text-center group"
-              >
-                <div className="w-12 h-12 rounded-full bg-warning/10 text-warning flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                  <ClipboardCheck className="h-6 w-6" />
-                </div>
-                <p className="font-semibold text-navy mb-1">Know Some Basics?</p>
-                <p className="text-sm text-muted-foreground">Assess your current knowledge</p>
-              </Link>
-              <Link 
-                to="/modules" 
-                className="bg-card rounded-xl p-6 border border-border/50 hover:border-primary/30 hover:shadow-md transition-all text-center group"
-              >
-                <div className="w-12 h-12 rounded-full bg-success/10 text-success flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                  <Trophy className="h-6 w-6" />
-                </div>
-                <p className="font-semibold text-navy mb-1">Ready to Learn?</p>
-                <p className="text-sm text-muted-foreground">Jump straight into Module 1</p>
-              </Link>
-            </div>
           </div>
         </div>
       </section>

@@ -1,4 +1,5 @@
 import { Layout } from '@/components/layout/Layout';
+import { PageIntro } from '@/components/PageIntro';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, Calendar, MessageSquare, Award, RefreshCw, Target, BookOpen, Rocket } from 'lucide-react';
 
@@ -12,9 +13,18 @@ export default function ManagerGuide() {
               <Users className="h-8 w-8 text-primary" />
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-navy mb-4">Manager & Team Guide</h1>
-            <p className="text-muted-foreground">
-              How to use CIP Readiness Academy as a team training program for NERC CIP audit readiness.
-            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Page Intro */}
+      <section className="py-6 border-b border-border/50">
+        <div className="container">
+          <div className="max-w-4xl mx-auto">
+            <PageIntro>
+              This guide helps managers and team leads use CIP Readiness Academy as a structured training program 
+              for their teams. Learn how to assign roles, run team sessions, and track progress across your organization.
+            </PageIntro>
           </div>
         </div>
       </section>
