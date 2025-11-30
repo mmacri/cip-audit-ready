@@ -106,7 +106,10 @@ export default function Home() {
               A complete training program for power utilities preparing for NERC CIP audits. 
               Learn the standards, build your evidence system, and practice before auditors arrive.
             </p>
-            <div className="flex flex-col items-center gap-6 pt-6">
+            <div className="flex flex-col items-center gap-4 pt-6">
+              <p className="text-white/80 text-sm max-w-md text-center">
+                Begin by choosing your role so we can tailor the CIP training path to your responsibilities.
+              </p>
               <Button 
                 onClick={handleChooseRole}
                 size="lg" 

@@ -8,6 +8,7 @@ import { useProgress } from "@/hooks/useProgress";
 import { roleTrainingPlans, moduleNames } from "@/data/roleTrainingData";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { PageIntro } from "@/components/PageIntro";
 import { 
   Route, 
   Users, 
@@ -91,10 +92,10 @@ export default function LearningPath() {
             <h1 className="text-4xl md:text-5xl font-bold text-navy mb-4">
               Learning Path
             </h1>
-            <p className="text-lg text-muted-foreground">
-              Select your role to get a personalized training path. Your selection highlights 
-              required and recommended modules based on your job responsibilities.
-            </p>
+            <PageIntro variant="subtle" className="text-muted-foreground mb-0 p-0">
+              This page shows how the CIP Readiness Academy is structured across all roles. 
+              Use it to see how modules and tracks fit together from a high level.
+            </PageIntro>
           </div>
         </div>
       </section>
