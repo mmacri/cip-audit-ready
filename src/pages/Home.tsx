@@ -70,7 +70,14 @@ export default function Home() {
     if (selectedRole) {
       navigate(`/role-training/${roleToSlug[selectedRole]}`);
     } else {
-      navigate('/get-started');
+      // Skip tour: navigate to home and scroll to overview section
+      navigate('/');
+      setTimeout(() => {
+        const el = document.getElementById('cip-overview');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
     }
   };
 
@@ -140,7 +147,7 @@ export default function Home() {
       </section>
 
       {/* Your CIP Readiness Journey - Golden Path */}
-      <section className="py-16 md:py-20">
+      <section id="cip-overview" className="py-16 md:py-20">
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-navy mb-3">
