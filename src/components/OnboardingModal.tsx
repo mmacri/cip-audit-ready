@@ -115,7 +115,7 @@ export function OnboardingModal({ open, onComplete }: OnboardingModalProps) {
             </Button>
           ) : (
             <Button variant="ghost" onClick={handleSkip}>
-              Skip for now
+              Skip tour – show me the overview
             </Button>
           )}
           
